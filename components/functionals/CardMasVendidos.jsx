@@ -4,7 +4,6 @@ import OneMasVendidos from '@/components/functionals/OneMasVendidos';
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/card';
 import { Suspense } from 'react';
 import { Skeleton } from '../ui/skeleton';
-import { error } from 'console';
 
 function SkeletonOneVendidos() {
   return (

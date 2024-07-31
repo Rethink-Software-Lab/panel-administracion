@@ -46,7 +46,7 @@ export default async function AreasVenta({ searchParams }) {
               Upsss.. Nada por aquí
             </h3>
             <p className="text-sm text-muted-foreground">
-              Cuando agregues puntos de venta aparecerán aquí.
+              Cuando agregues áreas de venta aparecerán aquí.
             </p>
           </div>
         </div>

@@ -15,6 +15,7 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from '@/components/ui/chart';
+import { BookX } from 'lucide-react';
 
 const today = DateTime.local().setLocale('es');
 const inicioSemana = today.startOf('week');
@@ -28,7 +29,7 @@ const rangoSemana = `${formatoDia(inicioSemana)} - ${formatoDia(
 )} de ${formatoMes(finSemana)}`;
 
 function obtenerNombresAreas(ventasPorDia) {
-  if (ventasPorDia.length === 0) return [];
+  if (ventasPorDia?.length === 0) return [];
 
   const primerDia = ventasPorDia[0];
   const nombresAreas = Object.keys(primerDia).filter(
@@ -47,42 +48,53 @@ export default function ChartVentasPorArea({ data }) {
     <Card className="col-span-3 md:col-span-2">
       <CardHeader>
         <CardTitle>Ventas por área</CardTitle>
-        <CardDescription>{rangoSemana}</CardDescription>
+        <CardDescription>{data?.length > 0 && rangoSemana}</CardDescription>
       </CardHeader>
-      <CardContent>
-        <ChartContainer config={{}} className="max-h-80 w-full">
-          <LineChart
-            accessibilityLayer
-            data={data}
-            margin={{
-              left: 12,
-              right: 12,
-            }}
-          >
-            <CartesianGrid vertical={false} />
-            <XAxis
-              dataKey="dia"
-              tickLine={false}
-              axisLine={false}
-              tickMargin={8}
-            />
-            <ChartTooltip
-              cursor={false}
-              content={<ChartTooltipContent className="w-52" />}
-            />
-            {nombresAreas.map(({ nombre, color }) => (
-              <Line
-                key={nombre}
-                name={nombre}
-                dataKey={(data) => data[nombre].ventas}
-                type="monotone"
-                stroke={color}
-                strokeWidth={2}
-                dot={false}
+      <CardContent className="h-80">
+        {data?.length < 1 ? (
+          <div className="flex justify-center items-center h-full">
+            <div className="flex flex-col items-center space-y-2">
+              <BookX className="w-14 h-14 text-muted-foreground" />
+              <p className="font-medium text-muted-foreground">
+                No hay datos que mostrar.
+              </p>
+            </div>
+          </div>
+        ) : (
+          <ChartContainer config={{}} className="max-h-80 w-full">
+            <LineChart
+              accessibilityLayer
+              data={data}
+              margin={{
+                left: 12,
+                right: 12,
+              }}
+            >
+              <CartesianGrid vertical={false} />
+              <XAxis
+                dataKey="dia"
+                tickLine={false}
+                axisLine={false}
+                tickMargin={8}
               />
-            ))}
-          </LineChart>
-        </ChartContainer>
+              <ChartTooltip
+                cursor={false}
+                content={<ChartTooltipContent className="w-52" />}
+              />
+              {nombresAreas.map(({ nombre, color }) => (
+                <Line
+                  key={nombre}
+                  name={nombre}
+                  dataKey={(data) => data[nombre].ventas}
+                  type="monotone"
+                  stroke={color}
+                  strokeWidth={2}
+                  dot={false}
+                />
+              ))}
+            </LineChart>
+          </ChartContainer>
+        )}
       </CardContent>
     </Card>
   );

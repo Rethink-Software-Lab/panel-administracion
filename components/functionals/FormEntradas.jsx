@@ -405,7 +405,7 @@ export default function FormEntradas({ productosInfo }) {
               />
               {producto !==
                 productosInfo?.find((e) => e.categoria.nombre === 'Zapatos')
-                  .codigo && (
+                  ?.codigo && (
                 <div className="space-y-2">
                   <Label>Cantidad</Label>
                   <Input
@@ -421,7 +421,7 @@ export default function FormEntradas({ productosInfo }) {
           </Card>
           {producto ===
             productosInfo?.find((e) => e.categoria.nombre === 'Zapatos')
-              .codigo && (
+              ?.codigo && (
             <Card>
               <CardHeader>
                 <CardTitle>Mercancía</CardTitle>
