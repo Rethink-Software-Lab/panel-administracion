@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+
+# Host
+Host: https://panel-administracion.vercel.app

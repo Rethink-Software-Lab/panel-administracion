@@ -1,0 +1,140 @@
+'use client';
+
+import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
+import {
+  DialogFooter,
+  DialogClose,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogHeader,
+  DialogTrigger,
+  DialogDescription,
+} from '@/components/ui/dialog';
+
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '@/components/ui/form';
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+
+import { useForm } from 'react-hook-form';
+import { valibotResolver } from '@hookform/resolvers/valibot';
+import { AreaVentaSchema } from '@/lib/schemas';
+
+import { createAreaVenta, editAreaVenta } from '@/lib/actions';
+import { toast } from 'sonner';
+import { CircleX, LoaderCircle } from 'lucide-react';
+import { useState } from 'react';
+
+export default function ModalAreasVenta({ data = null, trigger }) {
+  const [isOpen, setIsOpen] = useState(false);
+  const [errors, setErrors] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const form = useForm({
+    resolver: valibotResolver(AreaVentaSchema),
+    defaultValues: { ...data },
+  });
+
+  console.log(form.getValues());
+
+  const onSubmit = async (dataForm) => {
+    setIsLoading(true);
+    if (!data) {
+      const { errors } = await createAreaVenta(dataForm);
+      setIsLoading(false);
+      if (!errors) {
+        form.reset();
+        setIsOpen(false);
+        toast.success('El área de venta fué creada con éxito.');
+      }
+      setErrors(errors);
+    } else {
+      const { errors } = await editAreaVenta({ ...dataForm, id: data?.id });
+      setIsLoading(false);
+      if (!errors) {
+        setIsOpen(false);
+        toast.success('El área de venta fué editada con éxito.');
+      }
+      setErrors(errors);
+    }
+  };
+
+  return (
+    <Dialog open={isOpen} onOpenChange={setIsOpen}>
+      <DialogTrigger asChild>{trigger}</DialogTrigger>
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>{data ? 'Editar' : 'Agregar'} Área de Venta</DialogTitle>
+        </DialogHeader>
+        <DialogDescription>Todos los campos son requeridos</DialogDescription>
+        {errors &&
+          errors.map((error, index) => (
+            <Alert variant="destructive" key={index}>
+              <CircleX className="h-5 w-5" />
+              <AlertTitle>Error!</AlertTitle>
+              <AlertDescription>
+                {error.message.startsWith('UNIQUE constraint failed')
+                  ? 'Ya existe un usuario con ese nombre'
+                  : error.message}
+              </AlertDescription>
+            </Alert>
+          ))}
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+            <FormField
+              control={form.control}
+              name="nombre"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Nombre</FormLabel>
+                  <FormControl>
+                    <Input {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="color"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Color</FormLabel>
+                  <FormControl>
+                    <Input type="color" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <div className="grid gap-4">
+              <DialogFooter className="w-full flex gap-2 mt-2">
+                <DialogClose asChild>
+                  <Button type="button" className="w-full" variant="secondary">
+                    Cancelar
+                  </Button>
+                </DialogClose>
+                <Button type="submit" className="w-full" disabled={isLoading}>
+                  {isLoading ? (
+                    <>
+                      <LoaderCircle className="mr-2 h-4 w-4 animate-spin" />
+                      {data ? 'Editando...' : 'Agregando...'}
+                    </>
+                  ) : (
+                    <>{data ? 'Editar' : 'Agregar'}</>
+                  )}
+                </Button>
+              </DialogFooter>
+            </div>
+          </form>
+        </Form>
+      </DialogContent>
+    </Dialog>
+  );
+}
