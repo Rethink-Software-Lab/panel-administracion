@@ -8,7 +8,7 @@ import {
 } from '@/components/ui/card';
 
 export default async function CardsInicio({ description, getData }) {
-  const { data } = await getData();
+  const { data, errors } = await getData();
   return (
     <Card>
       <CardHeader>

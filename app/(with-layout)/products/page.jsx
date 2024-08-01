@@ -27,7 +27,7 @@ export default async function Products({ searchParams }) {
   return (
     <main className="flex flex-1 flex-col gap-4 p-4 lg:gap-6 lg:p-6">
       <div className="flex justify-between items-center">
-        <h1 className="text-lg font-semibold md:text-2xl">Modelos</h1>
+        <h1 className="text-lg font-semibold md:text-2xl">Productos</h1>
         <ModalProduct
           trigger={
             <Button className="gap-1 items-center">

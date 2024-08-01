@@ -39,7 +39,7 @@ export default async function CardMasVendidos() {
                 error.message.startsWith('fetch failed') && (
                   <div
                     key={error?.message}
-                    className="flex justify-center items-center h-3/4"
+                    className="flex justify-center items-center h-3/4 "
                   >
                     <div className="flex flex-col items-center text-muted-foreground">
                       <CloudOff size={50} />
@@ -51,7 +51,7 @@ export default async function CardMasVendidos() {
                 )
             )}
           {data?.length < 1 ? (
-            <div className="flex justify-center items-center h-3/4">
+            <div className="flex justify-center items-center h-3/4 py-4">
               <div className="flex flex-col items-center text-muted-foreground">
                 <FolderXIcon size={50} />
                 <h3 className="font-medium">

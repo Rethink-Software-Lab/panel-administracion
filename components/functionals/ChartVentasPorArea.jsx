@@ -16,6 +16,7 @@ import {
   ChartTooltipContent,
 } from '@/components/ui/chart';
 import { BookX } from 'lucide-react';
+import { cn } from '@/lib/utils';
 
 const today = DateTime.local().setLocale('es');
 const inicioSemana = today.startOf('week');
@@ -50,7 +51,7 @@ export default function ChartVentasPorArea({ data }) {
         <CardTitle>Ventas por área</CardTitle>
         <CardDescription>{data?.length > 0 && rangoSemana}</CardDescription>
       </CardHeader>
-      <CardContent className="h-80">
+      <CardContent className={cn(data?.length < 1 && 'h-80')}>
         {data?.length < 1 ? (
           <div className="flex justify-center items-center h-full">
             <div className="flex flex-col items-center space-y-2">

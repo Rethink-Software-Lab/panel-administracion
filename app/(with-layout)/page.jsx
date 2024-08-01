@@ -21,11 +21,11 @@ import { getSession } from '@/lib/getSession';
 import { redirect } from 'next/navigation';
 
 export default async function Initial() {
-  const { isAlmacenero, isVendedor, punto } = getSession();
+  const { isVendedor, punto } = getSession();
   const { data: ventas } = await ventasPorArea();
-  if (isAlmacenero) return redirect('/inventario');
   if (isVendedor) return redirect(`areas-de-venta/${punto}`);
   const { data, errors } = await grafico();
+
   return (
     <main className="flex flex-1 flex-col gap-4 p-4 lg:gap-6 lg:p-6">
       <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-2 xl:grid-cols-4">
