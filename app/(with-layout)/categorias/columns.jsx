@@ -12,12 +12,11 @@ export const columns = [
   },
 
   {
-    header: 'Acciones',
-    size: 5,
+    header: ' ',
     cell: ({ row }) => {
       if (row.original.nombre !== 'Zapatos') {
         return (
-          <div className="flex items-center gap-2">
+          <div className="flex items-center justify-end gap-2">
             <ModalCategoria
               data={row.original}
               trigger={

@@ -68,7 +68,7 @@ export default async function Search({ params }) {
           <Card className="col-span-3 md:col-span-2 overflow-hidden">
             <CardHeader className="flex flex-row gap-2 items-start bg-muted/50">
               <CardTitle className="group flex items-center gap-2 text-lg">
-                {params.codigo}
+                {data?.codigo}
               </CardTitle>
             </CardHeader>
             <Separator />

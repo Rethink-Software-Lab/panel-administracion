@@ -5,6 +5,7 @@ import { Hourglass } from 'lucide-react';
 import CardsInicio from '@/components/functionals/CardsInicio';
 import CardMasVendidos from '@/components/functionals/CardMasVendidos';
 import ChartVentaPorArea from '@/components/functionals/ChartVentasPorArea';
+import ChartVentasAnuales from '@/components/functionals/ChartVentasAnuales';
 
 import { Skeleton } from '@/components/ui/skeleton';
 
@@ -16,7 +17,6 @@ import {
   ventasPorArea,
 } from '@/lib/services';
 import { Suspense } from 'react';
-import Grafico from '@/components/functionals/Grafico';
 import { getSession } from '@/lib/getSession';
 import { redirect } from 'next/navigation';
 
@@ -50,7 +50,7 @@ export default async function Initial() {
 
         <CardMasVendidos />
       </div>
-      <Grafico data={data} errors={errors} />
+      <ChartVentasAnuales data={data} />
     </main>
   );
 }

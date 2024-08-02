@@ -73,20 +73,19 @@ export default function TopBar({ session, areasVenta }) {
                   <span className=" text-sm">Panel de administración</span>
                 </Link>
               </div>
-              {session.isAdmin && (
-                <Link
-                  href="/"
-                  className={cn(
-                    'flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary',
-                    path === '/' && 'bg-muted text-primary'
-                  )}
-                >
-                  <Home className="h-4 w-4" />
-                  Inicio
-                </Link>
-              )}
               {session.isStaff && (
                 <>
+                  <Link
+                    href="/"
+                    className={cn(
+                      'flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary',
+                      path === '/' && 'bg-muted text-primary'
+                    )}
+                  >
+                    <Home className="h-4 w-4" />
+                    Inicio
+                  </Link>
+
                   <Link
                     href="/products"
                     className={cn(
@@ -158,7 +157,7 @@ export default function TopBar({ session, areasVenta }) {
               )}
 
               <span className="p-2">Áreas de venta</span>
-              {session.isAdmin && (
+              {session.isStaff && (
                 <Link
                   href="/areas-de-venta"
                   className={cn(
@@ -167,7 +166,7 @@ export default function TopBar({ session, areasVenta }) {
                   )}
                 >
                   <Settings2 className="h-4 w-4" />
-                  Administrar locales
+                  Administrar áreas
                 </Link>
               )}
               {areasVenta?.map((area) => (
