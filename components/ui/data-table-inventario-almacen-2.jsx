@@ -22,8 +22,17 @@ import { Input } from "@/components/ui/input";
 
 import { useState } from "react";
 import { DataTablePagination } from "@/components/ui/data-table-pagination";
+import { Button } from "./button";
+import { Check } from "lucide-react";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuTrigger,
+  DropdownMenuRadioGroup,
+  DropdownMenuRadioItem,
+} from "./dropdown-menu";
 
-export function DataTable({ columns, data }) {
+export function DataTable({ columns, data, categorias }) {
   const [sorting, setSorting] = useState([]);
   const [columnFilters, setColumnFilters] = useState([]);
   const table = useReactTable({
@@ -55,28 +64,6 @@ export function DataTable({ columns, data }) {
         <div className="flex gap-2">
           <Input
             className="max-w-60"
-            value={columnFilters?.find((el) => el.id === "id")?.value || ""}
-            onChange={(e) =>
-              setColumnFilters((prevState) => {
-                const has = prevState?.find((el) => el.id === "id");
-                if (!has) {
-                  return prevState.concat({
-                    id: "id",
-                    value: e.target.value,
-                  });
-                }
-                return prevState
-                  .filter((f) => f.id !== "id")
-                  .concat({
-                    id: "id",
-                    value: e.target.value,
-                  });
-              })
-            }
-            placeholder="Filtrar por ID"
-          />
-          <Input
-            className="max-w-60"
             value={columnFilters?.find((el) => el.id === "codigo")?.value || ""}
             onChange={(e) =>
               setColumnFilters((prevState) => {
@@ -97,6 +84,56 @@ export function DataTable({ columns, data }) {
             }
             placeholder="Filtrar por Código"
           />
+        </div>
+        <div className="flex items-center gap-2">
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button
+                variant="outline"
+                size="sm"
+                className="ml-auto flex gap-1"
+              >
+                {columnFilters.find((f) => f.id === "categoria") && (
+                  <Check size={16} />
+                )}
+                Categoría
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="max-h-[300px]">
+              <DropdownMenuRadioGroup
+                value={
+                  columnFilters?.find((el) => el.id === "categoria")?.value ||
+                  ""
+                }
+                onValueChange={(value) =>
+                  setColumnFilters((prevState) => {
+                    const has = prevState?.find((el) => el.id === "categoria");
+                    if (!has) {
+                      return prevState.concat({ id: "categoria", value });
+                    }
+                    if (has.value === value) {
+                      return prevState.filter((f) => f.id !== "categoria");
+                    } else {
+                      return prevState
+                        .filter((f) => f.id !== "categoria")
+                        .concat({ id: "categoria", value });
+                    }
+                  })
+                }
+              >
+                {categorias
+                  ?.filter((e) => e.nombre !== "Zapatos")
+                  .map((categoria) => (
+                    <DropdownMenuRadioItem
+                      key={categoria.id}
+                      value={categoria.nombre}
+                    >
+                      {categoria.nombre}
+                    </DropdownMenuRadioItem>
+                  ))}
+              </DropdownMenuRadioGroup>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
       </div>
       <Table>

@@ -16,6 +16,7 @@ import {
   forward,
   partialCheck,
   maxValue,
+  integer,
 } from 'valibot';
 
 enum ROLES {
@@ -151,18 +152,44 @@ export const SalidaSchema = object({
     string('El área de venta es requerida.'),
     nonEmpty('El área de venta es requerida.')
   ),
-  productos: pipe(
-    array(string(), 'Productos no puede estar vacio'),
-    minLength(1, 'Productos no puede estar vacio')
+  zapatos_id: optional(
+      pipe(
+      array(string(), 'Productos no puede estar vacio'),
+      minLength(1, 'Productos no puede estar vacio')
+    ) 
+  ),
+  cantidad: optional(
+      pipe(
+      number(),
+      integer(),
+      minValue(1)
+    )
+  ),
+  producto_info: pipe(
+    string('El producto es requerido.'),
+    nonEmpty('El producto es requerido.')
   ),
 });
 
 export const VentasSchema = object({
-  productos: pipe(
+  metodoPago: enum_(METODOS_PAGO, 'Método requerido: Efectivo o transferencia'),
+  zapatos_id: optional(
+    pipe(
     array(string(), 'Productos no puede estar vacio'),
     minLength(1, 'Productos no puede estar vacio')
-  ),
-  metodoPago: enum_(METODOS_PAGO, 'Método requerido: Efectivo o transferencia'),
+  ) 
+),
+cantidad: optional(
+    pipe(
+    number(),
+    integer(),
+    minValue(1)
+  )
+),
+producto_info: pipe(
+  string('El producto es requerido.'),
+  nonEmpty('El producto es requerido.')
+),
 });
 
 export const SearchSchema = object({

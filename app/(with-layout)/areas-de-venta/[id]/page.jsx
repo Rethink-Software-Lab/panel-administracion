@@ -1,12 +1,12 @@
-import { getSession } from '@/lib/getSession';
+import { getSession } from "@/lib/getSession";
 
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
-import InventarioAreaVenta from '@/components/functionals/InventarioAreaVenta';
-import dynamic from 'next/dynamic';
+import InventarioAreaVenta from "@/components/functionals/InventarioAreaVenta";
+import dynamic from "next/dynamic";
 
 const VentasAreaVenta = dynamic(
-  () => import('@/components/functionals/VentasAreaVenta'),
+  () => import("@/components/functionals/VentasAreaVenta"),
   {
     loading: () => <p>Cargando...</p>,
   }
@@ -14,12 +14,12 @@ const VentasAreaVenta = dynamic(
 
 export default async function AreaVenta({ params, searchParams }) {
   const { isAlmacenero } = getSession();
-  const page = searchParams['p'] ?? 1;
+  const page = searchParams["p"] ?? 1;
 
   return (
     <main className="flex flex-1 flex-col gap-4 py-4 lg:gap-6 lg:py-2">
-      <Tabs defaultValue="inventario" className="p-4 lg:p-6 h-full">
-        <TabsList>
+      <Tabs defaultValue="inventario" className="h-full">
+        <TabsList className="m-4">
           <TabsTrigger value="inventario">Inventario</TabsTrigger>
           <TabsTrigger disabled={isAlmacenero} value="ventas">
             Ventas

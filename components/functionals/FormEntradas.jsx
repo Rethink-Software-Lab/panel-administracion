@@ -159,6 +159,7 @@ export default function FormEntradas({ productosInfo }) {
   const [openDialog, setOpenDialog] = useState(false);
   const [dataModal, setData] = useState(null);
   const [loading, setLoading] = useState(false);
+  console.log(productosInfo)
   const form = useForm({
     resolver: valibotResolver(EntradaSchema),
     defaultValues: {
@@ -184,7 +185,11 @@ export default function FormEntradas({ productosInfo }) {
     setLoading(true);
     const { data, errors } = await createEntrada(dataForm);
     setLoading(false);
-    if (!errors) {
+    if ( !errors && !data) {
+      toast.success('Entrada creada con éxito.')
+      router.push('/entradas')
+    }
+    else if (!errors) {
       setData(data);
       setOpenDialog(true);
     } else {
@@ -201,15 +206,7 @@ export default function FormEntradas({ productosInfo }) {
             <AlertDialogDescription className="pb-2">
               Estos datos se quedan almacenados en la tabla de Entradas.
             </AlertDialogDescription>
-            {!Array.isArray(dataModal) ? (
-              <>
-                <Separator />
-                <div className="flex items-center py-4">
-                  <h4 className="text-gl font-semibold mr-2">IDs:</h4>
-                  <p className="text-muted-foreground">{dataModal?.ids}</p>
-                </div>
-              </>
-            ) : (
+            
               <Table>
                 <TableHeader>
                   <TableRow>
@@ -239,7 +236,7 @@ export default function FormEntradas({ productosInfo }) {
                   ))}
                 </TableBody>
               </Table>
-            )}
+            
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel
@@ -354,9 +351,9 @@ export default function FormEntradas({ productosInfo }) {
                                   value={producto.codigo}
                                   onSelect={(currentValue) => {
                                     currentValue !==
-                                    productosInfo.find(
+                                    productosInfo?.find(
                                       (e) => e.categoria.nombre === 'Zapatos'
-                                    ).codigo
+                                    )?.codigo
                                       ? (() => {
                                           form.setValue('variantes', undefined);
                                           form.setValue('cantidad', 0);

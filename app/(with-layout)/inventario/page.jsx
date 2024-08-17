@@ -1,12 +1,17 @@
+import { Card } from '@/components/ui/card';
 import { columns } from './columns';
+import { columns as columnsNew } from './columnsNew';
 import { DataTable } from '@/components/ui/data-table-inventario-almacen';
+import { DataTable as DataTableNew } from '@/components/ui/data-table-inventario-almacen-2';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 import { inventarioAlmacen, getCategorias } from '@/lib/services';
 import { CloudOff } from 'lucide-react';
 
 export default async function Inventario() {
-  const { data, errors } = await inventarioAlmacen();
+  const { data: { productos, zapatos }, errors } = await inventarioAlmacen();
   const { data: categorias } = await getCategorias();
+
 
   return (
     <main className="flex flex-1 flex-col gap-4 p-4 lg:gap-6 lg:p-6 max-w-full">
@@ -34,8 +39,22 @@ export default async function Inventario() {
             )
         )}
 
-      {data ? (
-        <DataTable columns={columns} data={data} categorias={categorias} />
+      {productos && zapatos ? (
+        <Tabs defaultValue="inventario" className=" h-full">
+        <TabsList>
+          <TabsTrigger value="inventario">Inventario</TabsTrigger>
+          <TabsTrigger value="zapatos">
+            Zapatos
+          </TabsTrigger>
+        </TabsList>
+        <TabsContent value="inventario" className="h-full">
+          <DataTableNew columns={columnsNew} data={productos} categorias={categorias} />
+        </TabsContent>
+          <TabsContent value="zapatos" className="h-full">
+            <DataTable columns={columns} data={zapatos} />
+          </TabsContent>
+      </Tabs>
+          
       ) : (
         <div className="flex flex-1 items-center justify-center rounded-lg border border-dashed shadow-sm">
           <div className="flex flex-col items-center gap-1 text-center">

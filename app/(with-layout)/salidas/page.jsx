@@ -13,7 +13,7 @@ import {
 import { Button } from '@/components/ui/button';
 import ModalSalidas from '@/components/functionals/ModalSalida';
 
-import { getSalidas, getAreasVentas, inventarioAlmacen } from '@/lib/services';
+import { getSalidas, getAreasVentas, getProducts } from '@/lib/services';
 import { deleteSalida } from '@/lib/actions';
 
 import Pagination from '@/components/functionals/Pagination';
@@ -32,7 +32,7 @@ export default async function Salidas({ searchParams }) {
   const { data: dataSalidas } = await getSalidas({ page: Number(page) });
   const salidas = dataSalidas?.salidas;
   const info = dataSalidas?.info;
-  const { data: productos } = await inventarioAlmacen();
+  const { data: { productosInfo } } = await getProducts();
   const {
     data: { areasVenta },
   } = await getAreasVentas();
@@ -52,7 +52,7 @@ export default async function Salidas({ searchParams }) {
             </Button>
           }
           areasVenta={areasVenta}
-          productos={productos}
+          productosInfo={productosInfo}
         />
       </div>
       {salidas.length < 1 ? (
@@ -145,7 +145,7 @@ export default async function Salidas({ searchParams }) {
                           </Button>
                         }
                         areasVenta={areasVenta}
-                        productos={productos}
+                        productosInfo={productosInfo}
                       />
                       <TableDelete id={salida?.id} action={deleteSalida} />
                     </TableCell>

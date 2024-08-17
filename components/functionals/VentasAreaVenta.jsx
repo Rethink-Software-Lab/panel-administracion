@@ -2,13 +2,13 @@ import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from '@/components/ui/popover';
-import { Separator } from '@/components/ui/separator';
-import { Edit2, PackagePlus, PackageX } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardFooter } from '@/components/ui/card';
+} from "@/components/ui/popover";
+import { Separator } from "@/components/ui/separator";
+import { Edit2, PackagePlus, PackageX } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardFooter } from "@/components/ui/card";
 
-import Pagination from '@/components/functionals/Pagination';
+import Pagination from "@/components/functionals/Pagination";
 import {
   Table,
   TableBody,
@@ -16,15 +16,19 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from '@/components/ui/table';
+} from "@/components/ui/table";
 
-import TableDelete from '@/components/functionals/TableDelete';
-import { deleteVenta } from '@/lib/actions';
-import ModalVentas from '@/components/functionals/ModalVentas';
-import { DateTime } from 'luxon';
-import { Badge } from '@/components/ui/badge';
+import TableDelete from "@/components/functionals/TableDelete";
+import { deleteVenta } from "@/lib/actions";
+import ModalVentas from "@/components/functionals/ModalVentas";
+import { DateTime } from "luxon";
+import { Badge } from "@/components/ui/badge";
 
-import { getOneVentas, productosByAreaVenta } from '@/lib/services';
+import {
+  getOneVentas,
+  productosByAreaVenta,
+  getProducts,
+} from "@/lib/services";
 
 export default async function VentasAreaVenta({ id, page }) {
   const { data, errors } = await getOneVentas({
@@ -33,16 +37,17 @@ export default async function VentasAreaVenta({ id, page }) {
   });
   const ventas = data?.ventas;
   const info = data?.info;
-  const { data: dataProductos, errors: e } = await productosByAreaVenta({
-    id,
-  });
+  const {
+    data: { productosInfo },
+    errors: e,
+  } = await getProducts();
   return (
-    <main className="flex flex-1 flex-col gap-4 py-4 lg:gap-6 lg:py-6 h-full">
+    <main className="flex flex-1 flex-col gap-4 pb-4 lg:gap-6 lg:pb-6 px-4 h-full">
       <div className="flex justify-between items-center">
         <h1 className="text-lg font-semibold md:text-2xl">Ventas</h1>
         <ModalVentas
           idPunto={Number(id)}
-          productos={dataProductos}
+          productosInfo={productosInfo}
           trigger={
             <Button className="gap-1 items-center">
               <PackagePlus size={18} />
@@ -126,7 +131,7 @@ export default async function VentasAreaVenta({ id, page }) {
                     </TableCell>
                     <TableCell className="font-medium">
                       {DateTime.fromISO(venta?.createdAt).toFormat(
-                        'dd/LL/yyyy  h:mma'
+                        "dd/LL/yyyy  h:mma"
                       )}
                     </TableCell>
                     <TableCell>
@@ -134,7 +139,7 @@ export default async function VentasAreaVenta({ id, page }) {
                         <ModalVentas
                           data={venta}
                           idPunto={Number(id)}
-                          productos={dataProductos}
+                          productosInfo={productosInfo}
                           trigger={
                             <Button variant="outline" size="icon">
                               <Edit2 size={18} />

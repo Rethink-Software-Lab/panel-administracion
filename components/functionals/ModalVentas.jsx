@@ -27,7 +27,7 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
-import { CheckIcon, X, PlusCircle } from 'lucide-react';
+import { CheckIcon, X, PlusCircle, ChevronDown } from 'lucide-react';
 
 import { cn } from '@/lib/utils';
 import {
@@ -44,52 +44,73 @@ import {
   PopoverTrigger,
 } from '@/components/ui/popover';
 
-import { useFieldArray, useForm } from 'react-hook-form';
+import { useFieldArray, useForm, useWatch } from 'react-hook-form';
 import { valibotResolver } from '@hookform/resolvers/valibot';
 import { VentasSchema } from '@/lib/schemas';
+import { safeParse, pipe, integer, minValue, string, transform } from 'valibot';
 
 import { updateVenta, addVenta } from '@/lib/actions';
 import { toast } from 'sonner';
 import { CircleX, LoaderCircle } from 'lucide-react';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 
 import { Label } from '../ui/label';
+import { Input } from '../ui/input';
 
 export default function ModalVentas({
   data = null,
   trigger,
   idPunto,
-  productos,
+  productosInfo,
 }) {
   const [open, setOpen] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const [errors, setErrors] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
+  const ref = useRef()
 
   const form = useForm({
     resolver: valibotResolver(VentasSchema),
     defaultValues: {
-      productos: data?.productoSet?.map((p) => p.id),
       metodoPago: data?.metodoPago,
+      zapatos_id: data?.zapatos_id?.map((p) => p.id),
+      producto_info: data?.producto_info?.codigo,
+      cantidad: data?.cantidad
     },
   });
 
   const { fields, append, remove } = useFieldArray({
     control: form.control,
-    name: 'productos',
+    name: 'zapatos_id',
   });
+
+  const info_producto = useWatch({ control: form.control, name: 'producto_info' });
+
+  const IdArraySchema = pipe(
+      string(),
+      transform((input) => parseInt(input)),
+      integer(),
+      minValue(1)
+  )
+  
+
+  const handleNewProducts = () => {
+    const {success} = safeParse(IdArraySchema, ref.current.value)
+    success && append(ref.current.value)
+    ref.current.value = ''
+  }
 
   const onSubmit = async (dataForm) => {
     setIsLoading(true);
     if (!data) {
-      const { errors } = await addVenta({ ...dataForm, areaVenta: idPunto });
+      const { error } = await addVenta({ ...dataForm, areaVenta: idPunto });
       setIsLoading(false);
-      if (!errors) {
+      if (!error) {
         form.reset();
         setIsOpen(false);
         toast.success('La venta fué creada con éxito.');
       }
-      setErrors(errors);
+      setErrors(error);
     } else {
       const { errors } = await updateVenta({
         ...dataForm,
@@ -114,102 +135,18 @@ export default function ModalVentas({
         </DialogHeader>
         <DialogDescription>Todos los campos son requeridos</DialogDescription>
         {errors &&
-          errors.map((error, index) => (
-            <Alert variant="destructive" key={index}>
+            <Alert variant="destructive">
               <CircleX className="h-5 w-5" />
               <AlertTitle>Error!</AlertTitle>
               <AlertDescription>
-                {error.message.startsWith('UNIQUE constraint failed')
-                  ? 'Ya existe un usuario con ese nombre'
-                  : error.message}
+                {errors.message}
               </AlertDescription>
             </Alert>
-          ))}
+        }
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-            <FormField
-              control={form.control}
-              name="productos"
-              render={({ field }) => (
-                <FormItem className="flex flex-col">
-                  <div className="flex flex-col gap-2">
-                    <Label>Productos</Label>
 
-                    <Popover open={open} onOpenChange={setOpen}>
-                      <div
-                        className={cn(
-                          'flex gap-2 p-1 h-fit flex-wrap items-center whitespace-nowrap font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 border border-input bg-background shadow-sm hover:bg-accent hover:text-accent-foreground rounded-md px-3 text-xs border-dashed ',
-                          form?.formState?.errors?.productos &&
-                            'border-destructive'
-                        )}
-                      >
-                        {field?.value?.map((p, index) => (
-                          <Button
-                            key={p}
-                            size="sm"
-                            variant="outline"
-                            className="flex p-1.5 justify-between items-center"
-                          >
-                            {p}{' '}
-                            <X
-                              className="ml-2"
-                              onClick={() => remove(index)}
-                              size={16}
-                            />
-                          </Button>
-                        ))}
-                        <PopoverTrigger asChild>
-                          <Button size="sm" className="gap-1">
-                            <PlusCircle className="h-3.5 w-3.5" />
-                            Añadir
-                          </Button>
-                        </PopoverTrigger>
-                      </div>
-
-                      <PopoverContent className="w-[320px] p-0">
-                        <Command className="rounded-lg border shadow-md">
-                          <CommandInput placeholder="Escribe un id..." />
-                          <CommandList>
-                            <CommandEmpty>
-                              Ningún resultado encontrado.
-                            </CommandEmpty>
-                            <CommandGroup heading="Sugerencias">
-                              {productos?.map((producto) => (
-                                <CommandItem
-                                  key={producto.id}
-                                  value={producto.id}
-                                  onSelect={(currentValue) => {
-                                    const index =
-                                      field.value?.indexOf(currentValue);
-                                    index >= 0
-                                      ? remove(index)
-                                      : append(currentValue);
-                                    setOpen(false);
-                                  }}
-                                >
-                                  {producto.id}
-                                  <CheckIcon
-                                    className={cn(
-                                      'ml-auto h-4 w-4',
-                                      field.value?.includes(producto.id)
-                                        ? 'opacity-100'
-                                        : 'opacity-0'
-                                    )}
-                                  />
-                                </CommandItem>
-                              ))}
-                            </CommandGroup>
-                          </CommandList>
-                        </Command>
-                      </PopoverContent>
-                    </Popover>
-                  </div>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
+          <FormField
               control={form.control}
               name="metodoPago"
               render={({ field }) => (
@@ -240,6 +177,146 @@ export default function ModalVentas({
                 </FormItem>
               )}
             />
+
+
+          <FormField
+                control={form.control}
+                name="producto_info"
+                render={({ field }) => (
+                  <FormItem className="flex flex-col mt-2">
+                    <Label>Producto</Label>
+                    <Popover open={open} onOpenChange={setOpen}>
+                      <PopoverTrigger asChild>
+                        <FormControl>
+                          <Button
+                            variant="outline"
+                            role="combobox"
+                            className={cn(
+                              'justify-between',
+                              !field.value && 'text-muted-foreground'
+                            )}
+                          >
+                            {field.value
+                              ? productosInfo?.find(
+                                  (producto) => producto?.codigo === field.value
+                                )?.codigo
+                              : 'Selecciona un producto'}
+                            <ChevronDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                          </Button>
+                        </FormControl>
+                      </PopoverTrigger>
+                      <PopoverContent className="w-[320px] p-0">
+                        <Command className="rounded-lg border shadow-md">
+                          <CommandInput placeholder="Escribe un código..." />
+                          <CommandList>
+                            <CommandEmpty>
+                              Ningún resultado encontrado.
+                            </CommandEmpty>
+                            <CommandGroup heading="Sugerencias">
+                              {productosInfo?.map((producto) => (
+                                <CommandItem
+                                  key={producto.id}
+                                  value={producto.codigo}
+                                  keywords={[producto.descripcion]}
+                                  onSelect={(currentValue) => {
+                                    currentValue !==
+                                    productosInfo?.find(
+                                      (e) => e.categoria.nombre === 'Zapatos' 
+                                    )?.codigo
+                                      ? (() => {
+                                          form.setValue('zapatos_id', undefined);
+                                          form.setValue('cantidad', 0);
+                                        })()
+                                      : (() => {
+                                          form.setValue('cantidad', undefined);
+                                          form.setValue('zapatos_id', []);
+                                        })();
+                                    field.onChange(
+                                      currentValue === field.value
+                                        ? ''
+                                        : currentValue
+                                    );
+                                    setOpen(false);
+                                  }}
+                                >
+                                  <div>
+                                    <p className='font-semibold'>{producto.codigo}</p>
+                                    <span>{producto.descripcion}</span>
+                                  </div>
+                                  <CheckIcon
+                                    className={cn(
+                                      'ml-auto h-4 w-4',
+                                      producto.codigo === field.value
+                                        ? 'opacity-100'
+                                        : 'opacity-0'
+                                    )}
+                                  />
+                                </CommandItem>
+                              ))}
+                            </CommandGroup>
+                          </CommandList>
+                        </Command>
+                      </PopoverContent>
+                    </Popover>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+
+            { info_producto && productosInfo?.find(p => p.codigo === info_producto)?.categoria?.nombre === "Zapatos" &&
+              <div className="space-y-2">
+              <Label>Productos</Label>
+
+              {form.getValues('zapatos_id')?.length > 0 &&
+                <ul
+                  className={cn(
+                    'overflow-y-auto flex gap-2 p-2 max-h-[328px] flex-col items-center whitespace-nowrap font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 shadow-sm bg-accent hover:text-accent-foreground rounded-md px-3 text-xs border-dashed ',
+                    form?.formState?.errors?.productos && 'border-destructive'
+                  )}
+                >
+                  {form.getValues('zapatos_id')?.map((p, index) => (
+                    <li
+                      key={`${p}-${index}`}
+                      className="flex w-full p-2 px-4 justify-between items-center bg-background rounded-md"
+                    >
+                      <span>{p}</span>
+                      <X
+                        className="ml-2 cursor-pointer"
+                        onClick={() => remove(index)}
+                        size={16}
+                      />
+                    </li>
+                  ))}
+                   
+                </ul>
+              }
+                <div className='flex gap-2'>
+                    <Input ref={ref} type="number" placeholder="Introduzca Id" />
+                    <Button type="button" onClick={handleNewProducts}>
+                      <PlusCircle className='w-5 h-5' />
+                    </Button>
+                </div>
+                <p className="text-[0.8rem] font-medium text-destructive">
+                  {form?.formState?.errors?.productos?.message}
+                </p>
+            </div>
+            }
+
+            { info_producto && productosInfo?.find(p => p.codigo === info_producto)?.categoria?.nombre !== "Zapatos" &&
+
+                <div className="space-y-2">
+                  <Label>Cantidad</Label>
+                  <Input
+                    {...form.register('cantidad', { valueAsNumber: true })}
+                    type="number"
+                  />
+                  <p className="text-[0.8rem] font-medium text-destructive">
+                    {form.formState.errors?.cantidad?.message}
+                  </p>
+                </div>
+
+            }
 
             <div className="grid gap-4">
               <DialogFooter className="w-full flex gap-2 mt-2">
