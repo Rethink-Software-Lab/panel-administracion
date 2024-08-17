@@ -4,11 +4,11 @@ import { columns } from "@/app/(with-layout)/inventario/columns";
 import { columns as columnsNew } from "@/app/(with-layout)/inventario/columnsNew";
 import { DataTable } from "@/components/ui/data-table-inventario-almacen";
 import { DataTable as DataTableNew } from "@/components/ui/data-table-inventario-almacen-2";
-import { CloudOff, SearchX } from "lucide-react";
+import { CloudOff } from "lucide-react";
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
-export default async function InventarioAreaVenta({ id, page }) {
+export default async function InventarioAreaVenta({ id }) {
   const {
     data: { productos, zapatos },
   } = await inventarioAreaVenta({ id });
@@ -19,7 +19,7 @@ export default async function InventarioAreaVenta({ id, page }) {
         <h1 className="text-lg font-semibold md:text-2xl">Inventario</h1>
       </div>
 
-      {productos ? (
+      {productos && zapatos ? (
         <Tabs defaultValue="inventario" className="h-full">
           <TabsList className="ml-4 bg-transparent p-0">
             <TabsTrigger
@@ -49,11 +49,7 @@ export default async function InventarioAreaVenta({ id, page }) {
             value="zapatos"
             className="p-4 m-0 bg-muted/40 h-full border-t-2 border-muted"
           >
-            <DataTable
-              columns={columns}
-              data={zapatos}
-              categorias={categorias}
-            />
+            <DataTable columns={columns} data={zapatos} />
           </TabsContent>
         </Tabs>
       ) : (
