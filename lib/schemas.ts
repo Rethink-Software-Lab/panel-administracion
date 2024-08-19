@@ -86,9 +86,8 @@ export const ProductSchema = object({
     string('La categoría es requeriada'),
     nonEmpty('La categoría es requeriada')
   ),
-  imagen: optional(any()),
-  precioCosto: string('El precio de costo es un número'),
-  precioVenta: string('El precio de venta es un número'),
+  precio_costo: string('El precio de costo es un número'),
+  precio_venta: string('El precio de venta es un número'),
 });
 
 enum METODOS_PAGO {

@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import {
   DropdownMenu,
@@ -6,9 +6,9 @@ import {
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
-import { Button } from '@/components/ui/button';
-import Link from 'next/link';
+} from "@/components/ui/dropdown-menu";
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
 import {
   ArrowDownLeft,
   ArrowLeft,
@@ -25,17 +25,17 @@ import {
   Store,
   Tags,
   Users,
-} from 'lucide-react';
-import SearchForm from '@/components/functionals/SeachForm';
-import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
-import { cn } from '@/lib/utils';
-import { usePathname, useRouter } from 'next/navigation';
-import { logout } from '@/lib/actions';
+} from "lucide-react";
+import SearchForm from "@/components/functionals/SeachForm";
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { cn } from "@/lib/utils";
+import { usePathname, useRouter } from "next/navigation";
+import { logout } from "@/lib/actions";
 
 export default function TopBar({ session, areasVenta }) {
   const path = usePathname();
   const router = useRouter();
-  if (path === '/login') return;
+  if (path === "/login") return;
 
   return (
     <header className="flex h-14 items-center gap-4 border-b bg-muted/40 px-4 lg:h-[60px] lg:px-6">
@@ -78,8 +78,8 @@ export default function TopBar({ session, areasVenta }) {
                   <Link
                     href="/"
                     className={cn(
-                      'flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary',
-                      path === '/' && 'bg-muted text-primary'
+                      "flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary",
+                      path === "/" && "bg-muted text-primary"
                     )}
                   >
                     <Home className="h-4 w-4" />
@@ -89,8 +89,8 @@ export default function TopBar({ session, areasVenta }) {
                   <Link
                     href="/products"
                     className={cn(
-                      'flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary',
-                      path === '/products' && 'bg-muted text-primary'
+                      "flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary",
+                      path === "/products" && "bg-muted text-primary"
                     )}
                   >
                     <Package className="h-4 w-4" />
@@ -99,8 +99,8 @@ export default function TopBar({ session, areasVenta }) {
                   <Link
                     href="/categorias"
                     className={cn(
-                      'flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary',
-                      path === '/categorias' && 'bg-muted text-primary'
+                      "flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary",
+                      path === "/categorias" && "bg-muted text-primary"
                     )}
                   >
                     <Tags className="h-4 w-4" />
@@ -112,8 +112,8 @@ export default function TopBar({ session, areasVenta }) {
                 <Link
                   href="/users"
                   className={cn(
-                    'flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary',
-                    path === '/users' && 'bg-muted text-primary'
+                    "flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary",
+                    path === "/users" && "bg-muted text-primary"
                   )}
                 >
                   <Users className="h-4 w-4" />
@@ -126,8 +126,8 @@ export default function TopBar({ session, areasVenta }) {
                   <Link
                     href="/inventario"
                     className={cn(
-                      'flex flex-1 items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary',
-                      path === '/inventario' && 'bg-muted text-primary'
+                      "flex flex-1 items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary",
+                      path === "/inventario" && "bg-muted text-primary"
                     )}
                   >
                     <PackageOpen className="h-4 w-4" />
@@ -136,8 +136,8 @@ export default function TopBar({ session, areasVenta }) {
                   <Link
                     href="/entradas"
                     className={cn(
-                      'flex flex-1 items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary',
-                      path === '/entradas' && 'bg-muted text-primary'
+                      "flex flex-1 items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary",
+                      path === "/entradas" && "bg-muted text-primary"
                     )}
                   >
                     <ArrowDownLeft className="h-4 w-4" />
@@ -146,8 +146,8 @@ export default function TopBar({ session, areasVenta }) {
                   <Link
                     href="/salidas"
                     className={cn(
-                      'flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary',
-                      path === '/salidas' && 'bg-muted text-primary'
+                      "flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary",
+                      path === "/salidas" && "bg-muted text-primary"
                     )}
                   >
                     <ArrowUpRight className="h-4 w-4" />
@@ -161,8 +161,8 @@ export default function TopBar({ session, areasVenta }) {
                 <Link
                   href="/areas-de-venta"
                   className={cn(
-                    'flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary',
-                    path === '/areas-de-venta' && 'bg-muted text-primary'
+                    "flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary",
+                    path === "/areas-de-venta" && "bg-muted text-primary"
                   )}
                 >
                   <Settings2 className="h-4 w-4" />
@@ -174,9 +174,9 @@ export default function TopBar({ session, areasVenta }) {
                   key={area.id}
                   href={`/areas-de-venta/${area.id}`}
                   className={cn(
-                    'flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary',
+                    "flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary",
                     path === `/areas-de-venta/${area.id}` &&
-                      'bg-muted text-primary'
+                      "bg-muted text-primary"
                   )}
                 >
                   <Store className="h-4 w-4" />
@@ -192,7 +192,7 @@ export default function TopBar({ session, areasVenta }) {
       </div>
       <Link
         target="blank"
-        href="https://mail.google.com/mail/?view=cm&fs=1&to=estebarmartin@gmail.com&su=PETICIÓN%20DE%20SOPORTE"
+        href="https://mail.google.com/mail/?view=cm&fs=1&to=rethinksoftwarelab@gmail.com&su=PETICIÓN%20DE%20SOPORTE"
       >
         <Button
           variant="secondary"
@@ -210,10 +210,15 @@ export default function TopBar({ session, areasVenta }) {
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
-          <DropdownMenuItem className="md:hidden gap-1 text-muted-foreground">
-            <LifeBuoy size={18} />
-            Soporte
-          </DropdownMenuItem>
+          <Link
+            target="blank"
+            href="https://mail.google.com/mail/?view=cm&fs=1&to=rethinksoftwarelab@gmail.com&su=PETICIÓN%20DE%20SOPORTE"
+          >
+            <DropdownMenuItem className="md:hidden gap-1 text-muted-foreground">
+              <LifeBuoy size={18} />
+              Soporte
+            </DropdownMenuItem>
+          </Link>
           <DropdownMenuSeparator className="md:hidden" />
           <form action={logout}>
             <DropdownMenuItem asChild className="w-full cursor-pointer">

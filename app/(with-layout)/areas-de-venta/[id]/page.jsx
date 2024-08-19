@@ -26,7 +26,7 @@ export default async function AreaVenta({ params, searchParams }) {
           </TabsTrigger>
         </TabsList>
         <TabsContent value="inventario" className="h-full">
-          <InventarioAreaVenta id={params?.id} page={page} />
+          <InventarioAreaVenta id={params?.id} />
         </TabsContent>
         {!isAlmacenero && (
           <TabsContent value="ventas" className="h-full">

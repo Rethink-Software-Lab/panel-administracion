@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import {
   AlertDialog,
@@ -10,18 +10,18 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from '@/components/ui/alert-dialog';
-import { Button } from '@/components/ui/button';
-import { Trash } from 'lucide-react';
+} from "@/components/ui/alert-dialog";
+import { Button } from "@/components/ui/button";
+import { Trash } from "lucide-react";
 
-import { toast } from 'sonner';
+import { toast } from "sonner";
 
 export default function TableActions({ id, action, ...otherProps }) {
   const deleteAction = (id) => {
     const promise = new Promise((resolve, reject) => {
       action(id).then((res) => {
         if (res.error) {
-          reject();
+          reject(res.error?.message);
         }
         if (!res.error) {
           resolve(res.data);
@@ -29,7 +29,7 @@ export default function TableActions({ id, action, ...otherProps }) {
       });
     });
     toast.promise(promise, {
-      loading: 'Cargando...',
+      loading: "Cargando...",
       success: (message) => message,
       error: (message) => message,
     });
