@@ -24,11 +24,7 @@ import ModalVentas from "@/components/functionals/ModalVentas";
 import { DateTime } from "luxon";
 import { Badge } from "@/components/ui/badge";
 
-import {
-  getOneVentas,
-  productosByAreaVenta,
-  getProducts,
-} from "@/lib/services";
+import { getOneVentas, getProductos } from "@/lib/services";
 
 export default async function VentasAreaVenta({ id, page }) {
   const { data, errors } = await getOneVentas({
@@ -37,10 +33,7 @@ export default async function VentasAreaVenta({ id, page }) {
   });
   const ventas = data?.ventas;
   const info = data?.info;
-  const {
-    data: { productosInfo },
-    errors: e,
-  } = await getProducts();
+  const { data: productosInfo, errors: e } = await getProductos();
   return (
     <main className="flex flex-1 flex-col gap-4 pb-4 lg:gap-6 lg:pb-6 px-4 h-full">
       <div className="flex justify-between items-center">
