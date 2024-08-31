@@ -9,13 +9,15 @@ import { inventarioAlmacen, getCategorias } from '@/lib/services';
 import { CloudOff } from 'lucide-react';
 
 export default async function Inventario() {
-  const { data: { productos, zapatos }, errors } = await inventarioAlmacen();
+  const {
+    data: { productos, zapatos },
+    errors,
+  } = await inventarioAlmacen();
   const { data: categorias } = await getCategorias();
 
-
   return (
-    <main className="flex flex-1 flex-col gap-4 p-4 lg:gap-6 lg:p-6 max-w-full">
-      <div className="flex justify-between items-center">
+    <main className="flex flex-1 flex-col gap-4 py-4 lg:gap-6 lg:py-6 h-full">
+      <div className="flex justify-between items-center pl-6">
         <h1 className="text-lg font-semibold md:text-2xl">Inventario</h1>
       </div>
       {errors &&
@@ -40,21 +42,38 @@ export default async function Inventario() {
         )}
 
       {productos && zapatos ? (
-        <Tabs defaultValue="inventario" className=" h-full">
-        <TabsList>
-          <TabsTrigger value="inventario">Inventario</TabsTrigger>
-          <TabsTrigger value="zapatos">
-            Zapatos
-          </TabsTrigger>
-        </TabsList>
-        <TabsContent value="inventario" className="h-full">
-          <DataTableNew columns={columnsNew} data={productos} categorias={categorias} />
-        </TabsContent>
-          <TabsContent value="zapatos" className="h-full">
+        <Tabs defaultValue="productos" className=" h-full">
+          <TabsList className="ml-4 bg-transparent p-0">
+            <TabsTrigger
+              value="productos"
+              className="h-full rounded-none data-[state=active]:bg-white data-[state=active]:text-foreground data-[state=active]:shadow-none data-[state=active]:border-foreground border-b-[3px] border-white"
+            >
+              Productos
+            </TabsTrigger>
+            <TabsTrigger
+              value="zapatos"
+              className="h-full rounded-none data-[state=active]:bg-white data-[state=active]:text-foreground data-[state=active]:shadow-none data-[state=active]:border-foreground border-b-[3px] border-white"
+            >
+              Zapatos
+            </TabsTrigger>
+          </TabsList>
+          <TabsContent
+            value="productos"
+            className="p-4 m-0 bg-muted/40 h-full border-t-2 border-muted"
+          >
+            <DataTableNew
+              columns={columnsNew}
+              data={productos}
+              categorias={categorias}
+            />
+          </TabsContent>
+          <TabsContent
+            value="zapatos"
+            className="p-4 m-0 bg-muted/40 h-full border-t-2 border-muted"
+          >
             <DataTable columns={columns} data={zapatos} />
           </TabsContent>
-      </Tabs>
-          
+        </Tabs>
       ) : (
         <div className="flex flex-1 items-center justify-center rounded-lg border border-dashed shadow-sm">
           <div className="flex flex-col items-center gap-1 text-center">

@@ -1,12 +1,12 @@
-import { inventarioAreaVenta, getCategorias } from "@/lib/services";
+import { inventarioAreaVenta, getCategorias } from '@/lib/services';
 
-import { columns } from "@/app/(with-layout)/inventario/columns";
-import { columns as columnsNew } from "@/app/(with-layout)/inventario/columnsNew";
-import { DataTable } from "@/components/ui/data-table-inventario-almacen";
-import { DataTable as DataTableNew } from "@/components/ui/data-table-inventario-almacen-2";
-import { CloudOff } from "lucide-react";
+import { columns } from '@/app/(with-layout)/inventario/columns';
+import { columns as columnsNew } from '@/app/(with-layout)/inventario/columnsNew';
+import { DataTable } from '@/components/ui/data-table-inventario-almacen';
+import { DataTable as DataTableNew } from '@/components/ui/data-table-inventario-almacen-2';
+import { CloudOff } from 'lucide-react';
 
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 export default async function InventarioAreaVenta({ id }) {
   const {
@@ -20,11 +20,11 @@ export default async function InventarioAreaVenta({ id }) {
       </div>
 
       {productos && zapatos ? (
-        <Tabs defaultValue="inventario" className="h-full">
+        <Tabs defaultValue="productos" className="h-full">
           <TabsList className="ml-4 bg-transparent p-0">
             <TabsTrigger
               className="h-full rounded-none data-[state=active]:bg-white data-[state=active]:text-foreground data-[state=active]:shadow-none data-[state=active]:border-foreground border-b-[3px] border-white"
-              value="inventario"
+              value="productos"
             >
               Inventario
             </TabsTrigger>
@@ -36,7 +36,7 @@ export default async function InventarioAreaVenta({ id }) {
             </TabsTrigger>
           </TabsList>
           <TabsContent
-            value="inventario"
+            value="productos"
             className="p-4 m-0 bg-muted/40 h-full border-t-2 border-muted"
           >
             <DataTableNew
