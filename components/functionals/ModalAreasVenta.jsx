@@ -41,8 +41,6 @@ export default function ModalAreasVenta({ data = null, trigger }) {
     defaultValues: { ...data },
   });
 
-  console.log(form.getValues());
-
   const onSubmit = async (dataForm) => {
     setIsLoading(true);
     if (!data) {

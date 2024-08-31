@@ -159,7 +159,7 @@ export default function FormEntradas({ productosInfo }) {
   const [openDialog, setOpenDialog] = useState(false);
   const [dataModal, setData] = useState(null);
   const [loading, setLoading] = useState(false);
-  console.log(productosInfo)
+
   const form = useForm({
     resolver: valibotResolver(EntradaSchema),
     defaultValues: {
@@ -185,11 +185,10 @@ export default function FormEntradas({ productosInfo }) {
     setLoading(true);
     const { data, errors } = await createEntrada(dataForm);
     setLoading(false);
-    if ( !errors && !data) {
-      toast.success('Entrada creada con éxito.')
-      router.push('/entradas')
-    }
-    else if (!errors) {
+    if (!errors && !data) {
+      toast.success('Entrada creada con éxito.');
+      router.push('/entradas');
+    } else if (!errors) {
       setData(data);
       setOpenDialog(true);
     } else {
@@ -206,37 +205,33 @@ export default function FormEntradas({ productosInfo }) {
             <AlertDialogDescription className="pb-2">
               Estos datos se quedan almacenados en la tabla de Entradas.
             </AlertDialogDescription>
-            
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead>Color</TableHead>
-                    <TableHead className="grid grid-cols-2 items-center">
-                      <p>Número</p>
-                      <p>IDs</p>
-                    </TableHead>
+
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Color</TableHead>
+                  <TableHead className="grid grid-cols-2 items-center">
+                    <p>Número</p>
+                    <p>IDs</p>
+                  </TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {dataModal?.map((res, index) => (
+                  <TableRow key={`${res?.color}-${index}`}>
+                    <TableCell className="align-top">{res?.color}</TableCell>
+                    <TableCell>
+                      {res?.numeros?.map((n, index) => (
+                        <div key={`${n}-${index}`} className="grid grid-cols-2">
+                          <p>{n?.numero}</p>
+                          <p>{n?.ids}</p>
+                        </div>
+                      ))}
+                    </TableCell>
                   </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {dataModal?.map((res, index) => (
-                    <TableRow key={`${res?.color}-${index}`}>
-                      <TableCell className="align-top">{res?.color}</TableCell>
-                      <TableCell>
-                        {res?.numeros?.map((n, index) => (
-                          <div
-                            key={`${n}-${index}`}
-                            className="grid grid-cols-2"
-                          >
-                            <p>{n?.numero}</p>
-                            <p>{n?.ids}</p>
-                          </div>
-                        ))}
-                      </TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            
+                ))}
+              </TableBody>
+            </Table>
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel

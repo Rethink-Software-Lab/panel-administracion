@@ -1,10 +1,9 @@
 import FormEntradas from '@/components/functionals/FormEntradas';
 
-import { getProducts } from '@/lib/services';
+import { getProductos } from '@/lib/services';
 
 export default async function CreateEntrada() {
-  const { data, errors } = await getProducts();
-  const productosInfo = data?.productosInfo;
+  const { data, errors } = await getProductos();
 
   return (
     <main className="grid flex-1 items-start gap-4 my-6 p-4 sm:px-6 sm:py-0 md:gap-8">
@@ -13,10 +12,9 @@ export default async function CreateEntrada() {
           Nueva Entrada
         </h1>
         <div className="flex flex-col gap-6">
-          <FormEntradas productosInfo={productosInfo} />
+          <FormEntradas productosInfo={data} />
         </div>
       </div>
     </main>
   );
 }
-  

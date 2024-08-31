@@ -50,7 +50,7 @@ import { SalidaSchema } from '@/lib/schemas';
 import { safeParse, pipe, integer, minValue, string, transform } from 'valibot';
 
 import { updateSalida } from '@/lib/actions';
-import { addSalida } from '@/app/(with-layout)/salidas/actions'
+import { addSalida } from '@/app/(with-layout)/salidas/actions';
 import { toast } from 'sonner';
 import { CircleX, LoaderCircle } from 'lucide-react';
 import { useRef, useState } from 'react';
@@ -68,7 +68,7 @@ export default function ModalSalida({
   const [isOpen, setIsOpen] = useState(false);
   const [error, setErrors] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
-  const ref = useRef()
+  const ref = useRef();
 
   const form = useForm({
     resolver: valibotResolver(SalidaSchema),
@@ -76,7 +76,7 @@ export default function ModalSalida({
       areaVenta: data?.areaVenta?.id,
       zapatos_id: data?.zapatos_id?.map((p) => p.id),
       producto_info: data?.producto_info?.codigo,
-      cantidad: data?.cantidad
+      cantidad: data?.cantidad,
     },
   });
 
@@ -85,24 +85,25 @@ export default function ModalSalida({
     name: 'zapatos_id',
   });
 
-  const info_producto = useWatch({ control: form.control, name: 'producto_info' });
+  const info_producto = useWatch({
+    control: form.control,
+    name: 'producto_info',
+  });
 
   const IdArraySchema = pipe(
-      string(),
-      transform((input) => parseInt(input)),
-      integer(),
-      minValue(1)
-  )
-  
+    string(),
+    transform((input) => parseInt(input)),
+    integer(),
+    minValue(1)
+  );
 
   const handleNewProducts = () => {
-    const {success} = safeParse(IdArraySchema, ref.current.value)
-    success && append(ref.current.value)
-    ref.current.value = ''
-  }
+    const { success } = safeParse(IdArraySchema, ref.current.value);
+    success && append(ref.current.value);
+    ref.current.value = '';
+  };
 
   const onSubmit = async (dataForm) => {
-    console.log(dataForm)
     setIsLoading(true);
     if (!data) {
       const { error } = await addSalida(dataForm);
@@ -127,52 +128,62 @@ export default function ModalSalida({
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>{trigger}</DialogTrigger>
-      <DialogContent className={cn('max-h-[605px]', form.getValues('zapatos_id')?.length > 5 && 'max-w-3xl')}>
+      <DialogContent
+        className={cn(
+          'max-h-[605px]',
+          form.getValues('zapatos_id')?.length > 5 && 'max-w-3xl'
+        )}
+      >
         <DialogHeader>
           <DialogTitle>{data ? 'Editar' : 'Agregar'} Salida</DialogTitle>
         </DialogHeader>
         <DialogDescription>Todos los campos son requeridos</DialogDescription>
-        {error &&
-            <Alert variant="destructive">
-              <CircleX className="h-5 w-5" />
-              <AlertTitle>Error!</AlertTitle>
-              <AlertDescription>
-                {error.message}
-              </AlertDescription>
-            </Alert>
-        }
+        {error && (
+          <Alert variant="destructive">
+            <CircleX className="h-5 w-5" />
+            <AlertTitle>Error!</AlertTitle>
+            <AlertDescription>{error.message}</AlertDescription>
+          </Alert>
+        )}
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className={cn(form.getValues('zapatos_id')?.length > 5 ? 'grid grid-cols-2 gap-4' : 'space-y-2')}>
+          <form
+            onSubmit={form.handleSubmit(onSubmit)}
+            className={cn(
+              form.getValues('zapatos_id')?.length > 5
+                ? 'grid grid-cols-2 gap-4'
+                : 'space-y-2'
+            )}
+          >
             <div>
-            <FormField
-              control={form.control}
-              name="areaVenta"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Área de venta</FormLabel>
-                  <Select
-                    onValueChange={field.onChange}
-                    defaultValue={field.value}
-                  >
-                    <FormControl>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Seleccione área de venta" />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      {areasVenta?.map((a) => (
-                        <SelectItem key={a.id} value={a.id}>
-                          {a.nombre}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+              <FormField
+                control={form.control}
+                name="areaVenta"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Área de venta</FormLabel>
+                    <Select
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                    >
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Seleccione área de venta" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        {areasVenta?.map((a) => (
+                          <SelectItem key={a.id} value={a.id}>
+                            {a.nombre}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
 
-            <FormField
+              <FormField
                 control={form.control}
                 name="producto_info"
                 render={({ field }) => (
@@ -216,7 +227,10 @@ export default function ModalSalida({
                                       (e) => e.categoria.nombre === 'Zapatos'
                                     )?.codigo
                                       ? (() => {
-                                          form.setValue('zapatos_id', undefined);
+                                          form.setValue(
+                                            'zapatos_id',
+                                            undefined
+                                          );
                                           form.setValue('cantidad', 0);
                                         })()
                                       : (() => {
@@ -251,49 +265,56 @@ export default function ModalSalida({
                   </FormItem>
                 )}
               />
-              </div>
-              
-            { info_producto && productosInfo?.find(p => p.codigo === info_producto)?.categoria?.nombre === "Zapatos" &&
-              <div className="space-y-2">
-              <Label>Productos</Label>
-
-              {form.getValues('zapatos_id')?.length > 0 &&
-                <ul
-                  className={cn(
-                    'overflow-y-auto flex gap-2 p-2 max-h-[328px] flex-col items-center whitespace-nowrap font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 shadow-sm bg-accent hover:text-accent-foreground rounded-md px-3 text-xs border-dashed ',
-                    form?.formState?.errors?.productos && 'border-destructive'
-                  )}
-                >
-                  {form.getValues('zapatos_id')?.map((p, index) => (
-                    <li
-                      key={p}
-                      className="flex w-full p-2 px-4 justify-between items-center bg-background rounded-md"
-                    >
-                      <span>{p}</span>
-                      <X
-                        className="ml-2 cursor-pointer"
-                        onClick={() => remove(index)}
-                        size={16}
-                      />
-                    </li>
-                  ))}
-                   
-                </ul>
-              }
-                <div className='flex gap-2'>
-                    <Input ref={ref} type="number" placeholder="Introduzca Id" />
-                    <Button type="button" onClick={handleNewProducts}>
-                      <PlusCircle className='w-5 h-5' />
-                    </Button>
-                </div>
-                <p className="text-[0.8rem] font-medium text-destructive">
-                  {form?.formState?.errors?.productos?.message}
-                </p>
             </div>
-            }
 
-            { info_producto && productosInfo?.find(p => p.codigo === info_producto)?.categoria?.nombre !== "Zapatos" &&
+            {info_producto &&
+              productosInfo?.find((p) => p.codigo === info_producto)?.categoria
+                ?.nombre === 'Zapatos' && (
+                <div className="space-y-2">
+                  <Label>Productos</Label>
 
+                  {form.getValues('zapatos_id')?.length > 0 && (
+                    <ul
+                      className={cn(
+                        'overflow-y-auto flex gap-2 p-2 max-h-[328px] flex-col items-center whitespace-nowrap font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 shadow-sm bg-accent hover:text-accent-foreground rounded-md px-3 text-xs border-dashed ',
+                        form?.formState?.errors?.productos &&
+                          'border-destructive'
+                      )}
+                    >
+                      {form.getValues('zapatos_id')?.map((p, index) => (
+                        <li
+                          key={p}
+                          className="flex w-full p-2 px-4 justify-between items-center bg-background rounded-md"
+                        >
+                          <span>{p}</span>
+                          <X
+                            className="ml-2 cursor-pointer"
+                            onClick={() => remove(index)}
+                            size={16}
+                          />
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                  <div className="flex gap-2">
+                    <Input
+                      ref={ref}
+                      type="number"
+                      placeholder="Introduzca Id"
+                    />
+                    <Button type="button" onClick={handleNewProducts}>
+                      <PlusCircle className="w-5 h-5" />
+                    </Button>
+                  </div>
+                  <p className="text-[0.8rem] font-medium text-destructive">
+                    {form?.formState?.errors?.productos?.message}
+                  </p>
+                </div>
+              )}
+
+            {info_producto &&
+              productosInfo?.find((p) => p.codigo === info_producto)?.categoria
+                ?.nombre !== 'Zapatos' && (
                 <div className="space-y-2">
                   <Label>Cantidad</Label>
                   <Input
@@ -304,8 +325,7 @@ export default function ModalSalida({
                     {form.formState.errors?.cantidad?.message}
                   </p>
                 </div>
-
-            }
+              )}
 
             <div className="col-span-2 grid gap-4">
               <DialogFooter className=" w-full flex gap-2 mt-2">
