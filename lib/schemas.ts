@@ -32,7 +32,7 @@ export const UserSchema = pipe(
       minLength(1, 'El nombre de ususario es requerido')
     ),
     rol: enum_(ROLES, 'Rol invalido'),
-    areaVenta: optional(pipe(string(), nonEmpty())),
+    area_venta: optional(pipe(string(), nonEmpty())),
     password: pipe(
       string('La contraseña es requerida'),
       minLength(1, 'La contraseña es requerida')
@@ -40,16 +40,16 @@ export const UserSchema = pipe(
   }),
   forward(
     partialCheck(
-      [['rol'], ['areaVenta']],
+      [['rol'], ['area_venta']],
       (input) => {
-        if (input.rol === 'VENDEDOR' && !input.areaVenta) {
+        if (input.rol === 'VENDEDOR' && !input.area_venta) {
           return false;
         }
         return true;
       },
       'Debe asignarle un área de venta al vendedor.'
     ),
-    ['areaVenta']
+    ['area_venta']
   )
 );
 
@@ -152,18 +152,12 @@ export const SalidaSchema = object({
     nonEmpty('El área de venta es requerida.')
   ),
   zapatos_id: optional(
-      pipe(
+    pipe(
       array(string(), 'Productos no puede estar vacio'),
       minLength(1, 'Productos no puede estar vacio')
-    ) 
-  ),
-  cantidad: optional(
-      pipe(
-      number(),
-      integer(),
-      minValue(1)
     )
   ),
+  cantidad: optional(pipe(number(), integer(), minValue(1))),
   producto_info: pipe(
     string('El producto es requerido.'),
     nonEmpty('El producto es requerido.')
@@ -174,21 +168,15 @@ export const VentasSchema = object({
   metodoPago: enum_(METODOS_PAGO, 'Método requerido: Efectivo o transferencia'),
   zapatos_id: optional(
     pipe(
-    array(string(), 'Productos no puede estar vacio'),
-    minLength(1, 'Productos no puede estar vacio')
-  ) 
-),
-cantidad: optional(
-    pipe(
-    number(),
-    integer(),
-    minValue(1)
-  )
-),
-producto_info: pipe(
-  string('El producto es requerido.'),
-  nonEmpty('El producto es requerido.')
-),
+      array(string(), 'Productos no puede estar vacio'),
+      minLength(1, 'Productos no puede estar vacio')
+    )
+  ),
+  cantidad: optional(pipe(number(), integer(), minValue(1))),
+  producto_info: pipe(
+    string('El producto es requerido.'),
+    nonEmpty('El producto es requerido.')
+  ),
 });
 
 export const SearchSchema = object({

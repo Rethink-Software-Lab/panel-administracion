@@ -1,7 +1,7 @@
-import { DateTime } from "luxon";
+import { DateTime } from 'luxon';
 
-import { Card, CardContent, CardFooter } from "@/components/ui/card";
-import { Edit2, PlusCircle, SearchX } from "lucide-react";
+import { Card, CardContent, CardFooter } from '@/components/ui/card';
+import { Edit2, PlusCircle, SearchX } from 'lucide-react';
 import {
   Table,
   TableBody,
@@ -9,26 +9,26 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table";
-import { Button } from "@/components/ui/button";
-import ModalSalidas from "@/components/functionals/ModalSalida";
+} from '@/components/ui/table';
+import { Button } from '@/components/ui/button';
+import ModalSalidas from '@/components/functionals/ModalSalida';
 
-import { getSalidas, getAreasVentas, getProductos } from "@/lib/services";
-import { deleteSalida } from "@/lib/actions";
+import { getSalidas, getAreasVentas, getProductos } from '@/lib/services';
+import { deleteSalida } from '@/lib/actions';
 
-import Pagination from "@/components/functionals/Pagination";
-import TableDelete from "@/components/functionals/TableDelete";
-import { Badge } from "@/components/ui/badge";
+import Pagination from '@/components/functionals/Pagination';
+import TableDelete from '@/components/functionals/TableDelete';
+import { Badge } from '@/components/ui/badge';
 import {
   Popover,
   PopoverTrigger,
   PopoverContent,
-} from "@/components/ui/popover";
-import { Separator } from "@/components/ui/separator";
+} from '@/components/ui/popover';
+import { Separator } from '@/components/ui/separator';
 
 export default async function Salidas({ searchParams }) {
-  const page = searchParams["p"] ?? 1;
-  const perPage = searchParams["perPage"] ?? 10;
+  const page = searchParams['p'] ?? 1;
+  const perPage = searchParams['perPage'] ?? 10;
   const { data: dataSalidas } = await getSalidas({ page: Number(page) });
   const salidas = dataSalidas?.salidas;
   const info = dataSalidas?.info;
@@ -128,16 +128,16 @@ export default async function Salidas({ searchParams }) {
                     </TableCell>
                     <TableCell className="font-medium">
                       {DateTime.fromISO(salida?.createdAt).toFormat(
-                        "dd/LL/yyyy  h:mma"
+                        'dd/LL/yyyy  h:mma'
                       )}
                     </TableCell>
                     <TableCell className="font-medium">
                       {DateTime.fromISO(salida?.updatedAt).toFormat(
-                        "dd/LL/yyyy  h:mma"
+                        'dd/LL/yyyy  h:mma'
                       )}
                     </TableCell>
                     <TableCell className="flex items-center gap-2">
-                      <ModalSalidas
+                      {/* <ModalSalidas
                         data={salida}
                         trigger={
                           <Button variant="outline" size="icon">
@@ -146,7 +146,7 @@ export default async function Salidas({ searchParams }) {
                         }
                         areasVenta={areasVenta}
                         productosInfo={productosInfo}
-                      />
+                      /> */}
                       <TableDelete id={salida?.id} action={deleteSalida} />
                     </TableCell>
                   </TableRow>

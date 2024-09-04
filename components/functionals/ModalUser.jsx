@@ -24,7 +24,6 @@ import {
   FormControl,
   FormField,
   FormItem,
-  FormLabel,
   FormMessage,
 } from '@/components/ui/form';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
@@ -33,22 +32,24 @@ import { useForm, useWatch } from 'react-hook-form';
 import { valibotResolver } from '@hookform/resolvers/valibot';
 import { UserSchema } from '@/lib/schemas';
 
-import { createUser, editUser } from '@/lib/actions';
+import { addUsuario, updateUsuario } from '@/app/(with-layout)/users/actions';
 import { toast } from 'sonner';
 import { CircleX, LoaderCircle } from 'lucide-react';
 import { useState } from 'react';
+import { Label } from '@/components/ui/label';
 
 export default function ModalUser({ data = null, trigger, areas }) {
   const [isOpen, setIsOpen] = useState(false);
-  const [errors, setErrors] = useState(null);
+  const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
+
   const form = useForm({
     resolver: valibotResolver(UserSchema),
     defaultValues: {
       username: data?.username || '',
       rol: data?.rol || '',
       password: '',
-      areaVenta: data?.areaVenta?.id?.toString(),
+      area_venta: data?.area_venta?.id?.toString(),
     },
   });
 
@@ -60,22 +61,25 @@ export default function ModalUser({ data = null, trigger, areas }) {
   const onSubmit = async (dataForm) => {
     setIsLoading(true);
     if (!data) {
-      const { errors } = await createUser(dataForm);
+      const { data, error } = await addUsuario(dataForm);
       setIsLoading(false);
-      if (!errors) {
+      if (!error) {
         form.reset();
         setIsOpen(false);
-        toast.success('El usuario fué creado.');
+        toast.success(data);
       }
-      setErrors(errors);
+      setError(error);
     } else {
-      const { errors } = await editUser({ ...dataForm, id: data?.id });
+      const { data: dataRes, error } = await updateUsuario({
+        ...dataForm,
+        id: data?.id,
+      });
       setIsLoading(false);
-      if (!errors) {
+      if (!error) {
         setIsOpen(false);
-        toast.success('El usuario fué editado.');
+        toast.success(dataRes);
       }
-      setErrors(errors);
+      setError(error);
     }
   };
 
@@ -87,18 +91,13 @@ export default function ModalUser({ data = null, trigger, areas }) {
           <DialogTitle>{data ? 'Editar' : 'Agregar'} Usuario</DialogTitle>
         </DialogHeader>
         <DialogDescription>Todos los campos son requeridos</DialogDescription>
-        {errors &&
-          errors.map((error, index) => (
-            <Alert variant="destructive" key={index}>
-              <CircleX className="h-5 w-5" />
-              <AlertTitle>Error!</AlertTitle>
-              <AlertDescription>
-                {error.message.startsWith('UNIQUE constraint failed')
-                  ? 'Ya existe un usuario con ese nombre'
-                  : error.message}
-              </AlertDescription>
-            </Alert>
-          ))}
+        {error && (
+          <Alert variant="destructive">
+            <CircleX className="h-5 w-5" />
+            <AlertTitle>Error!</AlertTitle>
+            <AlertDescription>{error.message}</AlertDescription>
+          </Alert>
+        )}
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
             <FormField
@@ -106,7 +105,7 @@ export default function ModalUser({ data = null, trigger, areas }) {
               name="username"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Nombre</FormLabel>
+                  <Label>Nombre</Label>
                   <FormControl>
                     <Input {...field} />
                   </FormControl>
@@ -119,7 +118,7 @@ export default function ModalUser({ data = null, trigger, areas }) {
               name="rol"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Rol</FormLabel>
+                  <Label>Rol</Label>
                   <Select
                     onValueChange={(value) => {
                       form.getValues('rol') !== 'VENDEDOR' &&
@@ -146,11 +145,12 @@ export default function ModalUser({ data = null, trigger, areas }) {
             {rol === 'VENDEDOR' && (
               <FormField
                 control={form.control}
-                name="areaVenta"
+                name="area_venta"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Área de venta</FormLabel>
+                    <Label>Área de venta</Label>
                     <Select
+                      disabled={!areas || areas.length < 1}
                       onValueChange={field.onChange}
                       defaultValue={field.value}
                     >
@@ -177,7 +177,7 @@ export default function ModalUser({ data = null, trigger, areas }) {
               name="password"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Contraseña</FormLabel>
+                  <Label>Contraseña</Label>
                   <FormControl>
                     <Input {...field} placeholder="******" type="password" />
                   </FormControl>
