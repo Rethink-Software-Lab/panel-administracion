@@ -14,48 +14,41 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import { getSession } from '@/lib/getSession';
+import { Fragment } from 'react';
 
 export default async function Search({ params }) {
   const { isStaff } = getSession();
-  const { data, errors } = await searchProduct({ codigo: params.codigo });
+  const { data, error } = await searchProduct(params.codigo);
+  const info = data?.info;
+  const inventario = data?.inventario;
+  const isZapato = data?.zapato;
+
   return (
     <main className="flex flex-1 flex-col gap-4 p-4 lg:gap-6 lg:p-6">
       {!data ? (
         <div className="flex flex-1 items-center justify-center rounded-lg border border-dashed shadow-sm">
           <div className="flex flex-col items-center gap-1 text-center">
-            {errors?.[0]?.message?.startsWith(
-              'No ProductoInfo matches the given query.'
-            ) ? (
-              <SearchX size={72} className="inline-flex mb-4" />
-            ) : (
-              <CloudOff size={72} className="inline-flex mb-4" />
-            )}
+            <CloudOff size={72} className="inline-flex mb-4" />
+
             <h3 className="text-2xl font-bold tracking-tight">
-              {errors?.[0]?.message?.startsWith(
-                'No ProductoInfo matches the given query.'
-              )
-                ? 'Producto no encontrado'
-                : 'Error al conectar'}
+              Error al conectar
             </h3>
             <p className="text-sm text-muted-foreground">
-              {errors?.[0]?.message?.startsWith(
-                'No ProductoInfo matches the given query.'
-              )
-                ? 'Asegúrate que existe un producto con ese código.'
-                : 'No se ha podido conectar con el servidor, por favor contactar con soporte.'}
+              No se ha podido conectar con el servidor, por favor contactar con
+              soporte.
             </p>
           </div>
         </div>
       ) : (
         <div className="grid grid-cols-3 gap-4">
-          {data?.imagen?.url ? (
+          {info?.imagen?.url ? (
             <Image
               priority
               className="col-span-3 md:col-span-1 rounded-lg object-cover aspect-square"
-              src={data?.imagen?.url}
+              src={info?.imagen?.url}
               width={800}
               height={800}
-              alt={data?.descripcion}
+              alt={info?.descripcion}
             />
           ) : (
             <div className="col-span-3 md:col-span-1 bg-muted rounded-lg min-h-80 flex justify-center items-center text-muted-foreground">
@@ -68,7 +61,7 @@ export default async function Search({ params }) {
           <Card className="col-span-3 md:col-span-2 overflow-hidden">
             <CardHeader className="flex flex-row gap-2 items-start bg-muted/50">
               <CardTitle className="group flex items-center gap-2 text-lg">
-                {data?.codigo}
+                {info?.codigo}
               </CardTitle>
             </CardHeader>
             <Separator />
@@ -77,7 +70,7 @@ export default async function Search({ params }) {
                 <ul className="grid gap-3">
                   <li className="flex items-center justify-between">
                     <span className="text-muted-foreground">Descripción</span>
-                    <span>{data?.descripcion}</span>
+                    <span>{info?.descripcion}</span>
                   </li>
                   {isStaff && (
                     <>
@@ -86,7 +79,7 @@ export default async function Search({ params }) {
                         <span className="text-muted-foreground">
                           Precio de Costo
                         </span>
-                        <span>${data?.precioCosto}</span>
+                        <span>${info?.precio_costo}</span>
                       </li>
                     </>
                   )}
@@ -95,7 +88,7 @@ export default async function Search({ params }) {
                     <span className="text-muted-foreground">
                       Precio de Venta
                     </span>
-                    <span>${data?.precioVenta}</span>
+                    <span>${info?.precio_venta}</span>
                   </li>
                 </ul>
               </div>
@@ -108,50 +101,54 @@ export default async function Search({ params }) {
             </CardHeader>
             <Separator />
             <CardContent className="p-6 text-sm">
-              {data?.productoSet?.length > 0 ? (
+              {isZapato ? (
+                inventario?.map((res) => (
+                  <Fragment key={res.area}>
+                    <h2 className="font-bold pb-2">{res.area}</h2>
+
+                    <Table className="mb-6">
+                      <TableHeader>
+                        <TableRow>
+                          <TableHead className="font-bold">Id</TableHead>
+                          <TableHead className="font-bold">Número</TableHead>
+                          <TableHead className="font-bold">Color</TableHead>
+                        </TableRow>
+                      </TableHeader>
+                      <TableBody>
+                        {res.productos.map((p) => (
+                          <TableRow key={p.id}>
+                            <TableCell>{p?.id}</TableCell>
+                            <TableCell>{p?.numero}</TableCell>
+                            <TableCell>{p?.color}</TableCell>
+                          </TableRow>
+                        ))}
+                      </TableBody>
+                    </Table>
+                  </Fragment>
+                ))
+              ) : (
                 <Table>
                   <TableHeader>
                     <TableRow>
-                      {data?.categoria?.nombre === 'Zapatos' ? (
-                        <>
-                          <TableHead>Color</TableHead>
-                          <TableHead>Número</TableHead>
-                        </>
-                      ) : (
-                        <TableHead>ID</TableHead>
-                      )}
-
-                      <TableHead>Localización</TableHead>
+                      <TableHead className="font-bold">Área</TableHead>
+                      <TableHead className="font-bold">Cantidad</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
-                    {data?.productoSet?.map((res) => {
-                      {
-                        if (!res.venta) {
-                          return (
-                            <TableRow key={res.id}>
-                              {res?.color ? (
-                                <>
-                                  <TableCell>{res?.color}</TableCell>
-                                  <TableCell>{res?.numero}</TableCell>
-                                </>
-                              ) : (
-                                <TableCell>{res?.id}</TableCell>
-                              )}
-
-                              <TableCell>
-                                {res?.areaVenta?.nombre
-                                  ? res?.areaVenta?.nombre
-                                  : 'Almacén'}
-                              </TableCell>
-                            </TableRow>
-                          );
-                        }
-                      }
-                    })}
+                    {inventario?.map((res) => (
+                      <TableRow key={res.area}>
+                        <TableCell>{res?.area}</TableCell>
+                        <TableCell>{res?.cantidad}</TableCell>
+                      </TableRow>
+                    ))}
                   </TableBody>
                 </Table>
-              ) : (
+              )}
+
+              {/* Si no hay cantidad y hay productos, no se muestra nada */}
+              {/* {!cantidad && productos && null} */}
+              {/* Si no hay cantidad ni productos, se muestra un mensaje */}
+              {/* {!cantidad && !productos && (
                 <div className=" min-h-80 flex flex-1 items-center justify-center rounded-lg border border-dashed shadow-sm">
                   <div className="flex flex-col items-center gap-1 text-center">
                     <PackageX size={72} className="inline-flex mb-4" />
@@ -163,7 +160,7 @@ export default async function Search({ params }) {
                     </p>
                   </div>
                 </div>
-              )}
+              )} */}
             </CardContent>
           </Card>
         </div>
