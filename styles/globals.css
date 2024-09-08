@@ -127,3 +127,18 @@
     --chart-5: 243 52% 68%;
   }
 }
+
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  #tablaParaImprimir,
+  #tablaParaImprimir * {
+    visibility: visible;
+  }
+  #tablaParaImprimir {
+    position: absolute;
+    left: 0;
+    top: 0;
+  }
+}
