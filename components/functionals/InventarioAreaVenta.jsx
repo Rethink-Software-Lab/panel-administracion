@@ -9,9 +9,9 @@ import { CloudOff } from 'lucide-react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 export default async function InventarioAreaVenta({ id }) {
-  const {
-    data: { productos, zapatos },
-  } = await inventarioAreaVenta({ id });
+  const { data } = await inventarioAreaVenta({ id });
+  const productos = data?.productos;
+  const zapatos = data?.zapatos;
   const { data: categorias } = await getCategorias();
   return (
     <main className="flex flex-1 flex-col gap-4 pb-4 lg:gap-6 lg:pb-6 h-full">
@@ -26,7 +26,7 @@ export default async function InventarioAreaVenta({ id }) {
               className="h-full rounded-none data-[state=active]:bg-white data-[state=active]:text-foreground data-[state=active]:shadow-none data-[state=active]:border-foreground border-b-[3px] border-white"
               value="productos"
             >
-              Inventario
+              Productos
             </TabsTrigger>
             <TabsTrigger
               className="h-full rounded-none data-[state=active]:bg-white data-[state=active]:text-foreground data-[state=active]:shadow-none data-[state=active]:border-foreground border-b-[3px] border-white"
@@ -53,7 +53,7 @@ export default async function InventarioAreaVenta({ id }) {
           </TabsContent>
         </Tabs>
       ) : (
-        <div className="flex flex-1 items-center justify-center rounded-lg border border-dashed shadow-sm">
+        <div className="flex flex-1 items-center justify-center rounded-lg border border-dashed shadow-sm mx-4 mb-16">
           <div className="flex flex-col items-center gap-1 text-center">
             <CloudOff size={72} className="inline-flex mb-4" />
             <h3 className="text-2xl font-bold tracking-tight">
