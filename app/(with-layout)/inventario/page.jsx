@@ -1,4 +1,3 @@
-import { Card } from '@/components/ui/card';
 import { columns } from './columns';
 import { columns as columnsNew } from './columnsNew';
 import { DataTable } from '@/components/ui/data-table-inventario-almacen';
@@ -18,7 +17,9 @@ export default async function Inventario() {
   return (
     <main className="flex flex-1 flex-col gap-4 py-4 lg:gap-6 lg:py-6 h-full">
       <div className="flex justify-between items-center pl-6">
-        <h1 className="text-lg font-semibold md:text-2xl">Inventario</h1>
+        <h1 className="text-lg font-semibold md:text-2xl">
+          Inventario Almacén
+        </h1>
       </div>
       {errors &&
         errors?.map(
