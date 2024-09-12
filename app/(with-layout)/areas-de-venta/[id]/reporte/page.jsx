@@ -24,7 +24,8 @@ export default async function Page({ params }) {
               <h2 className="text-2xl font-medium">Reporte de venta</h2>
               <p>
                 {DateTime.fromISO(new Date().toISOString()).toLocaleString(
-                  DateTime.DATE_FULL
+                  DateTime.DATE_FULL,
+                  { locale: 'es' }
                 )}
               </p>
             </div>
