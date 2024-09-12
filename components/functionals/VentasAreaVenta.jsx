@@ -1,33 +1,45 @@
-import { CloudOff, PackagePlus } from 'lucide-react';
+import { CloudOff, FileText, PackagePlus } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 import ModalVentas from '@/components/functionals/ModalVentas';
 
 import { DataTable } from '../ui/data-table-ventas';
-import { columns } from '@/app/(with-layout)/areas-de-venta/columns-ventas';
+import { columns } from '@/app/(with-layout)/areas-de-venta/[id]/columns-ventas';
 
 import { getVenta, getProductos } from '@/lib/services';
+import Link from 'next/link';
+
+// TODO: Agregar Tooltip
 
 export default async function VentasAreaVenta({ id }) {
   const { data, error } = await getVenta(id);
+  console.log(data);
 
   const { data: productosInfo } = await getProductos();
   return (
     <main className="flex flex-1 flex-col gap-4 pb-4 lg:gap-6 lg:pb-6 px-4 h-full">
       <div className="flex justify-between items-center">
         <h1 className="text-lg font-semibold md:text-2xl">Ventas</h1>
-        <ModalVentas
-          idPunto={Number(id)}
-          productosInfo={productosInfo}
-          trigger={
-            <Button className="gap-1 items-center" disabled={error}>
-              <PackagePlus size={18} />
-              <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
-                Agregar
-              </span>
+        <div className="flex items-center gap-2">
+          <Link href={`/areas-de-venta/${id}/reporte`}>
+            <Button variant="outline" size="icon">
+              <span className="sr-only">Ver reporte</span>
+              <FileText size={18} />
             </Button>
-          }
-        />
+          </Link>
+          <ModalVentas
+            idPunto={Number(id)}
+            productosInfo={productosInfo}
+            trigger={
+              <Button className="gap-1 items-center" disabled={error}>
+                <PackagePlus size={18} />
+                <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
+                  Agregar
+                </span>
+              </Button>
+            }
+          />
+        </div>
       </div>
 
       {data ? (
