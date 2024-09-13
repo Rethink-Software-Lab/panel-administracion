@@ -72,12 +72,6 @@ export default function ModalSalida({
 
   const form = useForm({
     resolver: valibotResolver(SalidaSchema),
-    defaultValues: {
-      areaVenta: data?.areaVenta?.id,
-      zapatos_id: data?.zapatos_id?.map((p) => p.id),
-      producto_info: data?.producto_info?.codigo,
-      cantidad: data?.cantidad,
-    },
   });
 
   const { fields, append, remove } = useFieldArray({
@@ -157,7 +151,7 @@ export default function ModalSalida({
             <div>
               <FormField
                 control={form.control}
-                name="areaVenta"
+                name="area_venta"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Área de venta</FormLabel>
@@ -222,21 +216,18 @@ export default function ModalSalida({
                                   key={producto.id}
                                   value={producto.codigo}
                                   onSelect={(currentValue) => {
-                                    currentValue !==
-                                    productosInfo?.find(
-                                      (e) => e.categoria.nombre === 'Zapatos'
-                                    )?.codigo
-                                      ? (() => {
-                                          form.setValue(
-                                            'zapatos_id',
-                                            undefined
-                                          );
-                                          form.setValue('cantidad', 0);
-                                        })()
-                                      : (() => {
-                                          form.setValue('cantidad', undefined);
-                                          form.setValue('zapatos_id', []);
-                                        })();
+                                    const esZapato =
+                                      productosInfo?.find(
+                                        (e) => e.codigo === currentValue
+                                      )?.categoria.nombre === 'Zapatos';
+
+                                    if (esZapato) {
+                                      form.setValue('cantidad', undefined);
+                                      form.setValue('zapatos_id', []);
+                                    } else {
+                                      form.setValue('zapatos_id', undefined);
+                                      form.setValue('cantidad', 0);
+                                    }
                                     field.onChange(
                                       currentValue === field.value
                                         ? ''

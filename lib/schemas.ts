@@ -147,7 +147,7 @@ export const EntradaSchema = object({
 });
 
 export const SalidaSchema = object({
-  areaVenta: pipe(
+  area_venta: pipe(
     string('El área de venta es requerida.'),
     nonEmpty('El área de venta es requerida.')
   ),
