@@ -16,25 +16,16 @@ export async function addProducto(formData) {
     if (res.status === 401)
       return {
         data: null,
-        error: {
-          message: 'No autorizado',
-          description: 'Usted no está autorizado para esta acción',
-        },
+        error: 'No autorizado',
       };
     if (res.status === 424)
       return {
         data: null,
-        error: {
-          message: 'Fallo de una dependencia.',
-          description: 'Una de las dependencias falló, contacte con soporte.',
-        },
+        error: 'Fallo de una dependencia.',
       };
     return {
       data: null,
-      error: {
-        message: 'Algo salió mal.',
-        description: 'Por favor contacte con soporte',
-      },
+      error: 'Algo salió mal.',
     };
   }
   revalidatePath('/productos');
@@ -60,45 +51,27 @@ export async function updateProducto(formData, id) {
     if (res.status === 401)
       return {
         data: null,
-        error: {
-          message: 'No autorizado',
-          description: 'Usted no está autorizado para esta acción',
-        },
+        error: 'No autorizado',
       };
     if (res.status === 403)
       return {
         data: null,
-        error: {
-          message:
-            'No es posible editar la categoría de un producto que tiene productos asociados.',
-          description:
-            'No es posible editar la categoría de un producto que tiene un producto asociado.',
-        },
+        error:
+          'No es posible editar la categoría de un producto que tiene productos asociados.',
       };
     if (res.status === 404)
       return {
         data: null,
-        error: {
-          message: 'Producto no encontrado',
-          description:
-            'No fué posible encontrar el producto que desea eliminar',
-        },
+        error: 'No fué posible encontrar el producto que desea eliminar',
       };
     if (res.status === 424)
       return {
         data: null,
-        error: {
-          message: 'Fallo en una dependencia.',
-          description:
-            'No fué posible encontrar el producto que desea eliminar',
-        },
+        error: 'Fallo en una dependencia.',
       };
     return {
       data: null,
-      error: {
-        message: 'Algo salió mal.',
-        description: 'Por favor contacte con soporte',
-      },
+      error: 'Algo salió mal.',
     };
   }
   revalidatePath('/productos');

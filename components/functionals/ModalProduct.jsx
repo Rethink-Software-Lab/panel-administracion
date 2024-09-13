@@ -1,7 +1,7 @@
-"use client";
+'use client';
 
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
+import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
 import {
   DialogFooter,
   DialogClose,
@@ -11,7 +11,7 @@ import {
   DialogHeader,
   DialogTrigger,
   DialogDescription,
-} from "@/components/ui/dialog";
+} from '@/components/ui/dialog';
 import {
   Form,
   FormControl,
@@ -19,48 +19,30 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+} from '@/components/ui/form';
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 
-import { useForm } from "react-hook-form";
-import { valibotResolver } from "@hookform/resolvers/valibot";
-import { ProductSchema } from "@/lib/schemas";
-
-import {
-  addProducto,
-  updateProducto,
-} from "@/app/(with-layout)/products/actions";
-
-import { toast } from "sonner";
-import { CircleX, LoaderCircle, UploadIcon, X } from "lucide-react";
-import { useState } from "react";
-import Image from "next/image";
-import { optional, pipe, safeParse, string, url } from "valibot";
+import { useForm } from 'react-hook-form';
+import { valibotResolver } from '@hookform/resolvers/valibot';
+import { ProductSchema } from '@/lib/schemas';
+import { CircleX, LoaderCircle } from 'lucide-react';
+import { useEffect, useState } from 'react';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "../ui/select";
+} from '@/components/ui/select';
 
-function formatBytes(bytes) {
-  const decimals = 1;
-  const sizeType = "normal";
-  const sizes = ["Bytes", "KB", "MB", "GB", "TB"];
-  const accurateSizes = ["Bytes", "KiB", "MiB", "GiB", "TiB"];
-  if (bytes === 0) return "0 Byte";
-  const i = Math.floor(Math.log(bytes) / Math.log(1024));
-  return `${(bytes / Math.pow(1024, i)).toFixed(decimals)} ${
-    sizeType === "accurate" ? accurateSizes[i] ?? "Bytest" : sizes[i] ?? "Bytes"
-  }`;
-}
+import { ImagePreview } from '@/components/functionals/ImagePreview';
+import { ImageUploadLabel } from '@/components/functionals/ImageUploadLabel';
+
+import { useProductSubmit } from '@/hooks/useProductSubmit';
 
 export default function ModalProduct({ data = null, trigger, categorias }) {
-  const [imagen, setImage] = useState(data?.imagen?.url || undefined);
+  const [imagen, setImage] = useState(data?.imagen?.url);
   const [isOpen, setIsOpen] = useState(false);
-  const [error, setError] = useState(null);
-  const [isLoading, setIsLoading] = useState(false);
 
   const form = useForm({
     resolver: valibotResolver(ProductSchema),
@@ -70,53 +52,23 @@ export default function ModalProduct({ data = null, trigger, categorias }) {
     },
   });
 
-  const { success, output } = safeParse(
-    optional(pipe(string(), url())),
-    imagen
-  );
+  const watchImagen = form.watch('imagen');
 
-  const onSubmit = async (dataForm) => {
-    setIsLoading(true);
-    const formData = new FormData();
-    if (!success) {
-      formData.append("imagen", imagen);
+  useEffect(() => {
+    if (watchImagen && watchImagen.length > 0) {
+      setImage(URL.createObjectURL(watchImagen[0]));
     }
-    if (!data) {
-      formData.append(
-        "data",
-        JSON.stringify({
-          ...dataForm,
-        })
-      );
+  }, [watchImagen]);
 
-      const { data, error } = await addProducto(formData);
-      setIsLoading(false);
-      if (!error) {
-        form.reset();
-        setImage(undefined);
-        setIsOpen(false);
-        toast.success(data);
-      }
-      setError(error);
-    } else {
-      formData.append(
-        "data",
-        JSON.stringify({
-          ...dataForm,
-          imagen: success ? imagen : null,
-        })
-      );
+  const { handleSubmit, error, isLoading } = useProductSubmit({
+    form,
+    setIsOpen,
+    setImage,
+  });
 
-      const { data: res, error } = await updateProducto(formData, data?.id);
-      setIsLoading(false);
-      if (!error) {
-        form.reset();
-        setImage(undefined);
-        setIsOpen(false);
-        toast.success(res);
-      }
-      setError(error);
-    }
+  const handleImageRemove = () => {
+    form.setValue('imagen', undefined);
+    setImage(undefined);
   };
 
   return (
@@ -124,7 +76,7 @@ export default function ModalProduct({ data = null, trigger, categorias }) {
       <DialogTrigger asChild>{trigger}</DialogTrigger>
       <DialogContent className="max-w-3xl">
         <DialogHeader>
-          <DialogTitle>{data ? "Editar" : "Agregar"} Producto</DialogTitle>
+          <DialogTitle>{data ? 'Editar' : 'Agregar'} Producto</DialogTitle>
         </DialogHeader>
         <DialogDescription className="text-center md:text-left">
           Todos los campos son requeridos
@@ -138,7 +90,7 @@ export default function ModalProduct({ data = null, trigger, categorias }) {
         )}
         <Form {...form}>
           <form
-            onSubmit={form.handleSubmit(onSubmit)}
+            onSubmit={form.handleSubmit(handleSubmit)}
             className="grid md:grid-cols-2 gap-4"
           >
             <div className="space-y-2 col-span-2 md:col-span-1">
@@ -200,70 +152,21 @@ export default function ModalProduct({ data = null, trigger, categorias }) {
               />
             </div>
             <div className="space-y-2 col-span-2 md:col-span-1">
-              <div className="relative flex flex-col gap-2 h-[68px] overflow-hidden">
-                {output === undefined && (
-                  <label
-                    htmlFor="imagen"
-                    className="w-full cursor-pointer rounded-lg border-2 border-dashed border-muted-foreground/25 px-5 py-2.5 transition hover:bg-muted/25 ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
-                  >
-                    <div className="flex items-center gap-4">
-                      <div className="rounded-full border border-dashed p-3">
-                        <UploadIcon
-                          className="size-5 text-muted-foreground"
-                          aria-hidden="true"
-                        />
-                      </div>
-                      <div className="">
-                        <p className="text-sm font-medium text-muted-foreground">
-                          Click para seleccionar imagen.
-                        </p>
-                      </div>
-                    </div>
-                  </label>
-                )}
-
-                {output !== undefined && (
-                  <div className="h-[68px] flex items-center mt-4">
-                    <div className="relative flex items-center w-full justify-between space-x-4">
-                      <Image
-                        priority
-                        src={success ? imagen : URL.createObjectURL(imagen)}
-                        alt="asd"
-                        width={48}
-                        height={48}
-                        className="aspect-square shrink-0 rounded-md object-cover border"
-                      />
-                      <div className="flex flex-1 space-x-4">
-                        <div className="flex w-full flex-col gap-2">
-                          <div className="space-y-px">
-                            <p className="line-clamp-1 text-sm font-medium text-foreground/80">
-                              {!success && imagen.name}
-                            </p>
-                            <p className="text-xs text-muted-foreground">
-                              {!success && formatBytes(imagen.size)}
-                            </p>
-                          </div>
-                        </div>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <Button
-                          type="button"
-                          variant="outline"
-                          size="icon"
-                          className="size-7"
-                          onClick={() => setImage(undefined)}
-                        >
-                          <X className="size-4 " aria-hidden="true" />
-                          <span className="sr-only">Remove file</span>
-                        </Button>
-                      </div>
-                    </div>
-                  </div>
+              <div className="relative flex flex-col gap-2 overflow-hidden">
+                {imagen ? (
+                  <ImagePreview
+                    imagen={imagen}
+                    fileName={form.getValues('imagen')?.[0]?.name}
+                    fileSize={form.getValues('imagen')?.[0]?.size}
+                    onRemove={handleImageRemove}
+                  />
+                ) : (
+                  <ImageUploadLabel />
                 )}
               </div>
               <input
                 id="imagen"
-                onChange={(e) => setImage(e.target.files[0])}
+                {...form.register('imagen')}
                 type="file"
                 accept="image/*"
                 hidden
@@ -318,10 +221,10 @@ export default function ModalProduct({ data = null, trigger, categorias }) {
                   {isLoading ? (
                     <>
                       <LoaderCircle className="mr-2 h-4 w-4 animate-spin" />
-                      {data ? "Editando..." : "Agregando..."}
+                      {data ? 'Editando...' : 'Agregando...'}
                     </>
                   ) : (
-                    <>{data ? "Editar" : "Agregar"}</>
+                    <>{data ? 'Editar' : 'Agregar'}</>
                   )}
                 </Button>
               </DialogFooter>
