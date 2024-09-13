@@ -13,7 +13,6 @@ import Link from 'next/link';
 
 export default async function VentasAreaVenta({ id }) {
   const { data, error } = await getVenta(id);
-  console.log(data);
 
   const { data: productosInfo } = await getProductos();
   return (
