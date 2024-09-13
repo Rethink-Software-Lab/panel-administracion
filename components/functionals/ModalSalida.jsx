@@ -136,7 +136,7 @@ export default function ModalSalida({
           <Alert variant="destructive">
             <CircleX className="h-5 w-5" />
             <AlertTitle>Error!</AlertTitle>
-            <AlertDescription>{error.message}</AlertDescription>
+            <AlertDescription>{error}</AlertDescription>
           </Alert>
         )}
         <Form {...form}>

@@ -60,25 +60,21 @@ export async function deleteSalida({ id }) {
     if (res.status === 401)
       return {
         data: null,
-        error: {
-          message: 'No autorizado',
-          description: 'Usted no está autorizado para esta acción',
-        },
+        error: 'No autorizado',
+      };
+    if (res.status === 400)
+      return {
+        data: null,
+        error: 'Algunos productos ya han sido vendidos',
       };
     if (res.status === 404)
       return {
         data: null,
-        error: {
-          message: 'Salida no encontrada',
-          description: 'No fué posible encontrar la salida que desea eliminar',
-        },
+        error: 'Salida no encontrada',
       };
     return {
       data: null,
-      error: {
-        message: 'Algo salió mal.',
-        description: 'Por favor contacte con soporte',
-      },
+      error: 'Algo salió mal.',
     };
   }
   revalidatePath(`/salidas/`);
