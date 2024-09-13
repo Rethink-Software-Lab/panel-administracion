@@ -67,7 +67,7 @@ export default function ModalVentas({
   const [isOpen, setIsOpen] = useState(false);
   const [errors, setErrors] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
-  const ref = useRef()
+  const ref = useRef();
 
   const form = useForm({
     resolver: valibotResolver(VentasSchema),
@@ -75,7 +75,7 @@ export default function ModalVentas({
       metodoPago: data?.metodoPago,
       zapatos_id: data?.zapatos_id?.map((p) => p.id),
       producto_info: data?.producto_info?.codigo,
-      cantidad: data?.cantidad
+      cantidad: data?.cantidad,
     },
   });
 
@@ -84,21 +84,23 @@ export default function ModalVentas({
     name: 'zapatos_id',
   });
 
-  const info_producto = useWatch({ control: form.control, name: 'producto_info' });
+  const info_producto = useWatch({
+    control: form.control,
+    name: 'producto_info',
+  });
 
   const IdArraySchema = pipe(
-      string(),
-      transform((input) => parseInt(input)),
-      integer(),
-      minValue(1)
-  )
-  
+    string(),
+    transform((input) => parseInt(input)),
+    integer(),
+    minValue(1)
+  );
 
   const handleNewProducts = () => {
-    const {success} = safeParse(IdArraySchema, ref.current.value)
-    success && append(ref.current.value)
-    ref.current.value = ''
-  }
+    const { success } = safeParse(IdArraySchema, ref.current.value);
+    success && append(ref.current.value);
+    ref.current.value = '';
+  };
 
   const onSubmit = async (dataForm) => {
     setIsLoading(true);
@@ -134,19 +136,16 @@ export default function ModalVentas({
           <DialogTitle>{data ? 'Editar' : 'Agregar'} Venta</DialogTitle>
         </DialogHeader>
         <DialogDescription>Todos los campos son requeridos</DialogDescription>
-        {errors &&
-            <Alert variant="destructive">
-              <CircleX className="h-5 w-5" />
-              <AlertTitle>Error!</AlertTitle>
-              <AlertDescription>
-                {errors.message}
-              </AlertDescription>
-            </Alert>
-        }
+        {errors && (
+          <Alert variant="destructive">
+            <CircleX className="h-5 w-5" />
+            <AlertTitle>Error!</AlertTitle>
+            <AlertDescription>{errors.message}</AlertDescription>
+          </Alert>
+        )}
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-
-          <FormField
+            <FormField
               control={form.control}
               name="metodoPago"
               render={({ field }) => (
@@ -178,133 +177,140 @@ export default function ModalVentas({
               )}
             />
 
-
-          <FormField
-                control={form.control}
-                name="producto_info"
-                render={({ field }) => (
-                  <FormItem className="flex flex-col mt-2">
-                    <Label>Producto</Label>
-                    <Popover open={open} onOpenChange={setOpen}>
-                      <PopoverTrigger asChild>
-                        <FormControl>
-                          <Button
-                            variant="outline"
-                            role="combobox"
-                            className={cn(
-                              'justify-between',
-                              !field.value && 'text-muted-foreground'
-                            )}
-                          >
-                            {field.value
-                              ? productosInfo?.find(
-                                  (producto) => producto?.codigo === field.value
-                                )?.codigo
-                              : 'Selecciona un producto'}
-                            <ChevronDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-                          </Button>
-                        </FormControl>
-                      </PopoverTrigger>
-                      <PopoverContent className="w-[320px] p-0">
-                        <Command className="rounded-lg border shadow-md">
-                          <CommandInput placeholder="Escribe un código..." />
-                          <CommandList>
-                            <CommandEmpty>
-                              Ningún resultado encontrado.
-                            </CommandEmpty>
-                            <CommandGroup heading="Sugerencias">
-                              {productosInfo?.map((producto) => (
-                                <CommandItem
-                                  key={producto.id}
-                                  value={producto.codigo}
-                                  keywords={[producto.descripcion]}
-                                  onSelect={(currentValue) => {
-                                    currentValue !==
+            <FormField
+              control={form.control}
+              name="producto_info"
+              render={({ field }) => (
+                <FormItem className="flex flex-col mt-2">
+                  <Label>Producto</Label>
+                  <Popover open={open} onOpenChange={setOpen}>
+                    <PopoverTrigger asChild>
+                      <FormControl>
+                        <Button
+                          variant="outline"
+                          role="combobox"
+                          className={cn(
+                            'justify-between',
+                            !field.value && 'text-muted-foreground'
+                          )}
+                        >
+                          {field.value
+                            ? productosInfo?.find(
+                                (producto) => producto?.codigo === field.value
+                              )?.codigo
+                            : 'Selecciona un producto'}
+                          <ChevronDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                        </Button>
+                      </FormControl>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-[320px] p-0">
+                      <Command className="rounded-lg border shadow-md">
+                        <CommandInput placeholder="Escribe un código..." />
+                        <CommandList>
+                          <CommandEmpty>
+                            Ningún resultado encontrado.
+                          </CommandEmpty>
+                          <CommandGroup heading="Sugerencias">
+                            {productosInfo?.map((producto) => (
+                              <CommandItem
+                                key={producto.id}
+                                value={producto.codigo}
+                                keywords={[producto.descripcion]}
+                                onSelect={(currentValue) => {
+                                  const esZapato =
                                     productosInfo?.find(
-                                      (e) => e.categoria.nombre === 'Zapatos' 
-                                    )?.codigo
-                                      ? (() => {
-                                          form.setValue('zapatos_id', undefined);
-                                          form.setValue('cantidad', 0);
-                                        })()
-                                      : (() => {
-                                          form.setValue('cantidad', undefined);
-                                          form.setValue('zapatos_id', []);
-                                        })();
-                                    field.onChange(
-                                      currentValue === field.value
-                                        ? ''
-                                        : currentValue
-                                    );
-                                    setOpen(false);
-                                  }}
-                                >
-                                  <div>
-                                    <p className='font-semibold'>{producto.codigo}</p>
-                                    <span>{producto.descripcion}</span>
-                                  </div>
-                                  <CheckIcon
-                                    className={cn(
-                                      'ml-auto h-4 w-4',
-                                      producto.codigo === field.value
-                                        ? 'opacity-100'
-                                        : 'opacity-0'
-                                    )}
-                                  />
-                                </CommandItem>
-                              ))}
-                            </CommandGroup>
-                          </CommandList>
-                        </Command>
-                      </PopoverContent>
-                    </Popover>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+                                      (e) => e.codigo === currentValue
+                                    )?.categoria.nombre === 'Zapatos';
 
+                                  if (esZapato) {
+                                    form.setValue('cantidad', undefined);
+                                    form.setValue('zapatos_id', []);
+                                  } else {
+                                    form.setValue('zapatos_id', undefined);
+                                    form.setValue('cantidad', 0);
+                                  }
+                                  field.onChange(
+                                    currentValue === field.value
+                                      ? ''
+                                      : currentValue
+                                  );
+                                  setOpen(false);
+                                }}
+                              >
+                                <div>
+                                  <p className="font-semibold">
+                                    {producto.codigo}
+                                  </p>
+                                  <span>{producto.descripcion}</span>
+                                </div>
+                                <CheckIcon
+                                  className={cn(
+                                    'ml-auto h-4 w-4',
+                                    producto.codigo === field.value
+                                      ? 'opacity-100'
+                                      : 'opacity-0'
+                                  )}
+                                />
+                              </CommandItem>
+                            ))}
+                          </CommandGroup>
+                        </CommandList>
+                      </Command>
+                    </PopoverContent>
+                  </Popover>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-            { info_producto && productosInfo?.find(p => p.codigo === info_producto)?.categoria?.nombre === "Zapatos" &&
-              <div className="space-y-2">
-              <Label>Productos</Label>
+            {info_producto &&
+              productosInfo?.find((p) => p.codigo === info_producto)?.categoria
+                ?.nombre === 'Zapatos' && (
+                <div className="space-y-2">
+                  <Label>Productos</Label>
 
-              {form.getValues('zapatos_id')?.length > 0 &&
-                <ul
-                  className={cn(
-                    'overflow-y-auto flex gap-2 p-2 max-h-[328px] flex-col items-center whitespace-nowrap font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 shadow-sm bg-accent hover:text-accent-foreground rounded-md px-3 text-xs border-dashed ',
-                    form?.formState?.errors?.productos && 'border-destructive'
-                  )}
-                >
-                  {form.getValues('zapatos_id')?.map((p, index) => (
-                    <li
-                      key={`${p}-${index}`}
-                      className="flex w-full p-2 px-4 justify-between items-center bg-background rounded-md"
+                  {form.getValues('zapatos_id')?.length > 0 && (
+                    <ul
+                      className={cn(
+                        'overflow-y-auto flex gap-2 p-2 max-h-[328px] flex-col items-center whitespace-nowrap font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 shadow-sm bg-accent hover:text-accent-foreground rounded-md px-3 text-xs border-dashed ',
+                        form?.formState?.errors?.productos &&
+                          'border-destructive'
+                      )}
                     >
-                      <span>{p}</span>
-                      <X
-                        className="ml-2 cursor-pointer"
-                        onClick={() => remove(index)}
-                        size={16}
-                      />
-                    </li>
-                  ))}
-                   
-                </ul>
-              }
-                <div className='flex gap-2'>
-                    <Input ref={ref} type="number" placeholder="Introduzca Id" />
+                      {form.getValues('zapatos_id')?.map((p, index) => (
+                        <li
+                          key={`${p}-${index}`}
+                          className="flex w-full p-2 px-4 justify-between items-center bg-background rounded-md"
+                        >
+                          <span>{p}</span>
+                          <X
+                            className="ml-2 cursor-pointer"
+                            onClick={() => remove(index)}
+                            size={16}
+                          />
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                  <div className="flex gap-2">
+                    <Input
+                      ref={ref}
+                      type="number"
+                      placeholder="Introduzca Id"
+                    />
                     <Button type="button" onClick={handleNewProducts}>
-                      <PlusCircle className='w-5 h-5' />
+                      <PlusCircle className="w-5 h-5" />
                     </Button>
+                  </div>
+                  <p className="text-[0.8rem] font-medium text-destructive">
+                    {form?.formState?.errors?.productos?.message}
+                  </p>
                 </div>
-                <p className="text-[0.8rem] font-medium text-destructive">
-                  {form?.formState?.errors?.productos?.message}
-                </p>
-            </div>
-            }
+              )}
 
-            { info_producto && productosInfo?.find(p => p.codigo === info_producto)?.categoria?.nombre !== "Zapatos" &&
-
+            {info_producto &&
+              productosInfo?.find((p) => p.codigo === info_producto)?.categoria
+                ?.nombre !== 'Zapatos' && (
                 <div className="space-y-2">
                   <Label>Cantidad</Label>
                   <Input
@@ -315,8 +321,7 @@ export default function ModalVentas({
                     {form.formState.errors?.cantidad?.message}
                   </p>
                 </div>
-
-            }
+              )}
 
             <div className="grid gap-4">
               <DialogFooter className="w-full flex gap-2 mt-2">
