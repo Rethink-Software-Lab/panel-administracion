@@ -13,7 +13,15 @@ import ButtonPrint from '@/components/functionals/ButtonPrint';
 import { DateTime } from 'luxon';
 import { BookOpen, CloudOff } from 'lucide-react';
 
-export default async function Page({ params }) {
+interface Producto {
+  id: number;
+  cantidad: number;
+  descripcion: string;
+  precio_venta: number;
+  importe: number;
+}
+
+export default async function Page({ params }: { params: { id: string } }) {
   const { data, error } = await getDetallesVenta(params.id);
   return (
     <main className="flex flex-1 flex-col gap-4 p-4 lg:gap-6 lg:p-6">
@@ -45,7 +53,7 @@ export default async function Page({ params }) {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {data?.productos?.map((p) => (
+                {data?.productos?.map((p: Producto) => (
                   <TableRow key={p.id}>
                     <TableCell className="font-medium">{p.cantidad}</TableCell>
                     <TableCell>{p.descripcion}</TableCell>
@@ -55,7 +63,27 @@ export default async function Page({ params }) {
                 ))}
               </TableBody>
               <TableFooter>
-                <TableRow>
+                {data?.pago_trabajador > 0 && (
+                  <>
+                    <TableRow>
+                      <TableCell colSpan={3} className="font-medium">
+                        Subtotal
+                      </TableCell>
+                      <TableCell className="text-right font-medium">
+                        ${data?.subtotal}
+                      </TableCell>
+                    </TableRow>
+                    <TableRow>
+                      <TableCell colSpan={3} className="pl-10">
+                        Pago al trabajador
+                      </TableCell>
+                      <TableCell className="text-right">
+                        - ${data?.pago_trabajador}
+                      </TableCell>
+                    </TableRow>
+                  </>
+                )}
+                <TableRow className="border-t border-t-gray-300">
                   <TableCell colSpan={3} className="font-bold">
                     Total
                   </TableCell>
