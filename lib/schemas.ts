@@ -88,6 +88,10 @@ export const ProductSchema = object({
   ),
   precio_costo: string('El precio de costo es un número'),
   precio_venta: string('El precio de venta es un número'),
+  pago_trabajador: pipe(
+    number('El pago del trabajador es un número'),
+    minValue(-0.1, 'Debe ser un número positivo')
+  ),
 });
 
 enum METODOS_PAGO {

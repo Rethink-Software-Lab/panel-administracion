@@ -68,6 +68,7 @@ export function useProductSubmit({
       form.reset();
       setImage(undefined);
       setIsOpen(false);
+      setError(null);
       toast.success(result.data);
     } else {
       setError(result.error);

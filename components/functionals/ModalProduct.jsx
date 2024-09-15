@@ -48,6 +48,7 @@ export default function ModalProduct({ data = null, trigger, categorias }) {
     resolver: valibotResolver(ProductSchema),
     defaultValues: {
       ...data,
+      pago_trabajador: data?.pago_trabajador || 0,
       categoria: data?.categoria?.id?.toString(),
     },
   });
@@ -59,6 +60,8 @@ export default function ModalProduct({ data = null, trigger, categorias }) {
       setImage(URL.createObjectURL(watchImagen[0]));
     }
   }, [watchImagen]);
+
+  console.log(form.getValues());
 
   const { handleSubmit, error, isLoading } = useProductSubmit({
     form,
@@ -85,7 +88,7 @@ export default function ModalProduct({ data = null, trigger, categorias }) {
           <Alert variant="destructive">
             <CircleX className="h-5 w-5" />
             <AlertTitle>Error!</AlertTitle>
-            <AlertDescription>{error?.message}</AlertDescription>
+            <AlertDescription>{error}</AlertDescription>
           </Alert>
         )}
         <Form {...form}>
@@ -146,6 +149,25 @@ export default function ModalProduct({ data = null, trigger, categorias }) {
                         ))}
                       </SelectContent>
                     </Select>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="pago_trabajador"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Pago trabajador</FormLabel>
+                    <FormControl>
+                      <Input
+                        {...field}
+                        placeholder="0"
+                        type="number"
+                        step="0.01"
+                        onChange={(e) => field.onChange(Number(e.target.value))}
+                      />
+                    </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}

@@ -18,6 +18,11 @@ export async function addProducto(formData) {
         data: null,
         error: 'No autorizado',
       };
+    if (res.status === 400)
+      return {
+        data: null,
+        error: 'El código debe ser único.',
+      };
     if (res.status === 424)
       return {
         data: null,
