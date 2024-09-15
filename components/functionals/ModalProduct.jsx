@@ -164,7 +164,6 @@ export default function ModalProduct({ data = null, trigger, categorias }) {
                         {...field}
                         placeholder="0"
                         type="number"
-                        step="0.01"
                         onChange={(e) => field.onChange(Number(e.target.value))}
                       />
                     </FormControl>
