@@ -71,6 +71,7 @@ import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover';
 import { cn } from '@/lib/utils';
 import { Separator } from '../ui/separator';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 
 function NestedArray({ nestedIndex, register, control, errors }) {
   const { fields, append, remove } = useFieldArray({
@@ -496,9 +497,11 @@ export default function FormEntradas({ productosInfo }) {
             </Card>
           )}
           <div className="grid grid-cols-1 gap-2 md:flex md:items-center md:justify-end">
-            <Button className="order-2 md:order-none" variant="outline">
-              Cancelar
-            </Button>
+            <Link href="/entradas">
+              <Button className="order-2 md:order-none" variant="outline">
+                Cancelar
+              </Button>
+            </Link>
             <Button
               className="gap-2 order-1 md:order-none"
               type="submit"
