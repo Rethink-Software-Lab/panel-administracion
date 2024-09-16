@@ -346,10 +346,9 @@ export default function FormEntradas({ productosInfo }) {
                                   key={producto.id}
                                   value={producto.codigo}
                                   onSelect={(currentValue) => {
-                                    currentValue !==
                                     productosInfo?.find(
-                                      (e) => e.categoria.nombre === 'Zapatos'
-                                    )?.codigo
+                                      (e) => e.codigo === currentValue
+                                    )?.categoria?.nombre !== 'Zapatos'
                                       ? (() => {
                                           form.setValue('variantes', undefined);
                                           form.setValue('cantidad', 0);
@@ -396,9 +395,8 @@ export default function FormEntradas({ productosInfo }) {
                   </FormItem>
                 )}
               />
-              {producto !==
-                productosInfo?.find((e) => e.categoria.nombre === 'Zapatos')
-                  ?.codigo && (
+              {productosInfo?.find((e) => e.codigo === producto)?.categoria
+                ?.nombre !== 'Zapatos' && (
                 <div className="space-y-2">
                   <Label>Cantidad</Label>
                   <Input
@@ -412,9 +410,8 @@ export default function FormEntradas({ productosInfo }) {
               )}
             </CardContent>
           </Card>
-          {producto ===
-            productosInfo?.find((e) => e.categoria.nombre === 'Zapatos')
-              ?.codigo && (
+          {productosInfo?.find((p) => p.codigo === producto)?.categoria
+            ?.nombre === 'Zapatos' && (
             <Card>
               <CardHeader>
                 <CardTitle>Mercancía</CardTitle>
