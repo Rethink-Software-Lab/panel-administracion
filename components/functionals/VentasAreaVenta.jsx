@@ -14,7 +14,7 @@ import Link from 'next/link';
 export default async function VentasAreaVenta({ id }) {
   const { data, error } = await getVenta(id);
 
-  const { data: productosInfo } = await getProductos();
+  const { data: productosInfo } = await getProductos(id);
   return (
     <main className="flex flex-1 flex-col gap-4 pb-4 lg:gap-6 lg:pb-6 px-4 h-full">
       <div className="flex justify-between items-center">
