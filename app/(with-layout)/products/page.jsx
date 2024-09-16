@@ -1,15 +1,15 @@
-import { PackagePlus, PackageX } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { PackagePlus, PackageX } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 
-import { getProductos, getCategorias } from "@/lib/services";
+import { getProductos, getCategorias } from '@/lib/services';
 
-import ModalProduct from "@/components/functionals/ModalProduct";
+import ModalProduct from '@/components/functionals/ModalProduct';
 
-import { DataTable } from "@/components/ui/data-table-productos";
-import { columns } from "./columns";
+import { DataTable } from '@/components/ui/data-table-productos';
+import { columns } from './columns';
 
 export default async function Products() {
-  const { data, errors } = await getProductos();
+  const { data, error } = await getProductos();
   const { data: categorias } = await getCategorias();
 
   return (
