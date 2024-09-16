@@ -5,7 +5,7 @@ import { cookies } from 'next/headers';
 
 export async function addProducto(formData) {
   const token = cookies().get('session')?.value || null;
-  const res = await fetch(process.env.BACKEND_URL_V2 + '/productos/', {
+  const res = await fetch(process.env.BACKEND_URL_V2 + '/productos', {
     method: 'POST',
     headers: {
       Authorization: `Bearer ${token}`,

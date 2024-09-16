@@ -61,8 +61,6 @@ export default function ModalProduct({ data = null, trigger, categorias }) {
     }
   }, [watchImagen]);
 
-  console.log(form.getValues());
-
   const { handleSubmit, error, isLoading } = useProductSubmit({
     form,
     setIsOpen,
