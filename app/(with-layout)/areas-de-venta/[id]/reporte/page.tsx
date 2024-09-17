@@ -67,16 +67,26 @@ export default async function Page({ params }: { params: { id: string } }) {
                   <>
                     <TableRow>
                       <TableCell colSpan={3} className="font-medium">
-                        Subtotal
+                        Subtotal:
                       </TableCell>
                       <TableCell className="text-right font-medium">
                         ${data?.subtotal}
                       </TableCell>
                     </TableRow>
                     <TableRow>
-                      <TableCell colSpan={3} className="pl-10">
-                        Pago al trabajador
+                      <TableCell colSpan={3}>Total efectivo</TableCell>
+                      <TableCell className="text-right">
+                        ${data?.efectivo}
                       </TableCell>
+                    </TableRow>
+                    <TableRow>
+                      <TableCell colSpan={3}>Total transferencia</TableCell>
+                      <TableCell className="text-right">
+                        ${data?.transferencia}
+                      </TableCell>
+                    </TableRow>
+                    <TableRow>
+                      <TableCell colSpan={3}>Pago al trabajador</TableCell>
                       <TableCell className="text-right">
                         - ${data?.pago_trabajador}
                       </TableCell>
