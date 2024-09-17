@@ -13,15 +13,20 @@ export const columns = [
     header: 'Descripcion',
   },
   {
+    accessorKey: 'cantidad',
+    header: 'Cantidad',
+  },
+  {
+    accessorKey: 'precio_venta',
+    header: 'Precio de venta',
+    cell: ({ row }) => <span>${row?.original?.precio_venta}</span>,
+  },
+  {
     id: 'categoria',
     accessorKey: 'categoria__nombre',
     header: 'Categoría',
     cell: ({ row }) => (
       <Badge variant="outline">{row?.original?.categoria__nombre}</Badge>
     ),
-  },
-  {
-    accessorKey: 'cantidad',
-    header: 'Cantidad',
   },
 ];

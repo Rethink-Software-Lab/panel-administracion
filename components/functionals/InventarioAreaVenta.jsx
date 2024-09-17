@@ -1,7 +1,7 @@
 import { inventarioAreaVenta, getCategorias } from '@/lib/services';
 
 import { columns } from '@/app/(with-layout)/inventario/columns';
-import { columns as columnsNew } from '@/app/(with-layout)/inventario/columnsNew';
+import { columns as columnsNew } from '@/app/(with-layout)/areas-de-venta/[id]/columns';
 import { DataTable } from '@/components/ui/data-table-inventario-almacen';
 import { DataTable as DataTableNew } from '@/components/ui/data-table-inventario-almacen-2';
 import { CloudOff } from 'lucide-react';

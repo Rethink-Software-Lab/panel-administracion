@@ -89,6 +89,11 @@ export default function ModalVentas({
     name: 'producto_info',
   });
 
+  const metodo = useWatch({
+    control: form.control,
+    name: 'metodoPago',
+  });
+
   const IdArraySchema = pipe(
     string(),
     transform((input) => parseInt(input)),
@@ -152,7 +157,16 @@ export default function ModalVentas({
                 <FormItem>
                   <Label>Método de pago</Label>
                   <Select
-                    onValueChange={field.onChange}
+                    onValueChange={(value) => {
+                      field.onChange(value);
+                      if (value === 'MIXTO') {
+                        form.setValue('efectivo', 0);
+                        form.setValue('transferencia', 0);
+                      } else {
+                        form.setValue('efectivo', undefined);
+                        form.setValue('transferencia', undefined);
+                      }
+                    }}
                     defaultValue={field.value}
                   >
                     <FormControl>
@@ -170,12 +184,59 @@ export default function ModalVentas({
                       <SelectItem value="TRANSFERENCIA">
                         Transferencia
                       </SelectItem>
+                      <SelectItem value="MIXTO">Mixto</SelectItem>
                     </SelectContent>
                   </Select>
                   <FormMessage />
                 </FormItem>
               )}
             />
+
+            {metodo === 'MIXTO' && (
+              <div className="grid grid-cols-2 gap-2">
+                <FormField
+                  control={form.control}
+                  name="efectivo"
+                  render={({ field }) => (
+                    <FormItem>
+                      <Label>Efectivo</Label>
+                      <FormControl>
+                        <Input
+                          {...field}
+                          type="number"
+                          step="0.01"
+                          onChange={(e) =>
+                            field.onChange(Number(e.target.value))
+                          }
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={form.control}
+                  name="transferencia"
+                  render={({ field }) => (
+                    <FormItem>
+                      <Label>Transferencia</Label>
+                      <FormControl>
+                        <Input
+                          {...field}
+                          type="number"
+                          step="0.01"
+                          onChange={(e) =>
+                            field.onChange(Number(e.target.value))
+                          }
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+            )}
 
             <FormField
               control={form.control}

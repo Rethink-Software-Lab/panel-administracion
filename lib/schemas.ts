@@ -3,15 +3,13 @@ import {
   pipe,
   minLength,
   object,
-  omit,
+  check,
   string,
   number,
   minValue,
   array,
   optional,
   custom,
-  any,
-  transform,
   nonEmpty,
   forward,
   partialCheck,
@@ -97,6 +95,7 @@ export const ProductSchema = object({
 enum METODOS_PAGO {
   EFECTIVO = 'EFECTIVO',
   TRANSFERENCIA = 'TRANSFERENCIA',
+  MIXTO = 'MIXTO',
 }
 
 export const EntradaSchema = object({
@@ -170,6 +169,22 @@ export const SalidaSchema = object({
 
 export const VentasSchema = object({
   metodoPago: enum_(METODOS_PAGO, 'Método requerido: Efectivo o transferencia'),
+  efectivo: optional(
+    pipe(
+      number('El efectivo debe ser un número'),
+      integer('El efectivo debe ser un número entero'),
+      minValue(1, 'El efectivo debe ser mayor que 0')
+    )
+  ),
+
+  transferencia: optional(
+    pipe(
+      number('La transferencia debe ser un número'),
+      integer('La transferencia debe ser un número entero'),
+      minValue(1, 'La transferencia debe ser mayor que 0')
+    )
+  ),
+
   zapatos_id: optional(
     pipe(
       array(string(), 'Productos no puede estar vacio'),
