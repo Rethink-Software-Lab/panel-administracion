@@ -4,23 +4,18 @@ import { Badge } from '@/components/ui/badge';
 
 export const columns = [
   {
-    id: 'id',
     accessorKey: 'id',
     header: 'ID',
   },
   {
-    id: 'codigo',
-    accessorKey: 'info.codigo', 
+    accessorKey: 'info__codigo',
     header: 'Código',
   },
   {
-    id: 'categoria',
-    accessorKey: 'info.categoria.nombre',
-    header: 'Categoría',
-    cell: ({ row }) => (
-      <Badge variant="outline">{row?.original?.info?.categoria?.nombre}</Badge>
-    ),
+    accessorKey: 'info__descripcion',
+    header: 'Descripción',
   },
+
   {
     accessorKey: 'color',
     header: 'Color',
