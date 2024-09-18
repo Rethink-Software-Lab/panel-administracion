@@ -7,6 +7,7 @@ import { DataTable as DataTableNew } from '@/components/ui/data-table-inventario
 import { CloudOff } from 'lucide-react';
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { DownloadButton } from '@/components/functionals/DownloadButton';
 
 export default async function InventarioAreaVenta({ id }) {
   const { data } = await inventarioAreaVenta({ id });
@@ -15,8 +16,9 @@ export default async function InventarioAreaVenta({ id }) {
   const { data: categorias } = await getCategorias();
   return (
     <main className="flex flex-1 flex-col gap-4 pb-4 lg:gap-6 lg:pb-6 h-full">
-      <div className="flex justify-between items-center pl-4">
+      <div className="flex justify-between items-center px-4">
         <h1 className="text-lg font-semibold md:text-2xl">Inventario</h1>
+        <DownloadButton fileName={`inventario-${id}.pdf`} data={data} />
       </div>
 
       {productos && zapatos ? (

@@ -30,7 +30,9 @@
     "app/layout.jsx",
     "components/functionals/Combobox.jsx",
     "app/(with-layout)/page.jsx",
-    "lib/schemas.ts"
+    "lib/schemas.ts",
+    "components/functionals/DownloadButton.jsx",
+    "components/functionals/DocPdf.js"
   ],
   "exclude": ["node_modules"]
 }
