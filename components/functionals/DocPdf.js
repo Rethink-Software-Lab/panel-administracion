@@ -82,7 +82,7 @@ export default function DocPdf({ productos, zapatos, area_venta }) {
           <Text style={styles.h1}>{area_venta}</Text>
         </View>
 
-        {productos && (
+        {productos && productos?.length > 0 && (
           <View style={styles.table}>
             <View style={styles.tableRowHeader}>
               <View style={{ width: '20%' }}>
@@ -112,7 +112,7 @@ export default function DocPdf({ productos, zapatos, area_venta }) {
           </View>
         )}
 
-        {zapatos && (
+        {zapatos && zapatos?.length > 0 && (
           <>
             <View style={styles.secondHeader}>
               <Text style={styles.h1}>Zapatos</Text>
