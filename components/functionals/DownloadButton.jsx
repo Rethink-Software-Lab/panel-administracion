@@ -19,6 +19,12 @@ export function DownloadButton({ fileName, data }) {
 
   return (
     <PDFDownloadLink
+      onClick={(e) => {
+        if (data?.productos?.length === 0 && data?.zapatos?.length === 0) {
+          e.preventDefault();
+          return;
+        }
+      }}
       document={
         <Layout
           productos={data?.productos}
@@ -31,7 +37,10 @@ export function DownloadButton({ fileName, data }) {
       {({ blob, url, loading, error }) => (
         <Button
           variant="outline"
-          disabled={loading}
+          disabled={
+            loading ||
+            (data?.productos?.length === 0 && data?.zapatos?.length === 0)
+          }
           className="gap-2 max-md:w-9 max-md:h-9 max-md:p-0"
         >
           <Download className="w-4 h-4" />

@@ -19,7 +19,7 @@ export default async function Initial() {
         <h1 className="text-lg font-semibold md:text-2xl">Usuarios</h1>
         <ModalUser
           trigger={
-            <Button className="gap-1 items-center" disabled={error}>
+            <Button className="gap-1 items-center" disabled={!!error}>
               <UserRoundPlus size={18} />
               <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
                 Agregar
