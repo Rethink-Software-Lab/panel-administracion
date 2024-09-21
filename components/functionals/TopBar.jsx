@@ -76,7 +76,7 @@ export default function TopBar({ session, areasVenta }) {
               <span className="sr-only">Toggle navigation menu</span>
             </Button>
           </SheetTrigger>
-          <SheetContent side="left" className="flex flex-col">
+          <SheetContent side="left" className="flex flex-col overflow-y-auto">
             <nav className="grid gap-2 text-lg font-medium">
               <div className="flex h-14 items-center border-b px-4 lg:h-[60px] lg:px-6">
                 <Link
