@@ -13,7 +13,7 @@ import {
   ventasHoy,
   ventasSemana,
   ventasMes,
-  grafico,
+  graficoVentasAnuales,
   ventasPorArea,
 } from '@/lib/services';
 import { Suspense } from 'react';
@@ -24,7 +24,7 @@ export default async function Initial() {
   const { isVendedor, punto } = getSession();
   const { data: ventas } = await ventasPorArea();
   if (isVendedor) return redirect(`areas-de-venta/${punto}`);
-  const { data, errors } = await grafico();
+  const { data, error } = await graficoVentasAnuales();
 
   return (
     <main className="flex flex-1 flex-col gap-4 p-4 lg:gap-6 lg:p-6">

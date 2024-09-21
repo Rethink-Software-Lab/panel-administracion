@@ -26,13 +26,14 @@
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts",
-    "app/(with-layout)/layout.jsx",
+    "app/(with-layout)/layout.tsx",
     "app/layout.jsx",
     "components/functionals/Combobox.jsx",
-    "app/(with-layout)/page.jsx",
+    "app/(with-layout)/page.tsx",
     "lib/schemas.ts",
     "components/functionals/DownloadButton.jsx",
-    "components/functionals/DocPdf.js"
+    "components/functionals/DocPdf.js",
+    "components/functionals/EspecialWarningDelete.jsx"
   ],
   "exclude": ["node_modules"]
 }

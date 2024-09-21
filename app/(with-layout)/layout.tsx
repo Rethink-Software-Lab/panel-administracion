@@ -9,7 +9,11 @@ import { Button } from '@/components/ui/button';
 import { BrainCircuit, Facebook } from 'lucide-react';
 import Link from 'next/link';
 
-export default async function RootLayout({ children }) {
+export default async function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   const session = getSession();
   const { data } = await getAreasVentas();
 

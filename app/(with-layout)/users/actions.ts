@@ -3,7 +3,19 @@
 import { revalidatePath } from 'next/cache';
 import { cookies } from 'next/headers';
 
-export async function addUsuario(data) {
+type UserRole = 'ADMIN' | 'ALMACENERO' | 'VENDEDOR';
+
+interface User {
+  username: string;
+  rol: UserRole;
+  area_venta: number | null;
+}
+
+interface UserUpdate extends User {
+  id: number;
+}
+
+export async function addUsuario(data: User) {
   const token = cookies().get('session')?.value || null;
   const res = await fetch(process.env.BACKEND_URL_V2 + '/usuarios/', {
     method: 'POST',
@@ -48,7 +60,7 @@ export async function addUsuario(data) {
   };
 }
 
-export async function updateUsuario(data) {
+export async function updateUsuario(data: UserUpdate) {
   const token = cookies().get('session')?.value || null;
   const res = await fetch(
     process.env.BACKEND_URL_V2 + '/usuarios/' + data?.id + '/',
@@ -85,7 +97,7 @@ export async function updateUsuario(data) {
   };
 }
 
-export async function deleteUsuario({ id }) {
+export async function deleteUsuario({ id }: { id: number }) {
   const token = cookies().get('session')?.value || null;
   const res = await fetch(process.env.BACKEND_URL_V2 + '/usuarios/' + id, {
     method: 'DELETE',

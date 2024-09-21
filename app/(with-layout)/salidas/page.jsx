@@ -1,30 +1,9 @@
-import { DateTime } from 'luxon';
+import { PlusCircle } from 'lucide-react';
 
-import { Card, CardContent, CardFooter } from '@/components/ui/card';
-import { Edit2, PlusCircle, SearchX } from 'lucide-react';
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from '@/components/ui/table';
 import { Button } from '@/components/ui/button';
 import ModalSalidas from '@/components/functionals/ModalSalida';
 
 import { getSalidas, getAreasVentas, getProductos } from '@/lib/services';
-import { deleteSalida } from '@/lib/actions';
-
-import Pagination from '@/components/functionals/Pagination';
-import TableDelete from '@/components/functionals/TableDelete';
-import { Badge } from '@/components/ui/badge';
-import {
-  Popover,
-  PopoverTrigger,
-  PopoverContent,
-} from '@/components/ui/popover';
-import { Separator } from '@/components/ui/separator';
 
 import { DataTable } from '@/components/ui/data-table-salidas';
 import { columns } from './columns';

@@ -16,28 +16,20 @@ export async function addSalida(data) {
     if (res.status === 401)
       return {
         data: null,
-        error: {
-          message: 'No autorizado',
-          description: 'Usted no está autorizado para esta acción',
-        },
+        error: 'No autorizado',
       };
 
     if (res.status === 400) {
       const json = await res.json();
       return {
         data: null,
-        error: {
-          message: json.detail,
-        },
+        error: json.detail,
       };
     }
 
     return {
       data: null,
-      error: {
-        message: 'Algo salió mal.',
-        description: 'Por favor contacte con soporte',
-      },
+      error: 'Algo salió mal.',
     };
   }
   revalidatePath('/salidas');
