@@ -1,5 +1,5 @@
 'use client';
-import TableDeleteV2 from '@/components/functionals/TableDeleteV2';
+import EspecialWarningDelete from '@/components/functionals/EspecialWarningDelete';
 import { deleteEntrada } from './actions';
 import { Badge } from '@/components/ui/badge';
 import { DateTime } from 'luxon';
@@ -61,7 +61,11 @@ export const columns = [
   {
     header: ' ',
     cell: ({ row }) => (
-      <TableDeleteV2 id={row.original.id} action={deleteEntrada} />
+      <EspecialWarningDelete
+        id={row.original.id}
+        text="Al eliminar la entrada se eliminarán todas las salidas, productos y ventas asociadas a ella."
+        action={deleteEntrada}
+      />
     ),
   },
 ];

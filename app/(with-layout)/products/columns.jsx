@@ -3,7 +3,7 @@
 import { Badge } from '@/components/ui/badge';
 import { Edit2, FileX } from 'lucide-react';
 import Image from 'next/image';
-import TableDeleteV2 from '@/components/functionals/TableDeleteV2';
+import EspecialWarningDelete from '@/components/functionals/EspecialWarningDelete';
 import { Button } from '@/components/ui/button';
 
 import { deleteProducto } from './actions';
@@ -81,7 +81,11 @@ export const columns = [
               </Button>
             }
           />
-          <TableDeleteV2 id={row.original.id} action={deleteProducto} />
+          <EspecialWarningDelete
+            id={row.original.id}
+            text="Al eliminar un producto se eliminarán las entradas, salidas, ventas y productos asociados."
+            action={deleteProducto}
+          />
         </div>
       );
     },
