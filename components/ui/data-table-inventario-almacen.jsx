@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import {
   getPaginationRowModel,
@@ -7,7 +7,7 @@ import {
   getCoreRowModel,
   useReactTable,
   getFilteredRowModel,
-} from "@tanstack/react-table";
+} from '@tanstack/react-table';
 
 import {
   Table,
@@ -16,12 +16,12 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table";
+} from '@/components/ui/table';
 
-import { Input } from "@/components/ui/input";
+import { Input } from '@/components/ui/input';
 
-import { useState } from "react";
-import { DataTablePagination } from "@/components/ui/data-table-pagination";
+import { useState } from 'react';
+import { DataTablePagination } from '@/components/ui/data-table-pagination';
 
 export function DataTable({ columns, data }) {
   const [sorting, setSorting] = useState([]);
@@ -55,20 +55,20 @@ export function DataTable({ columns, data }) {
         <div className="flex gap-2">
           <Input
             className="max-w-60"
-            value={columnFilters?.find((el) => el.id === "id")?.value || ""}
+            value={columnFilters?.find((el) => el.id === 'id')?.value || ''}
             onChange={(e) =>
               setColumnFilters((prevState) => {
-                const has = prevState?.find((el) => el.id === "id");
+                const has = prevState?.find((el) => el.id === 'id');
                 if (!has) {
                   return prevState.concat({
-                    id: "id",
+                    id: 'id',
                     value: e.target.value,
                   });
                 }
                 return prevState
-                  .filter((f) => f.id !== "id")
+                  .filter((f) => f.id !== 'id')
                   .concat({
-                    id: "id",
+                    id: 'id',
                     value: e.target.value,
                   });
               })
@@ -77,20 +77,22 @@ export function DataTable({ columns, data }) {
           />
           <Input
             className="max-w-60"
-            value={columnFilters?.find((el) => el.id === "codigo")?.value || ""}
+            value={
+              columnFilters?.find((el) => el.id === 'info__codigo')?.value || ''
+            }
             onChange={(e) =>
               setColumnFilters((prevState) => {
-                const has = prevState?.find((el) => el.id === "codigo");
+                const has = prevState?.find((el) => el.id === 'info__codigo');
                 if (!has) {
                   return prevState.concat({
-                    id: "codigo",
+                    id: 'info__codigo',
                     value: e.target.value,
                   });
                 }
                 return prevState
-                  .filter((f) => f.id !== "codigo")
+                  .filter((f) => f.id !== 'info__codigo')
                   .concat({
-                    id: "codigo",
+                    id: 'info__codigo',
                     value: e.target.value,
                   });
               })
@@ -126,7 +128,7 @@ export function DataTable({ columns, data }) {
             table.getRowModel().rows.map((row) => (
               <TableRow
                 key={row.id}
-                data-state={row.getIsSelected() && "selected"}
+                data-state={row.getIsSelected() && 'selected'}
               >
                 {row.getVisibleCells().map((cell) => (
                   <TableCell
