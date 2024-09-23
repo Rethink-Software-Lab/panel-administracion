@@ -66,6 +66,15 @@ export default function DocPdf({ productos, zapatos, area_venta }) {
     },
   });
 
+  const productosPorCategoria = productos.reduce((acc, producto) => {
+    const categoria = producto.categoria__nombre || 'Sin categoría';
+    if (!acc[categoria]) {
+      acc[categoria] = [];
+    }
+    acc[categoria].push(producto);
+    return acc;
+  }, {});
+
   return (
     <Document>
       <Page style={styles.page} size="A4">
@@ -82,35 +91,42 @@ export default function DocPdf({ productos, zapatos, area_venta }) {
           <Text style={styles.h1}>{area_venta}</Text>
         </View>
 
-        {productos && productos?.length > 0 && (
-          <View style={styles.table}>
-            <View style={styles.tableRowHeader}>
-              <View style={{ width: '20%' }}>
-                <Text style={styles.tableCellHeader}>Código</Text>
-              </View>
-              <View style={{ width: '70%' }}>
-                <Text style={styles.tableCellHeader}>Descripción</Text>
-              </View>
-              <View style={{ width: '10%' }}>
-                <Text style={styles.tableCellHeader}>Cantidad</Text>
-              </View>
+        {Object.keys(productosPorCategoria).map((categoria) => (
+          <>
+            <View style={styles.secondHeader}>
+              <Text key={categoria} style={styles.h1}>
+                {categoria}
+              </Text>
             </View>
-
-            {productos?.map((d, index) => (
-              <View style={styles.tableRow} key={index}>
+            <View style={styles.table}>
+              <View style={styles.tableRowHeader}>
                 <View style={{ width: '20%' }}>
-                  <Text style={styles.tableCell}>{d.codigo}</Text>
+                  <Text style={styles.tableCellHeader}>Código</Text>
                 </View>
                 <View style={{ width: '70%' }}>
-                  <Text style={styles.tableCell}>{d.descripcion}</Text>
+                  <Text style={styles.tableCellHeader}>Descripción</Text>
                 </View>
                 <View style={{ width: '10%' }}>
-                  <Text style={styles.tableCell}>{d.cantidad}</Text>
+                  <Text style={styles.tableCellHeader}>Cantidad</Text>
                 </View>
               </View>
-            ))}
-          </View>
-        )}
+
+              {productosPorCategoria[categoria].map((d, index) => (
+                <View style={styles.tableRow} key={index}>
+                  <View style={{ width: '20%' }}>
+                    <Text style={styles.tableCell}>{d.codigo}</Text>
+                  </View>
+                  <View style={{ width: '70%' }}>
+                    <Text style={styles.tableCell}>{d.descripcion}</Text>
+                  </View>
+                  <View style={{ width: '10%' }}>
+                    <Text style={styles.tableCell}>{d.cantidad}</Text>
+                  </View>
+                </View>
+              ))}
+            </View>
+          </>
+        ))}
 
         {zapatos && zapatos?.length > 0 && (
           <>
