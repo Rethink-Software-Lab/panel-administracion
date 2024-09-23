@@ -6,6 +6,9 @@ export const columns = [
   {
     accessorKey: 'id',
     header: 'ID',
+    filterFn: (row, _, rowValue) => {
+      return row.original.id?.toString().includes(rowValue);
+    },
   },
   {
     accessorKey: 'info__codigo',
