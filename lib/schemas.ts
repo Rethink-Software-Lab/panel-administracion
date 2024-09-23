@@ -3,7 +3,7 @@ import {
   pipe,
   minLength,
   object,
-  check,
+  literal,
   string,
   number,
   minValue,
@@ -216,4 +216,8 @@ export const onlyNombreSchema = object({
 export const AreaVentaSchema = object({
   nombre: pipe(string('Campo requerido.'), nonEmpty('Campo requerido.')),
   color: pipe(string('Campo requerido.'), nonEmpty('Campo requerido.')),
+});
+
+export const EspecialWarningSchema = object({
+  test: literal('BORRAR', 'El campo debe ser igual a BORRAR'),
 });

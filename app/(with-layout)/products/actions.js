@@ -86,7 +86,7 @@ export async function updateProducto(formData, id) {
   };
 }
 
-export async function deleteProducto({ id }) {
+export async function deleteProducto(id) {
   const token = cookies().get('session')?.value || null;
   const res = await fetch(process.env.BACKEND_URL_V2 + '/productos/' + id, {
     method: 'DELETE',
