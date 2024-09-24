@@ -9,12 +9,12 @@ import {
   minValue,
   array,
   optional,
-  custom,
   nonEmpty,
   forward,
   partialCheck,
   maxValue,
   integer,
+  boolean,
 } from 'valibot';
 
 enum ROLES {
@@ -62,15 +62,6 @@ export const LoginSchema = object({
   ),
 });
 
-const fileSchema = object({
-  name: string(),
-  type: string(),
-  size: custom(
-    (value) => typeof value === 'number' && value > 0,
-    'Invalid file size'
-  ),
-});
-
 export const ProductSchema = object({
   codigo: pipe(
     string('El código del producto debe ser una cadena de texto'),
@@ -90,6 +81,7 @@ export const ProductSchema = object({
     number('El pago del trabajador es un número'),
     minValue(0, 'Debe ser un número positivo')
   ),
+  deletePhoto: boolean('debe ser un booleano'),
 });
 
 enum METODOS_PAGO {

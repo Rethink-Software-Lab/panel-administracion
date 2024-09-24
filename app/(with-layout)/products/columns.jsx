@@ -8,7 +8,7 @@ import { Button } from '@/components/ui/button';
 
 import { deleteProducto } from './actions';
 
-import ModalProduct from '@/components/functionals/ModalProduct';
+import Wrap from '@/components/functionals/ModalProduct';
 
 export const columns = [
   {
@@ -71,15 +71,10 @@ export const columns = [
     cell: ({ row, table }) => {
       return (
         <div className="flex items-center justify-end gap-2">
-          <ModalProduct
+          <Wrap
             data={row.original}
             categorias={table.options.categorias}
-            trigger={
-              <Button variant="outline" size="icon">
-                <span className="sr-only">Editar</span>
-                <Edit2 size={18} />
-              </Button>
-            }
+            isEdit
           />
           <EspecialWarningDelete
             id={row.original.id}

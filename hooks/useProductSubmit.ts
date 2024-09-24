@@ -20,7 +20,7 @@ interface ProductFormData {
 
 interface ProductSubmitHandlerProps {
   form: UseFormReturn<ProductFormData>;
-  setIsOpen: (isOpen: boolean) => void;
+  setOpen: (isOpen: boolean) => void;
   setImage: (image: string | undefined) => void;
 }
 
@@ -31,7 +31,7 @@ interface SubmitResult {
 
 export function useProductSubmit({
   form,
-  setIsOpen,
+  setOpen,
   setImage,
 }: ProductSubmitHandlerProps) {
   const [error, setError] = useState<string | null>(null);
@@ -67,7 +67,7 @@ export function useProductSubmit({
     if (!result.error) {
       form.reset();
       setImage(undefined);
-      setIsOpen(false);
+      setOpen(false);
       setError(null);
       toast.success(result.data);
     } else {
