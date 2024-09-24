@@ -9,7 +9,6 @@ import {
   DialogTitle,
   DialogContent,
   DialogHeader,
-  DialogTrigger,
   DialogDescription,
 } from '@/components/ui/dialog';
 import {
@@ -25,7 +24,7 @@ import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { useForm } from 'react-hook-form';
 import { valibotResolver } from '@hookform/resolvers/valibot';
 import { ProductSchema } from '@/lib/schemas';
-import { CircleX, LoaderCircle } from 'lucide-react';
+import { CircleX, Edit2, LoaderCircle, PackagePlus } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import {
   Select,
@@ -40,16 +39,65 @@ import { ImageUploadLabel } from '@/components/functionals/ImageUploadLabel';
 
 import { useProductSubmit } from '@/hooks/useProductSubmit';
 
-export default function ModalProduct({ data = null, trigger, categorias }) {
-  const [imagen, setImage] = useState(data?.imagen?.url);
-  const [isOpen, setIsOpen] = useState(false);
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from '@/components/ui/tooltip';
 
+export default function Wrap({ categorias, isEdit, data }) {
+  const [open, setOpen] = useState(false);
+
+  return (
+    <>
+      {isEdit ? (
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button
+                onClick={() => setOpen(true)}
+                variant="outline"
+                size="icon"
+              >
+                <span className="sr-only">Editar</span>
+                <Edit2 size={18} />
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>Editar</p>
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
+      ) : (
+        <Button onClick={() => setOpen(true)} className="gap-1 items-center">
+          <PackagePlus size={18} />
+          <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
+            Agregar
+          </span>
+        </Button>
+      )}
+      {open && (
+        <ModalProduct
+          categorias={categorias}
+          data={data}
+          open={open}
+          setOpen={setOpen}
+        />
+      )}
+    </>
+  );
+}
+
+function ModalProduct({ data = null, categorias, open, setOpen }) {
+  const [imagen, setImage] = useState(data?.imagen?.url);
   const form = useForm({
     resolver: valibotResolver(ProductSchema),
     defaultValues: {
       ...data,
       pago_trabajador: data?.pago_trabajador || 0,
       categoria: data?.categoria?.id?.toString(),
+      deletePhoto: false,
     },
   });
 
@@ -63,18 +111,18 @@ export default function ModalProduct({ data = null, trigger, categorias }) {
 
   const { handleSubmit, error, isLoading } = useProductSubmit({
     form,
-    setIsOpen,
+    setOpen,
     setImage,
   });
 
   const handleImageRemove = () => {
     form.setValue('imagen', undefined);
     setImage(undefined);
+    form.setValue('deletePhoto', true);
   };
 
   return (
-    <Dialog open={isOpen} onOpenChange={setIsOpen}>
-      <DialogTrigger asChild>{trigger}</DialogTrigger>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogContent className="max-w-3xl">
         <DialogHeader>
           <DialogTitle>{data ? 'Editar' : 'Agregar'} Producto</DialogTitle>
