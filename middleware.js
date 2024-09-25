@@ -1,17 +1,22 @@
 import { NextResponse } from 'next/server';
-import { userByToken } from '@/lib/services';
+import { verifyAuth } from '@/lib/auth';
 
 export async function middleware(request) {
-  const session = request.cookies.has('session');
+  const token = request.cookies.get('session')?.value;
 
-  if (!session) {
+  const verifyToken =
+    token &&
+    (await verifyAuth(token).catch((e) => {
+      console.log(e);
+    }));
+
+  if (!verifyToken) {
     return NextResponse.redirect(new URL('/login', request.url));
   }
 
-  const { data } = await userByToken();
   const requestHeaders = new Headers(request.headers);
-  requestHeaders.set('x-user-rol', data?.rol);
-  requestHeaders.set('x-user-punto', data?.areaVenta?.id);
+  requestHeaders.set('x-user-rol', verifyToken?.rol);
+  requestHeaders.set('x-user-punto', verifyToken?.area_venta);
   return NextResponse.next({
     request: {
       headers: requestHeaders,
