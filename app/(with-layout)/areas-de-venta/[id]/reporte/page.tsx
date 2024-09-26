@@ -73,6 +73,7 @@ export default async function Page({ params }: { params: { id: string } }) {
                         ${data?.subtotal}
                       </TableCell>
                     </TableRow>
+
                     <TableRow>
                       <TableCell colSpan={3}>Total efectivo</TableCell>
                       <TableCell className="text-right">
@@ -83,6 +84,14 @@ export default async function Page({ params }: { params: { id: string } }) {
                       <TableCell colSpan={3}>Total transferencia</TableCell>
                       <TableCell className="text-right">
                         ${data?.transferencia}
+                      </TableCell>
+                    </TableRow>
+                    <TableRow className="border-t border-t-gray-300">
+                      <TableCell colSpan={3} className="font-medium">
+                        Costos de producto:
+                      </TableCell>
+                      <TableCell className="text-right font-medium">
+                        - ${data?.costo_producto}
                       </TableCell>
                     </TableRow>
                     <TableRow>
