@@ -1,6 +1,6 @@
-"use client";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
+'use client';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 
 import {
   ClipboardCheck,
@@ -13,13 +13,13 @@ import {
   PackageOpen,
   Settings2,
   Tags,
-} from "lucide-react";
+} from 'lucide-react';
 
-import { cn } from "@/lib/utils";
+import { cn } from '@/lib/utils';
 
 export default function SideBar({ areasVenta, session }) {
   const path = usePathname();
-  if (path === "/login") return;
+  if (path === '/login') return;
   if (session.isVendedor) return;
 
   return (
@@ -38,8 +38,8 @@ export default function SideBar({ areasVenta, session }) {
                 <Link
                   href="/"
                   className={cn(
-                    "flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary",
-                    path === "/" && "bg-muted text-primary"
+                    'flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary',
+                    path === '/' && 'bg-muted text-primary'
                   )}
                 >
                   <Home className="h-4 w-4" />
@@ -49,8 +49,8 @@ export default function SideBar({ areasVenta, session }) {
                 <Link
                   href="/products"
                   className={cn(
-                    "flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary",
-                    path === "/products" && "bg-muted text-primary"
+                    'flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary',
+                    path === '/products' && 'bg-muted text-primary'
                   )}
                 >
                   <Package className="h-4 w-4" />
@@ -59,8 +59,8 @@ export default function SideBar({ areasVenta, session }) {
                 <Link
                   href="/categorias"
                   className={cn(
-                    "flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary",
-                    path === "/categorias" && "bg-muted text-primary"
+                    'flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary',
+                    path === '/categorias' && 'bg-muted text-primary'
                   )}
                 >
                   <Tags className="h-4 w-4" />
@@ -72,8 +72,8 @@ export default function SideBar({ areasVenta, session }) {
               <Link
                 href="/users"
                 className={cn(
-                  "flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary",
-                  path === "/users" && "bg-muted text-primary"
+                  'flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary',
+                  path === '/users' && 'bg-muted text-primary'
                 )}
               >
                 <Users className="h-4 w-4" />
@@ -82,12 +82,12 @@ export default function SideBar({ areasVenta, session }) {
             )}
             {session.isStaff && (
               <>
-                <span className="p-2">Almacén</span>
+                <span className="p-2">Almacén Principal</span>
                 <Link
                   href="/inventario"
                   className={cn(
-                    "flex flex-1 items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary",
-                    path === "/inventario" && "bg-muted text-primary"
+                    'flex flex-1 items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary',
+                    path === '/inventario' && 'bg-muted text-primary'
                   )}
                 >
                   <PackageOpen className="h-4 w-4" />
@@ -96,8 +96,8 @@ export default function SideBar({ areasVenta, session }) {
                 <Link
                   href="/entradas"
                   className={cn(
-                    "flex flex-1 items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary",
-                    path === "/entradas" && "bg-muted text-primary"
+                    'flex flex-1 items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary',
+                    path === '/entradas' && 'bg-muted text-primary'
                   )}
                 >
                   <ArrowDownLeft className="h-4 w-4" />
@@ -106,8 +106,8 @@ export default function SideBar({ areasVenta, session }) {
                 <Link
                   href="/salidas"
                   className={cn(
-                    "flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary",
-                    path === "/salidas" && "bg-muted text-primary"
+                    'flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary',
+                    path === '/salidas' && 'bg-muted text-primary'
                   )}
                 >
                   <ArrowUpRight className="h-4 w-4" />
@@ -116,13 +116,35 @@ export default function SideBar({ areasVenta, session }) {
               </>
             )}
 
+            <span className="p-2">Almacén Revoltosa</span>
+            <Link
+              href="/inventario-revoltosa"
+              className={cn(
+                'flex flex-1 items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary',
+                path === '/inventario-revoltosa' && 'bg-muted text-primary'
+              )}
+            >
+              <PackageOpen className="h-4 w-4" />
+              Inventario
+            </Link>
+            <Link
+              href="/salidas-revoltosa"
+              className={cn(
+                'flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary',
+                path === '/salidas-revoltosa' && 'bg-muted text-primary'
+              )}
+            >
+              <ArrowUpRight className="h-4 w-4" />
+              Salidas
+            </Link>
+
             <span className="p-2">Áreas de venta</span>
             {session.isStaff && (
               <Link
                 href="/areas-de-venta"
                 className={cn(
-                  "flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary",
-                  path === "/areas-de-venta" && "bg-muted text-primary"
+                  'flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary',
+                  path === '/areas-de-venta' && 'bg-muted text-primary'
                 )}
               >
                 <Settings2 className="h-4 w-4" />
@@ -134,9 +156,9 @@ export default function SideBar({ areasVenta, session }) {
                 key={area.id}
                 href={`/areas-de-venta/${area.id}`}
                 className={cn(
-                  "flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary",
+                  'flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary',
                   path === `/areas-de-venta/${area.id}` &&
-                    "bg-muted text-primary"
+                    'bg-muted text-primary'
                 )}
               >
                 <Store className="h-4 w-4" />

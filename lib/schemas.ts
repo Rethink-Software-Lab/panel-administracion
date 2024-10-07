@@ -159,6 +159,20 @@ export const SalidaSchema = object({
   ),
 });
 
+export const SalidaRevoltosaSchema = object({
+  zapatos_id: optional(
+    pipe(
+      array(string(), 'Productos no puede estar vacio'),
+      minLength(1, 'Productos no puede estar vacio')
+    )
+  ),
+  cantidad: optional(pipe(number(), integer(), minValue(1))),
+  producto_info: pipe(
+    string('El producto es requerido.'),
+    nonEmpty('El producto es requerido.')
+  ),
+});
+
 export const VentasSchema = object({
   metodoPago: enum_(METODOS_PAGO, 'Método requerido: Efectivo o transferencia'),
   efectivo: optional(

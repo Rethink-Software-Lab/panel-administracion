@@ -1,26 +1,25 @@
 import { PlusCircle } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
-import ModalSalidas from '@/components/functionals/ModalSalida';
+import ModalSalidasRevoltosa from '@/components/functionals/ModalSalidasRevoltosa';
 
-import { getSalidas, getAreasVentas, getProductos } from '@/lib/services';
+import { getSalidasRevoltosa, getProductos } from '@/lib/services';
 
 import { DataTable } from '@/components/ui/data-table-salidas';
 import { columns } from './columns';
 
 export default async function Salidas() {
-  const { data } = await getSalidas();
-  const { data: productosInfo } = await getProductos(null, null, true);
-  const {
-    data: { areasVenta },
-  } = await getAreasVentas();
+  const { data } = await getSalidasRevoltosa();
+  const { data: productosInfo } = await getProductos(null, true, null);
 
   return (
     <main className="flex flex-1 flex-col gap-4 p-4 lg:gap-6 lg:p-6">
       <div className="flex justify-between items-center">
-        <h1 className="text-lg font-semibold md:text-2xl">Salidas</h1>
+        <h1 className="text-lg font-semibold md:text-2xl">
+          Salidas Almacén Revoltosa
+        </h1>
 
-        <ModalSalidas
+        <ModalSalidasRevoltosa
           trigger={
             <Button className="gap-1 items-center">
               <PlusCircle size={18} />
@@ -29,7 +28,6 @@ export default async function Salidas() {
               </span>
             </Button>
           }
-          areasVenta={areasVenta}
           productosInfo={productosInfo}
         />
       </div>
