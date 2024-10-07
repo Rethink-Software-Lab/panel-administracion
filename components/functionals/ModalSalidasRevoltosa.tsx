@@ -153,6 +153,7 @@ export default function ModalSalidaRevoltosa({
         )}
         <Form {...form}>
           <form
+            // @ts-ignore
             onSubmit={form.handleSubmit(onSubmit)}
             className={cn(
               form.getValues('zapatos_id')?.length > 5
