@@ -15,6 +15,7 @@ import {
   maxValue,
   integer,
   boolean,
+  custom,
 } from 'valibot';
 
 enum ROLES {
@@ -166,7 +167,13 @@ export const SalidaRevoltosaSchema = object({
       minLength(1, 'Productos no puede estar vacio')
     )
   ),
-  cantidad: optional(pipe(number(), integer(), minValue(1))),
+  cantidad: optional(
+    pipe(
+      number('Debe introducir un número'),
+      integer('Debe introducir un número entero'),
+      minValue(1, 'La cantidad debe ser mayor que 0')
+    )
+  ),
   producto_info: pipe(
     string('El producto es requerido.'),
     nonEmpty('El producto es requerido.')
@@ -220,7 +227,14 @@ export const onlyNombreSchema = object({
 });
 
 export const AreaVentaSchema = object({
-  nombre: pipe(string('Campo requerido.'), nonEmpty('Campo requerido.')),
+  nombre: pipe(
+    string('Campo requerido.'),
+    nonEmpty('Campo requerido.'),
+    custom(
+      (value) => value !== 'Revoltosa',
+      'El nombre no puede ser "Revoltosa"'
+    )
+  ),
   color: pipe(string('Campo requerido.'), nonEmpty('Campo requerido.')),
 });
 
