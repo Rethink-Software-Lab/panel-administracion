@@ -168,11 +168,13 @@ export default function ModalSalida({
                         <SelectItem value="almacen-revoltosa">
                           Almacén Revoltosa
                         </SelectItem>
-                        {areasVenta?.map((a) => (
-                          <SelectItem key={a.id} value={a.id}>
-                            {a.nombre}
-                          </SelectItem>
-                        ))}
+                        {areasVenta?.map((a) =>
+                          a.nombre === 'Revoltosa' ? null : (
+                            <SelectItem key={a.id} value={a.id}>
+                              {a.nombre}
+                            </SelectItem>
+                          )
+                        )}
                       </SelectContent>
                     </Select>
                     <FormMessage />
