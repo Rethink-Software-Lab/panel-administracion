@@ -8,8 +8,12 @@ import { columns } from '@/app/(with-layout)/areas-de-venta/[id]/columns-ventas'
 
 import { getVenta, getProductos } from '@/lib/services';
 import Link from 'next/link';
-
-// TODO: Agregar Tooltip
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from '../ui/tooltip';
 
 export default async function VentasAreaVenta({ id }) {
   const { data, error } = await getVenta(id);
@@ -20,12 +24,22 @@ export default async function VentasAreaVenta({ id }) {
       <div className="flex justify-between items-center">
         <h1 className="text-lg font-semibold md:text-2xl">Ventas</h1>
         <div className="flex items-center gap-2">
-          <Link href={`/areas-de-venta/${id}/reporte`}>
-            <Button variant="outline" size="icon">
-              <span className="sr-only">Ver reporte</span>
-              <FileText size={18} />
-            </Button>
-          </Link>
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger>
+                <Link href={`/areas-de-venta/${id}/reporte`}>
+                  <Button variant="outline" size="icon">
+                    <span className="sr-only">Ver reporte</span>
+                    <FileText size={18} />
+                  </Button>
+                </Link>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>Ver reporte</p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
+
           <ModalVentas
             idPunto={Number(id)}
             productosInfo={productosInfo}

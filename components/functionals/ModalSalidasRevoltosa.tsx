@@ -1,11 +1,5 @@
 'use client';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
+
 import { Button } from '@/components/ui/button';
 import {
   DialogFooter,
@@ -44,13 +38,21 @@ import {
   PopoverTrigger,
 } from '@/components/ui/popover';
 
-import { useFieldArray, useForm, useWatch } from 'react-hook-form';
+import { Field, useFieldArray, useForm, useWatch } from 'react-hook-form';
 import { valibotResolver } from '@hookform/resolvers/valibot';
-import { SalidaSchema } from '@/lib/schemas';
-import { safeParse, pipe, integer, minValue, string, transform } from 'valibot';
+import { SalidaRevoltosaSchema } from '@/lib/schemas';
+import {
+  safeParse,
+  pipe,
+  integer,
+  minValue,
+  string,
+  transform,
+  InferInput,
+} from 'valibot';
 
 import { updateSalida } from '@/lib/actions';
-import { addSalida } from '@/app/(with-layout)/salidas/actions';
+import { addSalidaRevoltosa } from '@/app/(with-layout)/salidas-revoltosa/actions';
 import { toast } from 'sonner';
 import { CircleX, LoaderCircle } from 'lucide-react';
 import { useRef, useState } from 'react';
@@ -58,23 +60,29 @@ import { useRef, useState } from 'react';
 import { Label } from '../ui/label';
 import { Input } from '../ui/input';
 
-export default function ModalSalida({
-  data = null,
+import { SalidasRevoltosa } from '@/app/(with-layout)/salidas-revoltosa/types';
+import { ProductInfo } from '@/app/(with-layout)/products/types';
+
+export default function ModalSalidaRevoltosa({
+  data,
   trigger,
-  areasVenta,
   productosInfo,
+}: {
+  data?: SalidasRevoltosa;
+  trigger: React.ReactNode;
+  productosInfo: ProductInfo[];
 }) {
   const [open, setOpen] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const [error, setErrors] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
-  const ref = useRef();
+  const ref = useRef<HTMLInputElement>(null);
 
   const form = useForm({
-    resolver: valibotResolver(SalidaSchema),
+    resolver: valibotResolver(SalidaRevoltosaSchema),
   });
 
-  const { fields, append, remove } = useFieldArray({
+  const { append, remove } = useFieldArray({
     control: form.control,
     name: 'zapatos_id',
   });
@@ -92,15 +100,19 @@ export default function ModalSalida({
   );
 
   const handleNewProducts = () => {
-    const { success } = safeParse(IdArraySchema, ref.current.value);
-    success && append(ref.current.value);
-    ref.current.value = '';
+    const { success } = safeParse(IdArraySchema, ref.current?.value);
+    if (ref.current) {
+      success && append(ref.current.value);
+      ref.current.value = '';
+    }
   };
 
-  const onSubmit = async (dataForm) => {
+  const onSubmit = async (
+    dataForm: InferInput<typeof SalidaRevoltosaSchema>
+  ): Promise<void> => {
     setIsLoading(true);
     if (!data) {
-      const { error } = await addSalida(dataForm);
+      const { error } = await addSalidaRevoltosa(dataForm);
       setIsLoading(false);
       if (!error) {
         form.reset();
@@ -141,6 +153,7 @@ export default function ModalSalida({
         )}
         <Form {...form}>
           <form
+            // @ts-ignore
             onSubmit={form.handleSubmit(onSubmit)}
             className={cn(
               form.getValues('zapatos_id')?.length > 5
@@ -149,39 +162,6 @@ export default function ModalSalida({
             )}
           >
             <div>
-              <FormField
-                control={form.control}
-                name="area_venta"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Destino</FormLabel>
-                    <Select
-                      onValueChange={field.onChange}
-                      defaultValue={field.value}
-                    >
-                      <FormControl>
-                        <SelectTrigger>
-                          <SelectValue placeholder="Seleccione destino" />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent>
-                        <SelectItem value="almacen-revoltosa">
-                          Almacén Revoltosa
-                        </SelectItem>
-                        {areasVenta?.map((a) =>
-                          a.nombre === 'Revoltosa' ? null : (
-                            <SelectItem key={a.id} value={a.id}>
-                              {a.nombre}
-                            </SelectItem>
-                          )
-                        )}
-                      </SelectContent>
-                    </Select>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
               <FormField
                 control={form.control}
                 name="producto_info"
@@ -277,19 +257,21 @@ export default function ModalSalida({
                           'border-destructive'
                       )}
                     >
-                      {form.getValues('zapatos_id')?.map((p, index) => (
-                        <li
-                          key={p}
-                          className="flex w-full p-2 px-4 justify-between items-center bg-background rounded-md"
-                        >
-                          <span>{p}</span>
-                          <X
-                            className="ml-2 cursor-pointer"
-                            onClick={() => remove(index)}
-                            size={16}
-                          />
-                        </li>
-                      ))}
+                      {form
+                        .getValues('zapatos_id')
+                        ?.map((p: string, index: number) => (
+                          <li
+                            key={p}
+                            className="flex w-full p-2 px-4 justify-between items-center bg-background rounded-md"
+                          >
+                            <span>{p}</span>
+                            <X
+                              className="ml-2 cursor-pointer"
+                              onClick={() => remove(index)}
+                              size={16}
+                            />
+                          </li>
+                        ))}
                     </ul>
                   )}
                   <div className="flex gap-2">
@@ -303,7 +285,7 @@ export default function ModalSalida({
                     </Button>
                   </div>
                   <p className="text-[0.8rem] font-medium text-destructive">
-                    {form?.formState?.errors?.productos?.message}
+                    {form.formState.errors?.productos?.message as string}
                   </p>
                 </div>
               )}
@@ -318,7 +300,7 @@ export default function ModalSalida({
                     type="number"
                   />
                   <p className="text-[0.8rem] font-medium text-destructive">
-                    {form.formState.errors?.cantidad?.message}
+                    {form.formState.errors?.cantidad?.message as string}
                   </p>
                 </div>
               )}

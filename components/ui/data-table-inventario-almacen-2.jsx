@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import {
   getPaginationRowModel,
@@ -7,7 +7,7 @@ import {
   getCoreRowModel,
   useReactTable,
   getFilteredRowModel,
-} from "@tanstack/react-table";
+} from '@tanstack/react-table';
 
 import {
   Table,
@@ -16,21 +16,21 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table";
+} from '@/components/ui/table';
 
-import { Input } from "@/components/ui/input";
+import { Input } from '@/components/ui/input';
 
-import { useState } from "react";
-import { DataTablePagination } from "@/components/ui/data-table-pagination";
-import { Button } from "./button";
-import { Check } from "lucide-react";
+import { useState } from 'react';
+import { DataTablePagination } from '@/components/ui/data-table-pagination';
+import { Button } from './button';
+import { Check } from 'lucide-react';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuTrigger,
   DropdownMenuRadioGroup,
   DropdownMenuRadioItem,
-} from "./dropdown-menu";
+} from './dropdown-menu';
 
 export function DataTable({ columns, data, categorias }) {
   const [sorting, setSorting] = useState([]);
@@ -64,20 +64,20 @@ export function DataTable({ columns, data, categorias }) {
         <div className="flex gap-2">
           <Input
             className="max-w-60"
-            value={columnFilters?.find((el) => el.id === "codigo")?.value || ""}
+            value={columnFilters?.find((el) => el.id === 'codigo')?.value || ''}
             onChange={(e) =>
               setColumnFilters((prevState) => {
-                const has = prevState?.find((el) => el.id === "codigo");
+                const has = prevState?.find((el) => el.id === 'codigo');
                 if (!has) {
                   return prevState.concat({
-                    id: "codigo",
+                    id: 'codigo',
                     value: e.target.value,
                   });
                 }
                 return prevState
-                  .filter((f) => f.id !== "codigo")
+                  .filter((f) => f.id !== 'codigo')
                   .concat({
-                    id: "codigo",
+                    id: 'codigo',
                     value: e.target.value,
                   });
               })
@@ -93,7 +93,7 @@ export function DataTable({ columns, data, categorias }) {
                 size="sm"
                 className="ml-auto flex gap-1"
               >
-                {columnFilters.find((f) => f.id === "categoria") && (
+                {columnFilters.find((f) => f.id === 'categoria') && (
                   <Check size={16} />
                 )}
                 Categoría
@@ -102,27 +102,27 @@ export function DataTable({ columns, data, categorias }) {
             <DropdownMenuContent align="end" className="max-h-[300px]">
               <DropdownMenuRadioGroup
                 value={
-                  columnFilters?.find((el) => el.id === "categoria")?.value ||
-                  ""
+                  columnFilters?.find((el) => el.id === 'categoria')?.value ||
+                  ''
                 }
                 onValueChange={(value) =>
                   setColumnFilters((prevState) => {
-                    const has = prevState?.find((el) => el.id === "categoria");
+                    const has = prevState?.find((el) => el.id === 'categoria');
                     if (!has) {
-                      return prevState.concat({ id: "categoria", value });
+                      return prevState.concat({ id: 'categoria', value });
                     }
                     if (has.value === value) {
-                      return prevState.filter((f) => f.id !== "categoria");
+                      return prevState.filter((f) => f.id !== 'categoria');
                     } else {
                       return prevState
-                        .filter((f) => f.id !== "categoria")
-                        .concat({ id: "categoria", value });
+                        .filter((f) => f.id !== 'categoria')
+                        .concat({ id: 'categoria', value });
                     }
                   })
                 }
               >
                 {categorias
-                  ?.filter((e) => e.nombre !== "Zapatos")
+                  ?.filter((e) => e.nombre !== 'Zapatos')
                   .map((categoria) => (
                     <DropdownMenuRadioItem
                       key={categoria.id}
@@ -137,7 +137,7 @@ export function DataTable({ columns, data, categorias }) {
         </div>
       </div>
       <Table>
-        <TableHeader>
+        <TableHeader className="whitespace-nowrap">
           {table.getHeaderGroups().map((headerGroup) => (
             <TableRow key={headerGroup.id}>
               {headerGroup.headers.map((header) => {
@@ -163,7 +163,7 @@ export function DataTable({ columns, data, categorias }) {
             table.getRowModel().rows.map((row) => (
               <TableRow
                 key={row.id}
-                data-state={row.getIsSelected() && "selected"}
+                data-state={row.getIsSelected() && 'selected'}
               >
                 {row.getVisibleCells().map((cell) => (
                   <TableCell

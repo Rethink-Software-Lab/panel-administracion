@@ -15,6 +15,7 @@ import {
   maxValue,
   integer,
   boolean,
+  custom,
 } from 'valibot';
 
 enum ROLES {
@@ -159,6 +160,26 @@ export const SalidaSchema = object({
   ),
 });
 
+export const SalidaRevoltosaSchema = object({
+  zapatos_id: optional(
+    pipe(
+      array(string(), 'Productos no puede estar vacio'),
+      minLength(1, 'Productos no puede estar vacio')
+    )
+  ),
+  cantidad: optional(
+    pipe(
+      number('Debe introducir un número'),
+      integer('Debe introducir un número entero'),
+      minValue(1, 'La cantidad debe ser mayor que 0')
+    )
+  ),
+  producto_info: pipe(
+    string('El producto es requerido.'),
+    nonEmpty('El producto es requerido.')
+  ),
+});
+
 export const VentasSchema = object({
   metodoPago: enum_(METODOS_PAGO, 'Método requerido: Efectivo o transferencia'),
   efectivo: optional(
@@ -206,7 +227,14 @@ export const onlyNombreSchema = object({
 });
 
 export const AreaVentaSchema = object({
-  nombre: pipe(string('Campo requerido.'), nonEmpty('Campo requerido.')),
+  nombre: pipe(
+    string('Campo requerido.'),
+    nonEmpty('Campo requerido.'),
+    custom(
+      (value) => value !== 'Revoltosa',
+      'El nombre no puede ser "Revoltosa"'
+    )
+  ),
   color: pipe(string('Campo requerido.'), nonEmpty('Campo requerido.')),
 });
 

@@ -1,13 +1,16 @@
 'use client';
 import TableDeleteV2 from '@/components/functionals/TableDeleteV2';
-import { deleteSalida } from './actions';
+import { deleteSalidaRevoltosa } from './actions';
 import { DateTime } from 'luxon';
+import { Row } from '@tanstack/react-table';
+
+import { SalidasRevoltosa } from './types';
 
 export const columns = [
   {
     accessorKey: 'created_at',
     header: 'Fecha',
-    cell: ({ row }) => {
+    cell: ({ row }: { row: Row<SalidasRevoltosa> }) => {
       const date = DateTime.fromISO(row.getValue('created_at'));
       const now = DateTime.now();
       const diff = now.diff(date, 'days').days;
@@ -20,7 +23,7 @@ export const columns = [
         return (
           <span>
             {date.toRelative({
-              unit: 'day',
+              unit: 'days',
               locale: 'es',
             })}
           </span>
@@ -36,12 +39,6 @@ export const columns = [
     accessorKey: 'cantidad',
     header: 'Cantidad',
   },
-  {
-    accessorKey: 'area_venta__nombre',
-    header: 'Destino',
-    cell: ({ row }) =>
-      row.getValue('area_venta__nombre') || 'Almacén Revoltosa',
-  },
 
   {
     accessorKey: 'usuario__username',
@@ -50,8 +47,8 @@ export const columns = [
 
   {
     header: ' ',
-    cell: ({ row }) => (
-      <TableDeleteV2 id={row.original.id} action={deleteSalida} />
+    cell: ({ row }: { row: Row<SalidasRevoltosa> }) => (
+      <TableDeleteV2 id={row.original.id} action={deleteSalidaRevoltosa} />
     ),
   },
 ];

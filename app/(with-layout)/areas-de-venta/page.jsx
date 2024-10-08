@@ -75,18 +75,19 @@ export default async function AreasVenta({ searchParams }) {
                         style={{ background: punto?.color }}
                       ></div>
                     </TableCell>
-
-                    <TableCell className="flex items-center gap-2">
-                      <ModalAreasVenta
-                        data={punto}
-                        trigger={
-                          <Button variant="outline" size="icon">
-                            <Edit2 size={18} />
-                          </Button>
-                        }
-                      />
-                      <TableDelete id={punto?.id} action={deleteAreaVenta} />
-                    </TableCell>
+                    {punto?.nombre !== 'Revoltosa' && (
+                      <TableCell className="flex items-center gap-2">
+                        <ModalAreasVenta
+                          data={punto}
+                          trigger={
+                            <Button variant="outline" size="icon">
+                              <Edit2 size={18} />
+                            </Button>
+                          }
+                        />
+                        <TableDelete id={punto?.id} action={deleteAreaVenta} />
+                      </TableCell>
+                    )}
                   </TableRow>
                 ))}
               </TableBody>

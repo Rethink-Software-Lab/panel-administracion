@@ -170,6 +170,28 @@ export default function TopBar({ session, areasVenta }) {
                 </>
               )}
 
+              <span className="p-2">Almacén Revoltosa</span>
+              <Link
+                href="/inventario-revoltosa"
+                className={cn(
+                  'flex flex-1 items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary',
+                  path === '/inventario-revoltosa' && 'bg-muted text-primary'
+                )}
+              >
+                <PackageOpen className="h-4 w-4" />
+                Inventario
+              </Link>
+              <Link
+                href="/salidas-revoltosa"
+                className={cn(
+                  'flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary',
+                  path === '/salidas-revoltosa' && 'bg-muted text-primary'
+                )}
+              >
+                <ArrowUpRight className="h-4 w-4" />
+                Salidas
+              </Link>
+
               <span className="p-2">Áreas de venta</span>
               {session.isStaff && (
                 <Link
