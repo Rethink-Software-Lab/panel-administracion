@@ -1,4 +1,4 @@
-import { CloudOff, PackagePlus } from 'lucide-react';
+import { CloudOff, FileText, PackagePlus } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 import ModalVentas from '@/components/functionals/ModalVentas';
@@ -7,6 +7,7 @@ import { DataTable } from '../ui/data-table-ventas';
 import { columns } from '@/app/(with-layout)/areas-de-venta/[id]/columns-ventas';
 
 import { getVenta, getProductos } from '@/lib/services';
+import Link from 'next/link';
 
 export default async function VentasAreaVenta({ id }) {
   const { data, error } = await getVenta(id);
@@ -17,6 +18,18 @@ export default async function VentasAreaVenta({ id }) {
       <div className="flex justify-between items-center">
         <h1 className="text-lg font-semibold md:text-2xl">Ventas</h1>
         <div className="flex items-center gap-2">
+          <Link
+            href={{
+              pathname: '/reportes',
+              query: {
+                area: id,
+              },
+            }}
+          >
+            <Button variant="outline" size="icon">
+              <FileText size={18} />
+            </Button>
+          </Link>
           <ModalVentas
             idPunto={Number(id)}
             productosInfo={productosInfo}
