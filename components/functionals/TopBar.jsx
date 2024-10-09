@@ -15,6 +15,7 @@ import {
   ArrowUpRight,
   CircleUser,
   ClipboardCheck,
+  FileText,
   Home,
   LifeBuoy,
   LogOut,
@@ -109,6 +110,16 @@ export default function TopBar({ session, areasVenta }) {
                   >
                     <Package className="h-4 w-4" />
                     Productos
+                  </Link>
+                  <Link
+                    href="/reportes"
+                    className={cn(
+                      'flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary',
+                      path === '/reportes' && 'bg-muted text-primary'
+                    )}
+                  >
+                    <FileText className="h-4 w-4" />
+                    Reportes
                   </Link>
                   <Link
                     href="/categorias"
