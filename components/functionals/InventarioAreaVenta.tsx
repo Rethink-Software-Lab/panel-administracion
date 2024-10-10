@@ -1,5 +1,3 @@
-import { inventarioAreaVenta, getCategorias } from '@/lib/services';
-
 import { columns } from '@/app/(with-layout)/inventario/columns';
 import { columns as columnsNew } from '@/app/(with-layout)/areas-de-venta/[id]/columns';
 import { DataTable } from '@/components/ui/data-table-inventario-almacen';
@@ -8,19 +6,39 @@ import { CloudOff } from 'lucide-react';
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { DownloadButton } from '@/components/functionals/DownloadButton';
+import { Categoria } from '@/app/(with-layout)/categorias/types';
 
-export default async function InventarioAreaVenta({ id }) {
-  const { data } = await inventarioAreaVenta({ id });
+export interface Productos {
+  id: number;
+  codigo: string;
+  descripcion: string;
+  precio_venta: number;
+  cantidad: number;
+  categoria__nombre: string;
+}
+
+interface Data {
+  productos: Productos[];
+  zapatos: Productos[];
+  categorias: Categoria[];
+}
+
+export default async function InventarioAreaVenta({
+  data,
+  area,
+}: {
+  data: Data;
+  area: string;
+}) {
   const productos = data?.productos;
   const zapatos = data?.zapatos;
-  const { data: categorias } = await getCategorias();
   return (
     <main className="flex flex-1 flex-col gap-4 pb-4 lg:gap-6 lg:pb-6 h-full">
       <div className="flex justify-between items-center px-4">
         <h1 className="text-lg font-semibold md:text-2xl">Inventario</h1>
         <DownloadButton
-          fileName={`inventario-${data?.area_venta}.pdf`}
-          data={data}
+          fileName={`inventario-${area}.pdf`}
+          data={{ ...data, area_venta: area }}
         />
       </div>
 
@@ -47,7 +65,7 @@ export default async function InventarioAreaVenta({ id }) {
             <DataTableNew
               columns={columnsNew}
               data={productos}
-              categorias={categorias}
+              categorias={data?.categorias}
             />
           </TabsContent>
           <TabsContent
