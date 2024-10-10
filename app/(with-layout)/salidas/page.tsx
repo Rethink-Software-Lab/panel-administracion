@@ -3,17 +3,13 @@ import { PlusCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import ModalSalidas from '@/components/functionals/ModalSalida';
 
-import { getSalidas, getAreasVentas, getProductos } from '@/lib/services';
+import { getSalidas } from '@/lib/services';
 
 import { DataTable } from '@/components/ui/data-table-salidas';
 import { columns } from './columns';
 
 export default async function Salidas() {
   const { data } = await getSalidas();
-  const { data: productosInfo } = await getProductos(null, null, true);
-  const {
-    data: { areasVenta },
-  } = await getAreasVentas();
 
   return (
     <main className="flex flex-1 flex-col gap-4 p-4 lg:gap-6 lg:p-6">
@@ -29,11 +25,11 @@ export default async function Salidas() {
               </span>
             </Button>
           }
-          areasVenta={areasVenta}
-          productosInfo={productosInfo}
+          areasVenta={data?.areas_de_venta}
+          productosInfo={data?.productos}
         />
       </div>
-      {data && <DataTable columns={columns} data={data} />}
+      {data && <DataTable columns={columns} data={data?.salidas} />}
     </main>
   );
 }

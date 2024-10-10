@@ -8,7 +8,7 @@ import { DataTable } from '@/components/ui/data-table-entradas';
 import { columns } from './columns';
 
 export default async function Entradas() {
-  const { data, error } = await getEntradas();
+  const { data } = await getEntradas();
 
   return (
     <main className="flex flex-1 flex-col gap-4 p-4 lg:gap-6 lg:p-6">

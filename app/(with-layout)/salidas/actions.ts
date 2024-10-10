@@ -3,7 +3,13 @@
 import { revalidatePath } from 'next/cache';
 import { cookies } from 'next/headers';
 
-export async function addSalida(data) {
+interface CreateSalida {
+  producto_info: string;
+  cantidad?: number;
+  zapatos_id?: string[];
+}
+
+export async function addSalida(data: CreateSalida) {
   const token = cookies().get('session')?.value || null;
   const res = await fetch(process.env.BACKEND_URL_V2 + '/salidas/', {
     method: 'POST',
@@ -40,7 +46,7 @@ export async function addSalida(data) {
   };
 }
 
-export async function deleteSalida({ id }) {
+export async function deleteSalida({ id }: { id: number }) {
   const token = cookies().get('session')?.value || null;
   const res = await fetch(process.env.BACKEND_URL_V2 + '/salidas/' + id + '/', {
     method: 'DELETE',

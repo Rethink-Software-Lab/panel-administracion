@@ -154,7 +154,7 @@ export default function ModalSalida({ trigger, areasVenta, productosInfo }) {
                         </SelectItem>
                         {areasVenta?.map((a) =>
                           a.nombre === 'Revoltosa' ? null : (
-                            <SelectItem key={a.id} value={a.id}>
+                            <SelectItem key={a.id} value={a.id?.toString()}>
                               {a.nombre}
                             </SelectItem>
                           )

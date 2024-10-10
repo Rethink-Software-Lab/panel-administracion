@@ -4,14 +4,14 @@ import { DataTable } from '@/components/ui/data-table-inventario-almacen';
 import { DataTable as DataTableNew } from '@/components/ui/data-table-inventario-almacen-2';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
-import { inventarioAlmacen, getCategorias } from '@/lib/services';
+import { inventarioAlmacen } from '@/lib/services';
 import { CloudOff } from 'lucide-react';
 
 export default async function Inventario() {
   const { data } = await inventarioAlmacen();
-  const productos = data?.productos;
-  const zapatos = data?.zapatos;
-  const { data: categorias } = await getCategorias();
+  const productos = data?.inventario?.productos;
+  const zapatos = data?.inventario?.zapatos;
+  const categorias = data?.categorias;
 
   return (
     <main className="flex flex-1 flex-col gap-4 py-4 lg:gap-6 lg:py-6 h-full">
