@@ -2,12 +2,22 @@
 import TableDeleteV2 from '@/components/functionals/TableDeleteV2';
 import { deleteSalida } from './actions';
 import { DateTime } from 'luxon';
+import { Row } from '@tanstack/react-table';
+
+interface Data {
+  id: number;
+  created_at: string;
+  producto__info__descripcion: string;
+  cantidad: number;
+  area_venta__nombre: string;
+  usuario__username: string;
+}
 
 export const columns = [
   {
     accessorKey: 'created_at',
     header: 'Fecha',
-    cell: ({ row }) => {
+    cell: ({ row }: { row: Row<Data> }) => {
       const date = DateTime.fromISO(row.getValue('created_at'));
       const now = DateTime.now();
       const diff = now.diff(date, 'days').days;
@@ -20,7 +30,7 @@ export const columns = [
         return (
           <span>
             {date.toRelative({
-              unit: 'day',
+              unit: 'days',
               locale: 'es',
             })}
           </span>
@@ -39,7 +49,7 @@ export const columns = [
   {
     accessorKey: 'area_venta__nombre',
     header: 'Destino',
-    cell: ({ row }) =>
+    cell: ({ row }: { row: Row<Data> }) =>
       row.getValue('area_venta__nombre') || 'Almacén Revoltosa',
   },
 
@@ -50,7 +60,7 @@ export const columns = [
 
   {
     header: ' ',
-    cell: ({ row }) => (
+    cell: ({ row }: { row: Row<Data> }) => (
       <TableDeleteV2 id={row.original.id} action={deleteSalida} />
     ),
   },

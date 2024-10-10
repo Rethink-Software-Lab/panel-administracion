@@ -3,12 +3,24 @@ import EspecialWarningDelete from '@/components/functionals/EspecialWarningDelet
 import { deleteEntrada } from './actions';
 import { Badge } from '@/components/ui/badge';
 import { DateTime } from 'luxon';
+import { Row } from '@tanstack/react-table';
+
+interface Data {
+  id: number;
+  created_at: string;
+  producto__info__descripcion: string;
+  cantidad: number;
+  comprador: string;
+  proveedor: string;
+  metodo_pago: string;
+  usuario__username: string;
+}
 
 export const columns = [
   {
     accessorKey: 'created_at',
     header: 'Fecha',
-    cell: ({ row }) => {
+    cell: ({ row }: { row: Row<Data> }) => {
       const date = DateTime.fromISO(row.getValue('created_at'));
       const now = DateTime.now();
       const diff = now.diff(date, 'days').days;
@@ -21,7 +33,7 @@ export const columns = [
         return (
           <span>
             {date.toRelative({
-              unit: 'day',
+              unit: 'days',
               locale: 'es',
             })}
           </span>
@@ -48,7 +60,7 @@ export const columns = [
   {
     accessorKey: 'metodo_pago',
     header: 'Método de pago',
-    cell: ({ row }) => (
+    cell: ({ row }: { row: Row<Data> }) => (
       <Badge variant="outline">{row.getValue('metodo_pago')}</Badge>
     ),
   },
@@ -60,7 +72,7 @@ export const columns = [
 
   {
     header: ' ',
-    cell: ({ row }) => (
+    cell: ({ row }: { row: Row<Data> }) => (
       <EspecialWarningDelete
         id={row.original.id}
         text="Al eliminar la entrada se eliminarán todas las salidas, productos y ventas asociadas a ella."
