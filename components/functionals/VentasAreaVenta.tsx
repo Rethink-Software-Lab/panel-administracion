@@ -6,13 +6,36 @@ import ModalVentas from '@/components/functionals/ModalVentas';
 import { DataTable } from '../ui/data-table-ventas';
 import { columns } from '@/app/(with-layout)/areas-de-venta/[id]/columns-ventas';
 
-import { getVenta, getProductos } from '@/lib/services';
 import Link from 'next/link';
+import { Productos } from './InventarioAreaVenta';
 
-export default async function VentasAreaVenta({ id }) {
-  const { data, error } = await getVenta(id);
+enum Metodo {
+  Transferencia = 'TRANSFERENCIA',
+  Efectivo = 'EFECTIVO',
+  Mixto = 'MIXTO',
+}
 
-  const { data: productosInfo } = await getProductos(id);
+interface Ventas {
+  id: number;
+  created_at: string;
+  importe: number;
+  metodo_pago: Metodo;
+  usuario__username: string;
+  producto__info__descripcion: string;
+  cantidad: number;
+}
+
+interface Props {
+  id: string;
+  ventas: Ventas[];
+  productos: Productos[];
+}
+
+export default async function VentasAreaVenta({
+  id,
+  ventas,
+  productos,
+}: Props) {
   return (
     <main className="flex flex-1 flex-col gap-4 pb-4 lg:gap-6 lg:pb-6 px-4 h-full">
       <div className="flex justify-between items-center">
@@ -32,9 +55,9 @@ export default async function VentasAreaVenta({ id }) {
           </Link>
           <ModalVentas
             idPunto={Number(id)}
-            productosInfo={productosInfo}
+            productosInfo={productos}
             trigger={
-              <Button className="gap-1 items-center" disabled={error}>
+              <Button className="gap-1 items-center">
                 <PackagePlus size={18} />
                 <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
                   Agregar
@@ -45,8 +68,8 @@ export default async function VentasAreaVenta({ id }) {
         </div>
       </div>
 
-      {data ? (
-        <DataTable columns={columns} data={data} id={id} />
+      {ventas ? (
+        <DataTable columns={columns} data={ventas} id={id} />
       ) : (
         <div className="flex flex-1 items-center justify-center rounded-lg border border-dashed shadow-sm mb-16">
           <div className="flex flex-col items-center gap-1 text-center">

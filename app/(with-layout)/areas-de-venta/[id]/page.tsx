@@ -4,6 +4,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 import InventarioAreaVenta from '@/components/functionals/InventarioAreaVenta';
 import dynamic from 'next/dynamic';
+import { getArea } from '@/lib/services';
 
 const VentasAreaVenta = dynamic(
   () => import('@/components/functionals/VentasAreaVenta'),
@@ -12,8 +13,13 @@ const VentasAreaVenta = dynamic(
   }
 );
 
-export default async function AreaVenta({ params }) {
+interface Params {
+  id: string;
+}
+
+export default async function AreaVenta({ params }: { params: Params }) {
   const { isAlmacenero } = getSession();
+  const { data } = await getArea(params.id);
 
   return (
     <main className="flex flex-1 flex-col gap-4 py-4 lg:gap-6 lg:py-2">
@@ -25,11 +31,18 @@ export default async function AreaVenta({ params }) {
           </TabsTrigger>
         </TabsList>
         <TabsContent value="inventario" className="h-full">
-          <InventarioAreaVenta id={params?.id} />
+          <InventarioAreaVenta
+            data={data?.inventario}
+            area={data?.area_venta}
+          />
         </TabsContent>
         {!isAlmacenero && (
           <TabsContent value="ventas" className="h-full">
-            <VentasAreaVenta id={params?.id} />
+            <VentasAreaVenta
+              ventas={data?.ventas}
+              productos={data?.inventario?.productos}
+              id={params?.id}
+            />
           </TabsContent>
         )}
       </Tabs>
