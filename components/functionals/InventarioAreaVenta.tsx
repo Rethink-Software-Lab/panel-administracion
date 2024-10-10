@@ -40,7 +40,7 @@ export default async function InventarioAreaVenta({
         <h1 className="text-lg font-semibold md:text-2xl">Inventario</h1>
         <DownloadButton
           fileName={`inventario-${area}.pdf`}
-          data={{ ...all_productos, area_venta: area }}
+          data={{ ...data, area_venta: area }}
         />
       </div>
 
