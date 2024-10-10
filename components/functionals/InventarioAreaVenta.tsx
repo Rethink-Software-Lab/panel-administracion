@@ -26,9 +26,11 @@ interface Data {
 export default async function InventarioAreaVenta({
   data,
   area,
+  all_productos,
 }: {
   data: Data;
   area: string;
+  all_productos: any;
 }) {
   const productos = data?.productos;
   const zapatos = data?.zapatos;
@@ -38,7 +40,7 @@ export default async function InventarioAreaVenta({
         <h1 className="text-lg font-semibold md:text-2xl">Inventario</h1>
         <DownloadButton
           fileName={`inventario-${area}.pdf`}
-          data={{ ...data, area_venta: area }}
+          data={{ ...all_productos, area_venta: area }}
         />
       </div>
 
