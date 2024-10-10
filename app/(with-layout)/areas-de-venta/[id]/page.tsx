@@ -40,7 +40,7 @@ export default async function AreaVenta({ params }: { params: Params }) {
           <TabsContent value="ventas" className="h-full">
             <VentasAreaVenta
               ventas={data?.ventas}
-              productos={data?.inventario?.productos}
+              productos={data?.all_productos}
               id={params?.id}
             />
           </TabsContent>
