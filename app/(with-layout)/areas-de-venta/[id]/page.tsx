@@ -34,6 +34,7 @@ export default async function AreaVenta({ params }: { params: Params }) {
           <InventarioAreaVenta
             data={data?.inventario}
             area={data?.area_venta}
+            all_productos={data?.all_productos}
           />
         </TabsContent>
         {!isAlmacenero && (
