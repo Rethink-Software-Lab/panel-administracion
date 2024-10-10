@@ -49,7 +49,6 @@ import { valibotResolver } from '@hookform/resolvers/valibot';
 import { SalidaSchema } from '@/lib/schemas';
 import { safeParse, pipe, integer, minValue, string, transform } from 'valibot';
 
-import { updateSalida } from '@/lib/actions';
 import { addSalida } from '@/app/(with-layout)/salidas/actions';
 import { toast } from 'sonner';
 import { CircleX, LoaderCircle } from 'lucide-react';
@@ -58,12 +57,7 @@ import { useRef, useState } from 'react';
 import { Label } from '../ui/label';
 import { Input } from '../ui/input';
 
-export default function ModalSalida({
-  data = null,
-  trigger,
-  areasVenta,
-  productosInfo,
-}) {
+export default function ModalSalida({ trigger, areasVenta, productosInfo }) {
   const [open, setOpen] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const [error, setErrors] = useState(null);
@@ -99,24 +93,14 @@ export default function ModalSalida({
 
   const onSubmit = async (dataForm) => {
     setIsLoading(true);
-    if (!data) {
-      const { error } = await addSalida(dataForm);
-      setIsLoading(false);
-      if (!error) {
-        form.reset();
-        setIsOpen(false);
-        toast.success('La salida fué creada con éxito.');
-      }
-      setErrors(error);
-    } else {
-      const { errors } = await updateSalida({ ...dataForm, id: data?.id });
-      setIsLoading(false);
-      if (!errors) {
-        setIsOpen(false);
-        toast.success('La salida fué editada con éxito.');
-      }
-      setErrors(errors);
+    const { error } = await addSalida(dataForm);
+    setIsLoading(false);
+    if (!error) {
+      form.reset();
+      setIsOpen(false);
+      toast.success('La salida fué creada con éxito.');
     }
+    setErrors(error);
   };
 
   return (
@@ -129,7 +113,7 @@ export default function ModalSalida({
         )}
       >
         <DialogHeader>
-          <DialogTitle>{data ? 'Editar' : 'Agregar'} Salida</DialogTitle>
+          <DialogTitle>Agregar Salida</DialogTitle>
         </DialogHeader>
         <DialogDescription>Todos los campos son requeridos</DialogDescription>
         {error && (
@@ -334,10 +318,10 @@ export default function ModalSalida({
                   {isLoading ? (
                     <>
                       <LoaderCircle className="mr-2 h-4 w-4 animate-spin" />
-                      {data ? 'Editando...' : 'Agregando...'}
+                      Agregando...
                     </>
                   ) : (
-                    <>{data ? 'Editar' : 'Agregar'}</>
+                    'Agregar'
                   )}
                 </Button>
               </DialogFooter>

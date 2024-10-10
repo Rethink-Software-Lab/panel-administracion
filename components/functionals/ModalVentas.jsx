@@ -49,7 +49,7 @@ import { valibotResolver } from '@hookform/resolvers/valibot';
 import { VentasSchema } from '@/lib/schemas';
 import { safeParse, pipe, integer, minValue, string, transform } from 'valibot';
 
-import { updateVenta, addVenta } from '@/lib/actions';
+import { addVenta } from '@/lib/actions';
 import { toast } from 'sonner';
 import { CircleX, LoaderCircle } from 'lucide-react';
 import { useRef, useState } from 'react';
@@ -57,12 +57,7 @@ import { useRef, useState } from 'react';
 import { Label } from '../ui/label';
 import { Input } from '../ui/input';
 
-export default function ModalVentas({
-  data = null,
-  trigger,
-  idPunto,
-  productosInfo,
-}) {
+export default function ModalVentas({ trigger, idPunto, productosInfo }) {
   const [open, setOpen] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const [errors, setErrors] = useState(null);
@@ -71,12 +66,6 @@ export default function ModalVentas({
 
   const form = useForm({
     resolver: valibotResolver(VentasSchema),
-    defaultValues: {
-      metodoPago: data?.metodoPago,
-      zapatos_id: data?.zapatos_id?.map((p) => p.id),
-      producto_info: data?.producto_info?.codigo,
-      cantidad: data?.cantidad,
-    },
   });
 
   const { fields, append, remove } = useFieldArray({
@@ -109,28 +98,14 @@ export default function ModalVentas({
 
   const onSubmit = async (dataForm) => {
     setIsLoading(true);
-    if (!data) {
-      const { error } = await addVenta({ ...dataForm, areaVenta: idPunto });
-      setIsLoading(false);
-      if (!error) {
-        form.reset();
-        setIsOpen(false);
-        toast.success('La venta fué creada con éxito.');
-      }
-      setErrors(error);
-    } else {
-      const { errors } = await updateVenta({
-        ...dataForm,
-        id: data?.id,
-        areaVenta: idPunto,
-      });
-      setIsLoading(false);
-      if (!errors) {
-        setIsOpen(false);
-        toast.success('La venta fué editada con éxito.');
-      }
-      setErrors(errors);
+    const { error } = await addVenta({ ...dataForm, areaVenta: idPunto });
+    setIsLoading(false);
+    if (!error) {
+      form.reset();
+      setIsOpen(false);
+      toast.success('La venta fué creada con éxito.');
     }
+    setErrors(error);
   };
 
   return (
@@ -138,7 +113,7 @@ export default function ModalVentas({
       <DialogTrigger asChild>{trigger}</DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>{data ? 'Editar' : 'Agregar'} Venta</DialogTitle>
+          <DialogTitle>Agregar Venta</DialogTitle>
         </DialogHeader>
         <DialogDescription>Todos los campos son requeridos</DialogDescription>
         {errors && (
@@ -395,10 +370,10 @@ export default function ModalVentas({
                   {isLoading ? (
                     <>
                       <LoaderCircle className="mr-2 h-4 w-4 animate-spin" />
-                      {data ? 'Editando...' : 'Agregando...'}
+                      Agregando...
                     </>
                   ) : (
-                    <>{data ? 'Editar' : 'Agregar'}</>
+                    'Agregar'
                   )}
                 </Button>
               </DialogFooter>

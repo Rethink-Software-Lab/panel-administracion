@@ -17,7 +17,6 @@ import {
   FormControl,
   FormField,
   FormItem,
-  FormLabel,
   FormMessage,
 } from '@/components/ui/form';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
@@ -38,7 +37,7 @@ import {
   PopoverTrigger,
 } from '@/components/ui/popover';
 
-import { Field, useFieldArray, useForm, useWatch } from 'react-hook-form';
+import { useFieldArray, useForm, useWatch } from 'react-hook-form';
 import { valibotResolver } from '@hookform/resolvers/valibot';
 import { SalidaRevoltosaSchema } from '@/lib/schemas';
 import {
@@ -51,7 +50,6 @@ import {
   InferInput,
 } from 'valibot';
 
-import { updateSalida } from '@/lib/actions';
 import { addSalidaRevoltosa } from '@/app/(with-layout)/salidas-revoltosa/actions';
 import { toast } from 'sonner';
 import { CircleX, LoaderCircle } from 'lucide-react';
@@ -60,15 +58,12 @@ import { useRef, useState } from 'react';
 import { Label } from '../ui/label';
 import { Input } from '../ui/input';
 
-import { SalidasRevoltosa } from '@/app/(with-layout)/salidas-revoltosa/types';
 import { ProductInfo } from '@/app/(with-layout)/products/types';
 
 export default function ModalSalidaRevoltosa({
-  data,
   trigger,
   productosInfo,
 }: {
-  data?: SalidasRevoltosa;
   trigger: React.ReactNode;
   productosInfo: ProductInfo[];
 }) {
@@ -111,24 +106,14 @@ export default function ModalSalidaRevoltosa({
     dataForm: InferInput<typeof SalidaRevoltosaSchema>
   ): Promise<void> => {
     setIsLoading(true);
-    if (!data) {
-      const { error } = await addSalidaRevoltosa(dataForm);
-      setIsLoading(false);
-      if (!error) {
-        form.reset();
-        setIsOpen(false);
-        toast.success('La salida fué creada con éxito.');
-      }
-      setErrors(error);
-    } else {
-      const { errors } = await updateSalida({ ...dataForm, id: data?.id });
-      setIsLoading(false);
-      if (!errors) {
-        setIsOpen(false);
-        toast.success('La salida fué editada con éxito.');
-      }
-      setErrors(errors);
+    const { error } = await addSalidaRevoltosa(dataForm);
+    setIsLoading(false);
+    if (!error) {
+      form.reset();
+      setIsOpen(false);
+      toast.success('La salida fué creada con éxito.');
     }
+    setErrors(error);
   };
 
   return (
@@ -141,7 +126,7 @@ export default function ModalSalidaRevoltosa({
         )}
       >
         <DialogHeader>
-          <DialogTitle>{data ? 'Editar' : 'Agregar'} Salida</DialogTitle>
+          <DialogTitle>Agregar Salida</DialogTitle>
         </DialogHeader>
         <DialogDescription>Todos los campos son requeridos</DialogDescription>
         {error && (
@@ -316,10 +301,10 @@ export default function ModalSalidaRevoltosa({
                   {isLoading ? (
                     <>
                       <LoaderCircle className="mr-2 h-4 w-4 animate-spin" />
-                      {data ? 'Editando...' : 'Agregando...'}
+                      Agregando...
                     </>
                   ) : (
-                    <>{data ? 'Editar' : 'Agregar'}</>
+                    'Agregar'
                   )}
                 </Button>
               </DialogFooter>
