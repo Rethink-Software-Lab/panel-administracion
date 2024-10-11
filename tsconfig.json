@@ -33,7 +33,8 @@
     "lib/schemas.ts",
     "components/functionals/DownloadButton.jsx",
     "components/functionals/DocPdf.js",
-    "components/functionals/EspecialWarningDelete.jsx"
+    "components/functionals/EspecialWarningDelete.jsx",
+    "app/(with-layout)/products/page.jsx"
   ],
   "exclude": ["node_modules"]
 }
