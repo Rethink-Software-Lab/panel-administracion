@@ -9,9 +9,8 @@ import { CloudOff } from 'lucide-react';
 
 export default async function Inventario() {
   const { data } = await inventarioAlmacenRevoltosa();
-  const productos = data?.productos;
-  const zapatos = data?.zapatos;
-  const { data: categorias } = await getCategorias();
+  const productos = data?.inventario.productos;
+  const zapatos = data?.inventario.zapatos;
 
   return (
     <main className="flex flex-1 flex-col gap-4 py-4 lg:gap-6 lg:py-6 h-full">
@@ -44,7 +43,7 @@ export default async function Inventario() {
             <DataTableNew
               columns={columnsNew}
               data={productos}
-              categorias={categorias}
+              categorias={data?.categorias}
             />
           </TabsContent>
           <TabsContent

@@ -3,14 +3,13 @@ import { PlusCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import ModalSalidasRevoltosa from '@/components/functionals/ModalSalidasRevoltosa';
 
-import { getSalidasRevoltosa, getProductos } from '@/lib/services';
+import { getSalidasRevoltosa } from '@/lib/services';
 
 import { DataTable } from '@/components/ui/data-table-salidas';
 import { columns } from './columns';
 
 export default async function Salidas() {
   const { data } = await getSalidasRevoltosa();
-  const { data: productosInfo } = await getProductos(null, true, null);
 
   return (
     <main className="flex flex-1 flex-col gap-4 p-4 lg:gap-6 lg:p-6">
@@ -28,10 +27,10 @@ export default async function Salidas() {
               </span>
             </Button>
           }
-          productosInfo={productosInfo}
+          productosInfo={data?.productos}
         />
       </div>
-      {data && <DataTable columns={columns} data={data} />}
+      {data && <DataTable columns={columns} data={data?.salidas} />}
     </main>
   );
 }
