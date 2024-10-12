@@ -1,20 +1,18 @@
-import { Inter as FontSans } from "next/font/google";
+import { Inter as FontSans } from 'next/font/google';
 
-import "@/styles/globals.css";
-import { cn } from "@/lib/utils";
-import { Toaster } from "@/components/ui/sonner";
-import { SpeedInsights } from "@vercel/speed-insights/next";
-import { Analytics } from "@vercel/analytics/react";
+import '@/styles/globals.css';
+import { cn } from '@/lib/utils';
+import { Toaster } from '@/components/ui/sonner';
 
 const fontSans = FontSans({
-  subsets: ["latin"],
-  variable: "--font-sans",
+  subsets: ['latin'],
+  variable: '--font-sans',
 });
 
 export const metadata = {
-  title: "Panel de Administración",
+  title: 'Panel de Administración',
   description:
-    "Panel de Administración para facilitar la gestión y supervisión de diversas operaciones dentro de la organización.",
+    'Panel de Administración para facilitar la gestión y supervisión de diversas operaciones dentro de la organización.',
 };
 
 export default function LoginLayout({ children }) {
@@ -22,14 +20,12 @@ export default function LoginLayout({ children }) {
     <html lang="es">
       <body
         className={cn(
-          "min-h-screen bg-background font-sans antialiased w-full m-0 p-0",
+          'min-h-screen bg-background font-sans antialiased w-full m-0 p-0',
           fontSans.variable
         )}
       >
         <Toaster position="top-right" />
         {children}
-        <Analytics />
-        <SpeedInsights />
       </body>
     </html>
   );

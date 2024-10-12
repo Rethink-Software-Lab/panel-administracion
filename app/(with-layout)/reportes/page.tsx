@@ -21,6 +21,7 @@ export default async function Reportes({
 
   const { data: areas } = await getAreasVentas();
   const { data: reportes, error } = await getReporte(searchParams);
+
   return (
     <main className="flex flex-1 flex-col pt-4 lg:pt-6">
       <div className="flex flex-col gap-4 border-b border-b-gray-200 pb-4 px-4 lg:px-6">
@@ -28,7 +29,7 @@ export default async function Reportes({
           Reportes de ventas
         </h1>
         <div className="flex items-center justify-between max-sm:block max-sm:space-y-2">
-          <FormReportes areas={areas?.areasVenta} />
+          <FormReportes areas={areas} />
           <ButtonPrint
             disabled={!reportes || !!error}
             className="max-sm:w-full"

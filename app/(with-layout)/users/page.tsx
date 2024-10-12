@@ -10,8 +10,7 @@ import { columns } from './columns';
 
 export default async function Initial() {
   const { data, error } = await getUsuarios();
-  const { data: dataAreas } = await getAreasVentas();
-  const areas = dataAreas?.areasVenta;
+  const { data: areas } = await getAreasVentas();
 
   return (
     <main className="flex flex-1 flex-col gap-4 p-4 lg:gap-6 lg:p-6">
