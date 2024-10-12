@@ -4,7 +4,7 @@ import { DataTable } from '@/components/ui/data-table-inventario-almacen';
 import { DataTable as DataTableNew } from '@/components/ui/data-table-inventario-almacen-2';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
-import { inventarioAlmacenRevoltosa, getCategorias } from '@/lib/services';
+import { inventarioAlmacenRevoltosa } from '@/lib/services';
 import { CloudOff } from 'lucide-react';
 
 export default async function Inventario() {

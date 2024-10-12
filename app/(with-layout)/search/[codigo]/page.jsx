@@ -1,4 +1,4 @@
-import { CloudOff, FileXIcon, PackageX, SearchX } from 'lucide-react';
+import { CloudOff, FileXIcon } from 'lucide-react';
 
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 

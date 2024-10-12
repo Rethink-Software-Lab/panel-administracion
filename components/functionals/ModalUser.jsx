@@ -161,7 +161,7 @@ export default function ModalUser({ data = null, trigger, areas }) {
                       </FormControl>
                       <SelectContent>
                         {areas?.map((area) => (
-                          <SelectItem key={area.id} value={area.id}>
+                          <SelectItem key={area.id} value={area.id?.toString()}>
                             {area.nombre}
                           </SelectItem>
                         ))}
