@@ -1,7 +1,7 @@
 import { CloudOff, UserRoundPlus } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
-import { getUsuarios, getAreasVentas } from '@/lib/services';
+import { getUsuarios } from '@/lib/services';
 
 import ModalUser from '@/components/functionals/ModalUser';
 
@@ -10,7 +10,6 @@ import { columns } from './columns';
 
 export default async function Initial() {
   const { data, error } = await getUsuarios();
-  const { data: areas } = await getAreasVentas();
 
   return (
     <main className="flex flex-1 flex-col gap-4 p-4 lg:gap-6 lg:p-6">
@@ -25,12 +24,16 @@ export default async function Initial() {
               </span>
             </Button>
           }
-          areas={areas}
+          areas={data?.areas_ventas}
         />
       </div>
 
-      {data ? (
-        <DataTable data={data} columns={columns} areas={areas} />
+      {data?.usuarios && data?.areas_ventas ? (
+        <DataTable
+          data={data?.usuarios}
+          columns={columns}
+          areas={data?.areas_ventas}
+        />
       ) : (
         <div className="flex flex-1 items-center justify-center rounded-lg border border-dashed shadow-sm">
           <div className="flex flex-col items-center gap-1 text-center">

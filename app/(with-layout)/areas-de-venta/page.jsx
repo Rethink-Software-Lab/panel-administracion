@@ -8,7 +8,6 @@ import { DataTable } from '@/components/ui/data-table-areas';
 import { columns } from './columns';
 
 export default async function AreasVenta({ searchParams }) {
-  const page = searchParams['p'] ?? 1;
   const { data } = await getAreasVentas();
 
   return (
