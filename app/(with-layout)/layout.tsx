@@ -20,9 +20,9 @@ export default async function RootLayout({
   return (
     <>
       <div className="flex min-h-screen max-w-full box-content w-full">
-        <SideBar areasVenta={data?.areasVenta} session={session} />
+        <SideBar areasVenta={data} session={session} />
         <div className="flex flex-col w-full">
-          <TopBar session={session} areasVenta={data?.areasVenta} />
+          <TopBar session={session} areasVenta={data} />
           {children}
         </div>
       </div>

@@ -1,27 +1,16 @@
-import { Card, CardContent, CardFooter } from '@/components/ui/card';
-import { Edit2, PlusCircle, SearchX } from 'lucide-react';
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from '@/components/ui/table';
+import { CloudOff, PlusCircle } from 'lucide-react';
+
 import { Button } from '@/components/ui/button';
 import { getAreasVentas } from '@/lib/services';
-import { deleteAreaVenta } from '@/lib/actions';
 import ModalAreasVenta from '@/components/functionals/ModalAreasVenta';
 
-import Pagination from '@/components/functionals/Pagination';
-import TableDelete from '@/components/functionals/TableDelete';
+import { DataTable } from '@/components/ui/data-table-areas';
+import { columns } from './columns';
 
 export default async function AreasVenta({ searchParams }) {
   const page = searchParams['p'] ?? 1;
-  const perPage = searchParams['perPage'] ?? 10;
-  const { data, errors } = await getAreasVentas({ page: Number(page) });
-  const puntos = data?.areasVenta;
-  const info = data?.info;
+  const { data } = await getAreasVentas();
+
   return (
     <main className="flex flex-1 flex-col gap-4 p-4 lg:gap-6 lg:p-6">
       <div className="flex justify-between items-center">
@@ -38,65 +27,22 @@ export default async function AreasVenta({ searchParams }) {
           }
         />
       </div>
-      {puntos.length < 1 ? (
+
+      {data ? (
+        <DataTable columns={columns} data={data} />
+      ) : (
         <div className="flex flex-1 items-center justify-center rounded-lg border border-dashed shadow-sm">
           <div className="flex flex-col items-center gap-1 text-center">
-            <SearchX size={72} className="inline-flex mb-4" />
+            <CloudOff size={72} className="inline-flex mb-4" />
             <h3 className="text-2xl font-bold tracking-tight">
-              Upsss.. Nada por aquí
+              Error de conexión
             </h3>
             <p className="text-sm text-muted-foreground">
-              Cuando agregues áreas de venta aparecerán aquí.
+              Comprueba tu conexión a internet!, si el problema persiste
+              contacta con soporte.
             </p>
           </div>
         </div>
-      ) : (
-        <Card>
-          <CardContent className="mt-6">
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Nombre</TableHead>
-                  <TableHead>Color</TableHead>
-                  <TableHead>
-                    <span className="sr-only">Actions</span>
-                  </TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {puntos?.map((punto) => (
-                  <TableRow key={punto?.id}>
-                    <TableCell className="font-medium">
-                      {punto?.nombre}
-                    </TableCell>
-                    <TableCell className="font-medium">
-                      <div
-                        className="w-8 h-8 rounded-lg"
-                        style={{ background: punto?.color }}
-                      ></div>
-                    </TableCell>
-                    {punto?.nombre !== 'Revoltosa' && (
-                      <TableCell className="flex items-center gap-2">
-                        <ModalAreasVenta
-                          data={punto}
-                          trigger={
-                            <Button variant="outline" size="icon">
-                              <Edit2 size={18} />
-                            </Button>
-                          }
-                        />
-                        <TableDelete id={punto?.id} action={deleteAreaVenta} />
-                      </TableCell>
-                    )}
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </CardContent>
-          <CardFooter>
-            <Pagination totalPages={info?.totalPages} page={page} />
-          </CardFooter>
-        </Card>
       )}
     </main>
   );

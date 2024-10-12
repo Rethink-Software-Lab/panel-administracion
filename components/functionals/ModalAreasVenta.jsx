@@ -28,11 +28,15 @@ import { valibotResolver } from '@hookform/resolvers/valibot';
 import { AreaVentaSchema } from '@/lib/schemas';
 
 import { createAreaVenta, editAreaVenta } from '@/lib/actions';
+import {
+  addArea,
+  updateArea,
+} from '@/app/(with-layout)/areas-de-venta/actions';
 import { toast } from 'sonner';
 import { CircleX, LoaderCircle } from 'lucide-react';
 import { useState } from 'react';
 
-export default function ModalAreasVenta({ data = null, trigger }) {
+export default function ModalAreasVenta({ data, trigger }) {
   const [isOpen, setIsOpen] = useState(false);
   const [errors, setErrors] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -44,22 +48,22 @@ export default function ModalAreasVenta({ data = null, trigger }) {
   const onSubmit = async (dataForm) => {
     setIsLoading(true);
     if (!data) {
-      const { errors } = await createAreaVenta(dataForm);
+      const { data, error } = await addArea(dataForm);
       setIsLoading(false);
-      if (!errors) {
+      if (!error) {
         form.reset();
         setIsOpen(false);
-        toast.success('El área de venta fué creada con éxito.');
+        toast.success(data);
       }
-      setErrors(errors);
+      setErrors(error);
     } else {
-      const { errors } = await editAreaVenta({ ...dataForm, id: data?.id });
+      const { data: dataRes, error } = await updateArea(data?.id, dataForm);
       setIsLoading(false);
-      if (!errors) {
+      if (!error) {
         setIsOpen(false);
-        toast.success('El área de venta fué editada con éxito.');
+        toast.success(dataRes);
       }
-      setErrors(errors);
+      setErrors(error);
     }
   };
 
