@@ -1,5 +1,5 @@
 export interface AreaVenta {
-  id: string;
+  id: number;
   nombre: string;
   color: string;
 }

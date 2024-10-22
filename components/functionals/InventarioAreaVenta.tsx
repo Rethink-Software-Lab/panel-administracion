@@ -7,6 +7,7 @@ import { CloudOff } from 'lucide-react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { DownloadButton } from '@/components/functionals/DownloadButton';
 import { Categoria } from '@/app/(with-layout)/categorias/types';
+import { getSession } from '@/lib/getSession';
 
 export interface Productos {
   id: number;
@@ -26,22 +27,25 @@ interface Data {
 export default async function InventarioAreaVenta({
   data,
   area,
-  all_productos,
+  area_id,
 }: {
   data: Data;
   area: string;
-  all_productos: any;
+  area_id: string;
 }) {
   const productos = data?.productos;
   const zapatos = data?.zapatos;
+  const { isStaff, punto } = getSession();
   return (
     <main className="flex flex-1 flex-col gap-4 pb-4 lg:gap-6 lg:pb-6 h-full">
       <div className="flex justify-between items-center px-4">
         <h1 className="text-lg font-semibold md:text-2xl">Inventario</h1>
-        <DownloadButton
-          fileName={`inventario-${area}.pdf`}
-          data={{ ...data, area_venta: area }}
-        />
+        {(punto === area_id || isStaff) && (
+          <DownloadButton
+            fileName={`inventario-${area}.pdf`}
+            data={{ ...data, area_venta: area }}
+          />
+        )}
       </div>
 
       {productos && zapatos ? (
