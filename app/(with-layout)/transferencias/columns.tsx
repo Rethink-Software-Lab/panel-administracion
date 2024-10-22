@@ -3,21 +3,14 @@ import TableDeleteV2 from '@/components/functionals/TableDeleteV2';
 import { deleteTransferencia } from './actions';
 import { DateTime } from 'luxon';
 import { Row } from '@tanstack/react-table';
-import { AreaVenta } from '../areas-de-venta/types';
-
-interface Data {
-  id: number;
-  created_at: string;
-  de: AreaVenta;
-  para: AreaVenta;
-  usuario: { id: number; username: string }; // TODO UsuarioType
-}
+import SheetInfoTransferencias from '@/components/functionals/SheetInfoTransferencias';
+import { Transferencia } from './types';
 
 export const columns = [
   {
     accessorKey: 'created_at',
     header: 'Fecha',
-    cell: ({ row }: { row: Row<Data> }) =>
+    cell: ({ row }: { row: Row<Transferencia> }) =>
       DateTime.fromISO(row.getValue('created_at')).toLocaleString(
         DateTime.DATETIME_MED,
         { locale: 'es' }
@@ -38,8 +31,11 @@ export const columns = [
 
   {
     header: ' ',
-    cell: ({ row }: { row: Row<Data> }) => (
-      <TableDeleteV2 id={row.original.id} action={deleteTransferencia} />
+    cell: ({ row }: { row: Row<Transferencia> }) => (
+      <span className="space-x-2">
+        <SheetInfoTransferencias data={row.original} />
+        <TableDeleteV2 id={row.original.id} action={deleteTransferencia} />
+      </span>
     ),
   },
 ];
