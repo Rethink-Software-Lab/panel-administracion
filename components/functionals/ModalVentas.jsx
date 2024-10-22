@@ -63,6 +63,7 @@ export default function ModalVentas({ trigger, idPunto, productosInfo }) {
   const [errors, setErrors] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const ref = useRef();
+  const formRef = useRef(null);
 
   const form = useForm({
     resolver: valibotResolver(VentasSchema),
@@ -124,7 +125,11 @@ export default function ModalVentas({ trigger, idPunto, productosInfo }) {
           </Alert>
         )}
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+          <form
+            ref={formRef}
+            onSubmit={form.handleSubmit(onSubmit)}
+            className="space-y-4"
+          >
             <FormField
               control={form.control}
               name="metodoPago"
@@ -239,7 +244,10 @@ export default function ModalVentas({ trigger, idPunto, productosInfo }) {
                         </Button>
                       </FormControl>
                     </PopoverTrigger>
-                    <PopoverContent className="w-[320px] p-0">
+                    <PopoverContent
+                      containerRef={formRef}
+                      className="w-[320px] p-0"
+                    >
                       <Command className="rounded-lg border shadow-md">
                         <CommandInput placeholder="Escribe un código..." />
                         <CommandList>

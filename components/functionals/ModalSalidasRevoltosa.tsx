@@ -71,6 +71,7 @@ export default function ModalSalidaRevoltosa({
   const [isOpen, setIsOpen] = useState(false);
   const [error, setErrors] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
+  const formRef = useRef<HTMLFormElement>(null);
   const ref = useRef<HTMLInputElement>(null);
 
   const form = useForm({
@@ -145,6 +146,7 @@ export default function ModalSalidaRevoltosa({
                 ? 'grid grid-cols-2 gap-4'
                 : 'space-y-2'
             )}
+            ref={formRef}
           >
             <div>
               <FormField
@@ -173,7 +175,10 @@ export default function ModalSalidaRevoltosa({
                           </Button>
                         </FormControl>
                       </PopoverTrigger>
-                      <PopoverContent className="w-[320px] p-0">
+                      <PopoverContent
+                        containerRef={formRef}
+                        className="w-[320px] p-0"
+                      >
                         <Command className="rounded-lg border shadow-md">
                           <CommandInput placeholder="Escribe un código..." />
                           <CommandList>

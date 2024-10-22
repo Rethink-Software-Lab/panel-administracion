@@ -62,6 +62,7 @@ export default function ModalSalida({ trigger, areasVenta, productosInfo }) {
   const [isOpen, setIsOpen] = useState(false);
   const [error, setErrors] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
+  const formRef = useRef(null);
   const ref = useRef();
 
   const form = useForm({
@@ -125,6 +126,7 @@ export default function ModalSalida({ trigger, areasVenta, productosInfo }) {
         )}
         <Form {...form}>
           <form
+            ref={formRef}
             onSubmit={form.handleSubmit(onSubmit)}
             className={cn(
               form.getValues('zapatos_id')?.length > 5
@@ -192,7 +194,10 @@ export default function ModalSalida({ trigger, areasVenta, productosInfo }) {
                           </Button>
                         </FormControl>
                       </PopoverTrigger>
-                      <PopoverContent className="w-[320px] p-0">
+                      <PopoverContent
+                        containerRef={formRef}
+                        className="w-[320px] p-0"
+                      >
                         <Command className="rounded-lg border shadow-md">
                           <CommandInput placeholder="Escribe un código..." />
                           <CommandList>

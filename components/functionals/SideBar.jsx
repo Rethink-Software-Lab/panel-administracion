@@ -14,6 +14,7 @@ import {
   Settings2,
   Tags,
   FileText,
+  ArrowRightLeft,
 } from 'lucide-react';
 
 import { cn } from '@/lib/utils';
@@ -80,16 +81,28 @@ export default function SideBar({ areasVenta, session }) {
               </>
             )}
             {session.isAdmin && (
-              <Link
-                href="/users"
-                className={cn(
-                  'flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary',
-                  path === '/users' && 'bg-muted text-primary'
-                )}
-              >
-                <Users className="h-4 w-4" />
-                Usuarios
-              </Link>
+              <>
+                <Link
+                  href="/users"
+                  className={cn(
+                    'flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary',
+                    path === '/users' && 'bg-muted text-primary'
+                  )}
+                >
+                  <Users className="h-4 w-4" />
+                  Usuarios
+                </Link>
+                <Link
+                  href="/transferencias"
+                  className={cn(
+                    'flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary',
+                    path === '/transferencias' && 'bg-muted text-primary'
+                  )}
+                >
+                  <ArrowRightLeft className="h-4 w-4" />
+                  Transferencias
+                </Link>
+              </>
             )}
             {session.isStaff && (
               <>

@@ -16,6 +16,7 @@ import {
   integer,
   boolean,
   custom,
+  PathKeys,
 } from 'valibot';
 
 enum ROLES {
@@ -241,3 +242,79 @@ export const AreaVentaSchema = object({
 export const EspecialWarningSchema = object({
   test: literal('BORRAR', 'El campo debe ser igual a BORRAR'),
 });
+
+export const TransferenciaSchema = pipe(
+  object({
+    de: pipe(
+      string('El área de origen es requerida.'),
+      nonEmpty('El área de origen es requerida.')
+    ),
+    para: pipe(
+      string('El área de destino es requerida.'),
+      nonEmpty('El área de destino es requerida.')
+    ),
+    productos: array(
+      object({
+        producto: pipe(
+          string('El producto es requerido.'),
+          nonEmpty('El producto es requerido.')
+        ),
+        cantidad: optional(
+          pipe(
+            string(),
+            nonEmpty(),
+            custom<string>((value) => {
+              const parsedValue = parseInt(value as string, 10);
+              return !isNaN(parsedValue) && parsedValue >= 1;
+            }, 'La cantidad debe ser > 0')
+          )
+        ),
+        zapatos_id: optional(
+          pipe(
+            string('El ID de zapatos es requerido.'),
+            nonEmpty('El ID de zapatos es requerido.'),
+            custom((input: any) => {
+              const ids = input.replace(/\s+/g, '').split(/[;,]/);
+              const uniqueIds = new Set(ids);
+              return (
+                ids.every(
+                  (id: string) => /^\d+$/.test(id) && parseInt(id) > 0
+                ) && ids.length === uniqueIds.size
+              );
+            }, 'Los IDs deben ser números enteros > 0, separados por coma (,) o punto y coma (;) y deben ser únicos.')
+          )
+        ),
+      })
+    ),
+  }),
+  forward(
+    partialCheck(
+      [['de'], ['para']],
+      (input) => {
+        if (input.de === input.para) {
+          return false;
+        }
+        return true;
+      },
+      'Las áreas de origen y destino no pueden ser iguales.'
+    ),
+    ['de']
+  ),
+  forward(
+    partialCheck(
+      ['productos'] as any[],
+      (input) => {
+        const productosIds = input.productos.map(
+          (producto) => producto.producto
+        );
+        const uniqueProductos = new Set(productosIds);
+        if (productosIds.length !== uniqueProductos.size) {
+          return false;
+        }
+        return true;
+      },
+      'No se deben tener productos repetidos.'
+    ),
+    ['productos']
+  )
+);
