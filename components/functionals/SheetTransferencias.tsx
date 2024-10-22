@@ -74,8 +74,6 @@ export default function SheetTransferencias({
     },
   });
 
-  console.log(form.getValues());
-
   const { fields, append, remove } = useFieldArray({
     control: form.control,
     name: 'productos',
