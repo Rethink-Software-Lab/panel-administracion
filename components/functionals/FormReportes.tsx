@@ -43,7 +43,7 @@ export default function FormReportes({ areas }: { areas: AreaVenta[] }) {
             <>
               <SelectItem value="0">General</SelectItem>
               {areas?.map((area) => (
-                <SelectItem key={area.id} value={area.id}>
+                <SelectItem key={area.id} value={area.id.toString()}>
                   {area.nombre}
                 </SelectItem>
               ))}
