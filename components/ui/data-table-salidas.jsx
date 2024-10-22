@@ -20,10 +20,19 @@ import {
 
 import { useState } from 'react';
 import { DataTablePagination } from '@/components/ui/data-table-pagination';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuRadioGroup,
+  DropdownMenuRadioItem,
+  DropdownMenuTrigger,
+} from './dropdown-menu';
+import { Button } from './button';
+import { Check } from 'lucide-react';
 
 // TODO: Agregar filtro de fecha
 
-export function DataTable({ columns, data }) {
+export function DataTable({ columns, data, areas }) {
   const [sorting, setSorting] = useState([]);
   const [columnFilters, setColumnFilters] = useState([]);
   const table = useReactTable({
@@ -51,6 +60,55 @@ export function DataTable({ columns, data }) {
 
   return (
     <div className="p-2 rounded-md border bg-white">
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild disabled={!areas || areas.length < 1}>
+          <Button variant="outline" size="sm" className="ml-auto flex gap-1">
+            {columnFilters.find((f) => f.id === 'area_venta__nombre') ? (
+              <>
+                <Check size={16} />
+                {columnFilters.find((f) => f.id === 'area_venta__nombre')
+                  ?.value || 'Almacén Revoltosa'}
+              </>
+            ) : (
+              'Destino'
+            )}
+          </Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent align="end" className="max-h-[300px]">
+          <DropdownMenuRadioGroup
+            value={
+              columnFilters?.find((el) => el.id === 'area_venta__nombre')
+                ?.value || ''
+            }
+            onValueChange={(value) =>
+              setColumnFilters((prevState) => {
+                const has = prevState?.find(
+                  (el) => el.id === 'area_venta__nombre'
+                );
+                if (!has) {
+                  return prevState.concat({ id: 'area_venta__nombre', value });
+                }
+                if (has.value === value) {
+                  return prevState.filter((f) => f.id !== 'area_venta__nombre');
+                } else {
+                  return prevState
+                    .filter((f) => f.id !== 'area_venta__nombre')
+                    .concat({ id: 'area_venta__nombre', value });
+                }
+              })
+            }
+          >
+            <DropdownMenuRadioItem value="Almacén Revoltosa">
+              Almacén Revoltosa
+            </DropdownMenuRadioItem>
+            {areas?.map((area) => (
+              <DropdownMenuRadioItem key={area.id} value={area.nombre}>
+                {area.nombre}
+              </DropdownMenuRadioItem>
+            ))}
+          </DropdownMenuRadioGroup>
+        </DropdownMenuContent>
+      </DropdownMenu>
       <Table>
         <TableHeader>
           {table.getHeaderGroups().map((headerGroup) => (

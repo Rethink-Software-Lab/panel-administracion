@@ -17,26 +17,11 @@ export const columns = [
   {
     accessorKey: 'created_at',
     header: 'Fecha',
-    cell: ({ row }: { row: Row<Data> }) => {
-      const date = DateTime.fromISO(row.getValue('created_at'));
-      const now = DateTime.now();
-      const diff = now.diff(date, 'days').days;
-
-      if (diff < 1) {
-        return <span>hoy</span>;
-      } else if (diff < 2) {
-        return <span>ayer</span>;
-      } else {
-        return (
-          <span>
-            {date.toRelative({
-              unit: 'days',
-              locale: 'es',
-            })}
-          </span>
-        );
-      }
-    },
+    cell: ({ row }: { row: Row<Data> }) =>
+      DateTime.fromISO(row.getValue('created_at')).toLocaleString(
+        DateTime.DATETIME_MED,
+        { locale: 'es' }
+      ),
   },
   {
     accessorKey: 'producto__info__descripcion',
@@ -49,8 +34,6 @@ export const columns = [
   {
     accessorKey: 'area_venta__nombre',
     header: 'Destino',
-    cell: ({ row }: { row: Row<Data> }) =>
-      row.getValue('area_venta__nombre') || 'Almacén Revoltosa',
   },
 
   {
