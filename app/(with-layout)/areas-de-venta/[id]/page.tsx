@@ -19,7 +19,6 @@ interface Params {
 
 export default async function AreaVenta({ params }: { params: Params }) {
   const { isStaff, punto } = getSession();
-  console.log(punto);
   const { data } = await getArea(params.id);
 
   return (
