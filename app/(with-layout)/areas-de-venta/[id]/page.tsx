@@ -18,7 +18,8 @@ interface Params {
 }
 
 export default async function AreaVenta({ params }: { params: Params }) {
-  const { isAlmacenero } = getSession();
+  const { isStaff, punto } = getSession();
+  console.log(punto);
   const { data } = await getArea(params.id);
 
   return (
@@ -26,18 +27,21 @@ export default async function AreaVenta({ params }: { params: Params }) {
       <Tabs defaultValue="inventario" className="h-full">
         <TabsList className="m-4">
           <TabsTrigger value="inventario">Inventario</TabsTrigger>
-          <TabsTrigger disabled={isAlmacenero} value="ventas">
+          <TabsTrigger
+            disabled={punto !== params.id && !isStaff}
+            value="ventas"
+          >
             Ventas
           </TabsTrigger>
         </TabsList>
         <TabsContent value="inventario" className="h-full">
           <InventarioAreaVenta
+            area_id={params.id}
             data={data?.inventario}
             area={data?.area_venta}
-            all_productos={data?.all_productos}
           />
         </TabsContent>
-        {!isAlmacenero && (
+        {(punto === params.id || isStaff) && (
           <TabsContent value="ventas" className="h-full">
             <VentasAreaVenta
               ventas={data?.ventas}

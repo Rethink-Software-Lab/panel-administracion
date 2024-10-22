@@ -91,8 +91,8 @@ export default function DocPdf({ productos, zapatos, area_venta }) {
           <Text style={styles.h1}>{area_venta}</Text>
         </View>
 
-        {Object.keys(productosPorCategoria).map((categoria) => (
-          <>
+        {Object.keys(productosPorCategoria).map((categoria, index) => (
+          <View key={index}>
             <View style={styles.secondHeader}>
               <Text key={categoria} style={styles.h1}>
                 {categoria}
@@ -125,7 +125,7 @@ export default function DocPdf({ productos, zapatos, area_venta }) {
                 </View>
               ))}
             </View>
-          </>
+          </View>
         ))}
 
         {zapatos && zapatos?.length > 0 && (
