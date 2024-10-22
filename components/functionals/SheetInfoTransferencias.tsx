@@ -41,12 +41,12 @@ export default function SheetInfoTransferencias({
             {data.de.nombre} <ArrowRight size={18} /> {data.para.nombre}
           </SheetTitle>
           <SheetDescription className="pb-6 flex items-center gap-2 justify-between">
-            <p>
+            <span>
               {DateTime.fromISO(data.created_at).toLocaleString(
                 DateTime.DATE_FULL
               )}
-            </p>
-            <p>creada por : {data.usuario.username}</p>
+            </span>
+            <span>creada por : {data.usuario.username}</span>
           </SheetDescription>
         </SheetHeader>
         <Table>
