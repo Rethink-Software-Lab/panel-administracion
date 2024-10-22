@@ -29,7 +29,13 @@ export default async function Salidas() {
           productosInfo={data?.productos}
         />
       </div>
-      {data && <DataTable columns={columns} data={data?.salidas} />}
+      {data && (
+        <DataTable
+          columns={columns}
+          areas={data.areas_de_venta}
+          data={data?.salidas}
+        />
+      )}
     </main>
   );
 }
