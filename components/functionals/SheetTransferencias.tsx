@@ -47,7 +47,7 @@ import {
 import { ProductInfo } from '@/app/(with-layout)/products/types';
 import { Input } from '../ui/input';
 import { InferInput } from 'valibot';
-import addTransferencia from '@/app/(with-layout)/transferencias/actions';
+import { addTransferencia } from '@/app/(with-layout)/transferencias/actions';
 import { toast } from 'sonner';
 import { useRef, useState } from 'react';
 
