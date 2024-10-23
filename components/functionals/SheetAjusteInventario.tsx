@@ -119,15 +119,7 @@ export default function SheetTransferencias({
               <AlertDescription>{error}</AlertDescription>
             </Alert>
           )}
-          {form.formState.errors.productos?.root && (
-            <Alert className="text-left" variant="destructive">
-              <CircleX className="h-5 w-5" />
-              <AlertTitle>Error!</AlertTitle>
-              <AlertDescription>
-                {form.formState.errors.productos.root?.message}
-              </AlertDescription>
-            </Alert>
-          )}
+
           <Form {...form}>
             <form
               ref={formRef}

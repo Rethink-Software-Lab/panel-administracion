@@ -16,7 +16,7 @@ import {
   integer,
   boolean,
   custom,
-  PathKeys,
+  maxLength,
 } from 'valibot';
 
 enum ROLES {
@@ -318,3 +318,44 @@ export const TransferenciaSchema = pipe(
     ['productos']
   )
 );
+
+export const AjusteSchema = object({
+  motivo: pipe(
+    string('El área de origen es requerida.'),
+    nonEmpty('El área de origen es requerida.'),
+    maxLength(100, 'El motivo no debe tener más de 100 caracteres.')
+  ),
+  productos: array(
+    object({
+      producto: pipe(
+        string('El producto es requerido.'),
+        nonEmpty('El producto es requerido.')
+      ),
+      cantidad: optional(
+        pipe(
+          string(),
+          nonEmpty(),
+          custom<string>((value) => {
+            const parsedValue = parseInt(value as string, 10);
+            return !isNaN(parsedValue) && parsedValue >= 1;
+          }, 'La cantidad debe ser > 0')
+        )
+      ),
+      area_venta: optional(pipe(string(), nonEmpty('Localización requerida.'))),
+      zapatos_id: optional(
+        pipe(
+          string('El ID de zapatos es requerido.'),
+          nonEmpty('El ID de zapatos es requerido.'),
+          custom((input: any) => {
+            const ids = input.replace(/\s+/g, '').split(/[;,]/);
+            const uniqueIds = new Set(ids);
+            return (
+              ids.every((id: string) => /^\d+$/.test(id) && parseInt(id) > 0) &&
+              ids.length === uniqueIds.size
+            );
+          }, 'Los IDs deben ser números enteros > 0, separados por coma (,) o punto y coma (;) y deben ser únicos.')
+        )
+      ),
+    })
+  ),
+});

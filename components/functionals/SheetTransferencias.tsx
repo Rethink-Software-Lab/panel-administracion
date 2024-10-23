@@ -51,7 +51,7 @@ import { addTransferencia } from '@/app/(with-layout)/transferencias/actions';
 import { toast } from 'sonner';
 import { useRef, useState } from 'react';
 
-import SelectProductoTransferencias from '../SelectProductoTransferencias';
+import SelectProductoTransferencias from './SelectProductoTransferencias';
 import { Alert, AlertDescription, AlertTitle } from '../ui/alert';
 
 export default function SheetTransferencias({

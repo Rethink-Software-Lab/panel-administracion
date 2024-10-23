@@ -1,9 +1,7 @@
-import { CloudOff, PlusCircle } from 'lucide-react';
+import { CloudOff } from 'lucide-react';
 
-import { Button } from '@/components/ui/button';
 import { getTransferencias } from '@/lib/services';
 
-import Link from 'next/link';
 import { DataTable } from '@/components/ui/data-table-entradas';
 import { columns } from './columns';
 import SheetTransferencias from '@/components/functionals/SheetTransferencias';

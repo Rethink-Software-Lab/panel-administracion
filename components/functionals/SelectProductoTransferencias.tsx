@@ -1,9 +1,9 @@
 'use client';
 
-import { Control, FormProps, UseFormReturn } from 'react-hook-form';
-import { FormControl, FormField, FormItem, FormMessage } from './ui/form';
-import { Popover, PopoverContent, PopoverTrigger } from './ui/popover';
-import { Button } from './ui/button';
+import { UseFormReturn } from 'react-hook-form';
+import { FormControl, FormField, FormItem, FormMessage } from '../ui/form';
+import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover';
+import { Button } from '../ui/button';
 import { cn } from '@/lib/utils';
 import { CheckIcon, ChevronDown } from 'lucide-react';
 import {
@@ -13,7 +13,7 @@ import {
   CommandInput,
   CommandItem,
   CommandList,
-} from './ui/command';
+} from '../ui/command';
 import { InferInput } from 'valibot';
 import { TransferenciaSchema } from '@/lib/schemas';
 import { ProductInfo } from '@/app/(with-layout)/products/types';
