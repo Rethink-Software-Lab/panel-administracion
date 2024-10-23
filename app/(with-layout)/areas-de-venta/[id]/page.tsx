@@ -34,11 +34,7 @@ export default async function AreaVenta({ params }: { params: Params }) {
           </TabsTrigger>
         </TabsList>
         <TabsContent value="inventario" className="h-full">
-          <InventarioAreaVenta
-            area_id={params.id}
-            data={data?.inventario}
-            area={data?.area_venta}
-          />
+          <InventarioAreaVenta area_id={params.id} data={data?.inventario} />
         </TabsContent>
         {(punto === params.id || isStaff) && (
           <TabsContent value="ventas" className="h-full">
