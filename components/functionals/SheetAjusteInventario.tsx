@@ -34,7 +34,7 @@ import {
 import { useFieldArray, useForm } from 'react-hook-form';
 import { valibotResolver } from '@hookform/resolvers/valibot';
 import { AreaVenta } from '@/app/(with-layout)/areas-de-venta/types';
-import { TransferenciaSchema } from '@/lib/schemas';
+import { AjusteSchema } from '@/lib/schemas';
 import {
   Table,
   TableBody,
@@ -47,11 +47,11 @@ import {
 import { ProductInfo } from '@/app/(with-layout)/products/types';
 import { Input } from '../ui/input';
 import { InferInput } from 'valibot';
-import { addTransferencia } from '@/app/(with-layout)/transferencias/actions';
+import { addAjuste } from '@/app/(with-layout)/ajuste-inventario/actions';
 import { toast } from 'sonner';
 import { useRef, useState } from 'react';
 
-import SelectProductoTransferencias from './SelectProductoTransferencias';
+import SelectProductoAjuste from '@/components/functionals/SelectProductoAjuste';
 import { Alert, AlertDescription, AlertTitle } from '../ui/alert';
 
 export default function SheetTransferencias({
@@ -65,13 +65,15 @@ export default function SheetTransferencias({
   const [error, setError] = useState('');
   const formRef = useRef<HTMLFormElement>(null);
 
-  const form = useForm<InferInput<typeof TransferenciaSchema>>({
-    resolver: valibotResolver(TransferenciaSchema),
+  const form = useForm<InferInput<typeof AjusteSchema>>({
+    resolver: valibotResolver(AjusteSchema),
     defaultValues: {
-      de: '',
-      para: '',
-      productos: [{ producto: '', cantidad: '0', zapatos_id: undefined }],
+      motivo: '',
+      productos: [
+        { producto: '', cantidad: '0', zapatos_id: undefined, area_venta: '' },
+      ],
     },
+    mode: 'onSubmit',
   });
 
   const { fields, append, remove } = useFieldArray({
@@ -80,9 +82,9 @@ export default function SheetTransferencias({
   });
 
   const onSubmit = async (
-    dataForm: InferInput<typeof TransferenciaSchema>
+    dataForm: InferInput<typeof AjusteSchema>
   ): Promise<void> => {
-    const { data, error } = await addTransferencia(dataForm);
+    const { data, error } = await addAjuste(dataForm);
     if (error) {
       setError(error);
     } else {
@@ -103,11 +105,12 @@ export default function SheetTransferencias({
       </SheetTrigger>
       <SheetContent className="w-full sm:max-w-[600px] overflow-y-scroll">
         <SheetHeader>
-          <SheetTitle>Agregar transferencia</SheetTitle>
+          <SheetTitle>Nuevo ajuste de inventario</SheetTitle>
           <SheetDescription className="pb-4">
-            Las transferencias permiten trasladar productos de un área de venta
-            a otra. En el caso de las transferencias de zapatos deben colocarse
-            los IDs separados por comas ( , ) o punto y coma ( ; ).
+            El ajuste de inventario permite corregir las discrepancias entre el
+            inventario físico y los registros del sistema. Es útil en
+            situaciones como errores de conteo, pérdidas, robos, daños o
+            devoluciones
           </SheetDescription>
           {error && (
             <Alert className="text-left" variant="destructive">
@@ -116,91 +119,29 @@ export default function SheetTransferencias({
               <AlertDescription>{error}</AlertDescription>
             </Alert>
           )}
-          {form.formState.errors.productos?.root && (
-            <Alert className="text-left" variant="destructive">
-              <CircleX className="h-5 w-5" />
-              <AlertTitle>Error!</AlertTitle>
-              <AlertDescription>
-                {form.formState.errors.productos.root?.message}
-              </AlertDescription>
-            </Alert>
-          )}
+
           <Form {...form}>
             <form
               ref={formRef}
               onSubmit={form.handleSubmit(onSubmit)}
               className="space-y-4"
             >
-              <div className="max-sm:text-left max-sm:space-y-4  md:flex md:items-start md:justify-between md:gap-2">
-                <FormField
-                  control={form.control}
-                  name="de"
-                  render={({ field }) => (
-                    <FormItem className="w-full">
-                      <Label>Área de origen</Label>
-                      <Select
-                        disabled={!areas || areas.length < 1}
-                        onValueChange={field.onChange}
-                        defaultValue={field.value}
-                      >
-                        <FormControl>
-                          <SelectTrigger>
-                            <SelectValue placeholder="Selecciona un área de venta" />
-                          </SelectTrigger>
-                        </FormControl>
-                        <SelectContent>
-                          {areas?.map((area) => (
-                            <SelectItem
-                              key={area.id}
-                              value={area.id?.toString()}
-                            >
-                              {area.nombre}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <div className="hidden md:flex w-16 h-full mt-10 items-center justify-center">
-                  <ArrowRight size={18} />
-                </div>
-                <FormField
-                  control={form.control}
-                  name="para"
-                  render={({ field }) => (
-                    <FormItem className="w-full">
-                      <Label>Área de destino</Label>
-                      <Select
-                        disabled={!areas || areas.length < 1}
-                        onValueChange={field.onChange}
-                        defaultValue={field.value}
-                      >
-                        <FormControl>
-                          <SelectTrigger>
-                            <SelectValue
-                              className="line-clamp-1"
-                              placeholder="Selecciona un área de venta"
-                            />
-                          </SelectTrigger>
-                        </FormControl>
-                        <SelectContent>
-                          {areas?.map((area) => (
-                            <SelectItem
-                              key={area.id}
-                              value={area.id?.toString()}
-                            >
-                              {area.nombre}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </div>
+              <FormField
+                control={form.control}
+                name="motivo"
+                render={({ field }) => (
+                  <FormItem>
+                    <Label>Motivo</Label>
+                    <FormControl>
+                      <Input
+                        placeholder="Escriba el motivo del ajuste."
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
               <Table>
                 <TableHeader>
                   <TableRow>
@@ -212,7 +153,7 @@ export default function SheetTransferencias({
                   {fields.map((producto, index) => (
                     <TableRow key={producto.id}>
                       <TableCell className="font-semibold align-top w-1/2">
-                        <SelectProductoTransferencias
+                        <SelectProductoAjuste
                           form={form}
                           index={index}
                           productosInfo={productosInfo}
@@ -239,25 +180,62 @@ export default function SheetTransferencias({
                           />
                         </TableCell>
                       ) : (
-                        <TableCell>
-                          <FormField
-                            control={form.control}
-                            name={`productos.${index}.cantidad`}
-                            render={({ field }) => (
-                              <FormItem>
-                                <FormControl>
-                                  <Input
-                                    type="number"
-                                    min={0}
-                                    step="1"
-                                    {...field}
-                                  />
-                                </FormControl>
-                                <FormMessage />
-                              </FormItem>
-                            )}
-                          />
-                        </TableCell>
+                        <>
+                          <TableCell className="space-y-2">
+                            <FormField
+                              control={form.control}
+                              name={`productos.${index}.area_venta`}
+                              render={({ field }) => (
+                                <FormItem>
+                                  <Select
+                                    onValueChange={field.onChange}
+                                    defaultValue={field.value}
+                                  >
+                                    <FormControl>
+                                      <SelectTrigger>
+                                        <SelectValue placeholder="Seleccione localización" />
+                                      </SelectTrigger>
+                                    </FormControl>
+                                    <SelectContent>
+                                      <SelectItem value="almacen-principal">
+                                        Almacén Principal
+                                      </SelectItem>
+                                      <SelectItem value="almacen-revoltosa">
+                                        Almacén Revoltosa
+                                      </SelectItem>
+                                      {areas?.map((a) => (
+                                        <SelectItem
+                                          key={a.id}
+                                          value={a.id?.toString()}
+                                        >
+                                          {a.nombre}
+                                        </SelectItem>
+                                      ))}
+                                    </SelectContent>
+                                  </Select>
+                                  <FormMessage />
+                                </FormItem>
+                              )}
+                            />
+                            <FormField
+                              control={form.control}
+                              name={`productos.${index}.cantidad`}
+                              render={({ field }) => (
+                                <FormItem>
+                                  <FormControl>
+                                    <Input
+                                      type="number"
+                                      min={0}
+                                      step="1"
+                                      {...field}
+                                    />
+                                  </FormControl>
+                                  <FormMessage />
+                                </FormItem>
+                              )}
+                            />
+                          </TableCell>
+                        </>
                       )}
 
                       <TableCell className="align-top text-center">
@@ -282,6 +260,7 @@ export default function SheetTransferencias({
                       append({
                         producto: '',
                         cantidad: '0',
+                        area_venta: '',
                         zapatos_id: undefined,
                       })
                     }

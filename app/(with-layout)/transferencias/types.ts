@@ -1,6 +1,6 @@
 import { AreaVenta } from '../areas-de-venta/types';
 
-interface ProductosTransfer {
+export interface ProductosTransfer {
   descripcion: string;
   total_transfers: number;
 }

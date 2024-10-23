@@ -15,6 +15,7 @@ import {
   Tags,
   FileText,
   ArrowRightLeft,
+  Wrench,
 } from 'lucide-react';
 
 import { cn } from '@/lib/utils';
@@ -100,6 +101,16 @@ export default function SideBar({ areasVenta, session }) {
                 >
                   <ArrowRightLeft className="h-4 w-4" />
                   Transferencias
+                </Link>
+                <Link
+                  href="/ajuste-inventario"
+                  className={cn(
+                    'flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary',
+                    path === '/ajuste-inventario' && 'bg-muted text-primary'
+                  )}
+                >
+                  <Wrench className="h-4 w-4" />
+                  Ajuste Inventario
                 </Link>
               </>
             )}
