@@ -2,12 +2,12 @@ import { columns } from '@/app/(with-layout)/inventario/columns';
 import { columns as columnsNew } from '@/app/(with-layout)/areas-de-venta/[id]/columns';
 import { DataTable } from '@/components/ui/data-table-inventario-almacen';
 import { DataTable as DataTableNew } from '@/components/ui/data-table-inventario-almacen-2';
-import { CloudOff } from 'lucide-react';
+import { CloudOff, FileText } from 'lucide-react';
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { DownloadButton } from '@/components/functionals/DownloadButton';
 import { Categoria } from '@/app/(with-layout)/categorias/types';
-import { getSession } from '@/lib/getSession';
+import Link from 'next/link';
+import { Button } from '../ui/button';
 
 export interface Productos {
   id: number;
@@ -26,26 +26,30 @@ interface Data {
 
 export default async function InventarioAreaVenta({
   data,
-  area,
   area_id,
 }: {
   data: Data;
-  area: string;
   area_id: string;
 }) {
   const productos = data?.productos;
   const zapatos = data?.zapatos;
-  const { isStaff, punto } = getSession();
   return (
     <main className="flex flex-1 flex-col gap-4 pb-4 lg:gap-6 lg:pb-6 h-full">
       <div className="flex justify-between items-center px-4">
         <h1 className="text-lg font-semibold md:text-2xl">Inventario</h1>
-        {(punto === area_id || isStaff) && (
-          <DownloadButton
-            fileName={`inventario-${area}.pdf`}
-            data={{ ...data, area_venta: area }}
-          />
-        )}
+        <Link
+          href={{
+            pathname: '/reportes',
+            query: {
+              type: 'inventario',
+              area: area_id,
+            },
+          }}
+        >
+          <Button variant="outline" size="icon">
+            <FileText size={18} />
+          </Button>
+        </Link>
       </div>
 
       {productos && zapatos ? (

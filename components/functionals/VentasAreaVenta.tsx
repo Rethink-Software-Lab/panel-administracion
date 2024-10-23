@@ -45,6 +45,7 @@ export default async function VentasAreaVenta({
             href={{
               pathname: '/reportes',
               query: {
+                type: 'ventas',
                 area: id,
               },
             }}
