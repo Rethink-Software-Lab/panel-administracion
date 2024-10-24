@@ -25,6 +25,8 @@ export default async function Reportes({
   const { data: areas } = await getAreasVentas();
   const { data: reportes, error } = await getReporte(searchParams);
 
+  console.log(reportes);
+
   return (
     <main className="flex flex-1 flex-col pt-4 lg:pt-6">
       <div className="flex flex-col gap-4 border-b border-b-gray-200 pb-4 px-4 lg:px-6">
