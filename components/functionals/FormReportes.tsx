@@ -17,11 +17,12 @@ import { CalendarIcon } from 'lucide-react';
 import { Calendar } from '../ui/calendar';
 import { cn } from '@/lib/utils';
 import {
-  endOfMonth,
   endOfWeek,
+  lastDayOfMonth,
   format,
   startOfMonth,
   startOfWeek,
+  lastDayOfWeek,
 } from 'date-fns';
 import { es } from 'date-fns/locale';
 import { Label } from '../ui/label';
@@ -110,10 +111,10 @@ export default function FormReportes({ areas }: { areas: AreaVenta[] }) {
                 onValueChange={(value) => {
                   if (value === 'thisMonth') {
                     setFrom(startOfMonth(new Date()), { shallow: false });
-                    setTo(endOfMonth(new Date()), { shallow: false });
+                    setTo(lastDayOfMonth(new Date()), { shallow: false });
                   } else if (value === 'thisWeek') {
                     setFrom(startOfWeek(new Date()), { shallow: false });
-                    setTo(endOfWeek(new Date()), { shallow: false });
+                    setTo(lastDayOfWeek(new Date()), { shallow: false });
                   }
                 }}
               >

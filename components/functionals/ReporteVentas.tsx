@@ -23,6 +23,7 @@ interface Params {
   productos: Producto[];
   total: number;
   pago_trabajador: number;
+  salarios: number;
   costo_producto: number;
   subtotal: number;
   efectivo: number;
@@ -145,12 +146,26 @@ export default async function ReporteVentas({
                     colSpan={3}
                     className="font-medium px-4 print:px-0"
                   >
-                    Costos de producto:
+                    Costos de producto
                   </TableCell>
                   <TableCell className="text-right font-medium px-4 print:px-0">
                     - ${data.costo_producto}
                   </TableCell>
                 </TableRow>
+                {data.salarios > 0 && (
+                  <TableRow className="border-t border-t-gray-300">
+                    <TableCell
+                      colSpan={3}
+                      className="font-medium px-4 print:px-0"
+                    >
+                      Salarios
+                    </TableCell>
+                    <TableCell className="text-right font-medium px-4 print:px-0">
+                      - ${data.salarios}
+                    </TableCell>
+                  </TableRow>
+                )}
+
                 <TableRow>
                   <TableCell colSpan={3} className="px-4 print:px-0">
                     Pago al trabajador
