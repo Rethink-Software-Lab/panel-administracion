@@ -359,3 +359,14 @@ export const AjusteSchema = object({
     })
   ),
 });
+
+export const SalariosSchema = object({
+  usuario: pipe(
+    string('El usuario es requerido'),
+    nonEmpty('El usuario es requerido')
+  ),
+  cantidad: pipe(
+    number('La cantidad es requerida'),
+    minValue(1, 'La cantidad debe ser mayor a 0')
+  ),
+});
