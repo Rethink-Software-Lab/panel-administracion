@@ -273,7 +273,7 @@ export default function SheetTransferencias({
                 </TableCaption>
               </Table>
               <div className="flex justify-end">
-                <Button type="submit">Transferir</Button>
+                <Button type="submit">Completar</Button>
               </div>
             </form>
           </Form>
