@@ -24,6 +24,8 @@ interface Params {
   total: number;
   pago_trabajador: number;
   salarios: number;
+  gastos_variables: number;
+  gastos_fijos: number;
   costo_producto: number;
   subtotal: number;
   efectivo: number;
@@ -174,6 +176,27 @@ export default async function ReporteVentas({
                     - ${data.pago_trabajador}
                   </TableCell>
                 </TableRow>
+                {data.gastos_variables > 0 && (
+                  <TableRow>
+                    <TableCell colSpan={3} className="px-4 print:px-0">
+                      Gastos Variables
+                    </TableCell>
+                    <TableCell className="text-right px-4 print:px-0">
+                      - ${data.gastos_variables}
+                    </TableCell>
+                  </TableRow>
+                )}
+
+                {data.gastos_fijos > 0 && (
+                  <TableRow>
+                    <TableCell colSpan={3} className="px-4 print:px-0">
+                      Gastos Fijos
+                    </TableCell>
+                    <TableCell className="text-right px-4 print:px-0">
+                      - ${data.gastos_fijos}
+                    </TableCell>
+                  </TableRow>
+                )}
               </>
             )}
             <TableRow>
