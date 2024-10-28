@@ -14,6 +14,7 @@ import {
   ArrowRightLeft,
   ArrowUpRight,
   BookUser,
+  CircleDollarSign,
   CircleUser,
   ClipboardCheck,
   FileText,
@@ -125,6 +126,16 @@ export default function TopBar({ session, areasVenta }) {
                 >
                   <BookUser className="h-4 w-4" />
                   Salarios
+                </Link>
+                <Link
+                  href="/gastos"
+                  className={cn(
+                    'flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary',
+                    path === '/gastos' && 'bg-muted text-primary'
+                  )}
+                >
+                  <CircleDollarSign className="h-4 w-4" />
+                  Gastos
                 </Link>
                 <Link
                   href="/transferencias"
