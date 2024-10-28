@@ -1,4 +1,8 @@
 import {
+  FrecuenciasGastos,
+  TiposGastos,
+} from '@/app/(with-layout)/gastos/types';
+import {
   enum_,
   pipe,
   minLength,
@@ -17,6 +21,7 @@ import {
   boolean,
   custom,
   maxLength,
+  transform,
 } from 'valibot';
 
 enum ROLES {
@@ -370,3 +375,80 @@ export const SalariosSchema = object({
     minValue(1, 'La cantidad debe ser mayor a 0')
   ),
 });
+
+export const GastosSchema = pipe(
+  object({
+    descripcion: pipe(
+      string('La descripción es requerida.'),
+      nonEmpty('La descripción es requerida')
+    ),
+    tipo: enum_(TiposGastos, 'Tipo de gasto requerido.'),
+    frecuencia: optional(
+      enum_(FrecuenciasGastos, 'La frecuencia es requerida.')
+    ),
+    cantidad: pipe(
+      number('La cantidad es requerida'),
+      minValue(1, 'La cantidad debe ser mayor a 0')
+    ),
+    dia_mes: optional(
+      pipe(
+        number('El día del mes es requerido.'),
+        minValue(1, 'El día del mes debe ser mayor a 0.'),
+        maxValue(31, 'El día del mes no debe ser mayor a 31.')
+      )
+    ),
+    dia_semana: optional(
+      pipe(
+        string('Seleccione un dia de la semana'),
+        nonEmpty('Seleccione un dia de la semana'),
+        custom<string>((value) => {
+          const parsedValue = parseInt(value as string, 10);
+          return !isNaN(parsedValue) && parsedValue >= 0 && parsedValue <= 6;
+        }, 'Seleccione un dia de la semana'),
+        transform((value) => parseInt(value))
+      )
+    ),
+  }),
+  forward(
+    partialCheck(
+      [['tipo'], ['frecuencia']],
+      (input) => {
+        if (input.tipo === TiposGastos.FIJO && !input.frecuencia) {
+          return false;
+        }
+        return true;
+      },
+      'La frecuencia es requerida en un gasto fijo.'
+    ),
+    ['frecuencia']
+  ),
+  forward(
+    partialCheck(
+      [['frecuencia'], ['dia_mes']],
+      (input) => {
+        if (input.frecuencia === FrecuenciasGastos.MENSUAL && !input.dia_mes) {
+          return false;
+        }
+        return true;
+      },
+      'El dia del mes es requerido.'
+    ),
+    ['dia_mes']
+  ),
+  forward(
+    partialCheck(
+      [['frecuencia'], ['dia_semana']],
+      (input) => {
+        if (
+          input.frecuencia === FrecuenciasGastos.SEMANAL &&
+          !input.dia_semana
+        ) {
+          return false;
+        }
+        return true;
+      },
+      'El dia de la semana es requerido.'
+    ),
+    ['dia_semana']
+  )
+);
