@@ -59,8 +59,6 @@ export default function SheetGastos({ data }: { data?: Gasto }) {
     },
   });
 
-  console.log(form.getValues());
-
   const tipo = useWatch({ control: form.control, name: 'tipo' });
   const frecuencia = useWatch({ control: form.control, name: 'frecuencia' });
 
@@ -139,7 +137,6 @@ export default function SheetGastos({ data }: { data?: Gasto }) {
                     <Label>Tipo de gasto</Label>
                     <Select
                       onValueChange={(value) => {
-                        console.log(value);
                         if (value === TiposGastos.VARIABLE) {
                           form.setValue('frecuencia', undefined);
                           form.setValue('dia_semana', undefined),
