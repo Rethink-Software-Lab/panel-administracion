@@ -99,8 +99,7 @@ export default function SheetGastos({ data }: { data?: Gasto }) {
         <SheetHeader>
           <SheetTitle>{data ? 'Editar' : 'Agregar'} gasto</SheetTitle>
           <SheetDescription className="pb-4">
-            El salario requiere un usuario registrado en la aplicación y la
-            cantidad que será descontada diariamente de las ventas.
+            Especifique el tipo de gasto y la cantidad que desea registrar.
           </SheetDescription>
           {error && (
             <Alert className="text-left" variant="destructive">
