@@ -95,16 +95,6 @@ export default function SideBar({ areasVenta, session }) {
                   Usuarios
                 </Link>
                 <Link
-                  href="/salarios"
-                  className={cn(
-                    'flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary',
-                    path === '/salarios' && 'bg-muted text-primary'
-                  )}
-                >
-                  <BookUser className="h-4 w-4" />
-                  Salarios
-                </Link>
-                <Link
                   href="/gastos"
                   className={cn(
                     'flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary',
