@@ -14,7 +14,7 @@ export default async function Gastos() {
       <div className="flex justify-between items-center px-4 lg:px-6">
         <h1 className="text-lg font-semibold md:text-2xl">Gastos</h1>
 
-        <SheetGastos />
+        <SheetGastos areas={data?.areas_venta} />
       </div>
       {data ? (
         <Tabs defaultValue="gastos-variables" className=" h-full">
@@ -42,7 +42,11 @@ export default async function Gastos() {
             value="gastos-fijos"
             className="p-4 m-0 bg-muted/40 h-full border-t-2 border-muted"
           >
-            <DataTable columns={columnsFijos} data={data.fijos} />
+            <DataTable
+              columns={columnsFijos}
+              data={data.fijos}
+              areas={data?.areas_venta}
+            />
           </TabsContent>
         </Tabs>
       ) : (

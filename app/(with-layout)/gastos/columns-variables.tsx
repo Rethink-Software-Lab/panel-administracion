@@ -17,6 +17,10 @@ export const columns = [
       ),
   },
   {
+    accessorKey: 'area_venta.nombre',
+    header: 'Área de venta',
+  },
+  {
     accessorKey: 'descripcion',
     header: 'Descripción',
   },
