@@ -371,6 +371,10 @@ export const GastosSchema = pipe(
       string('La descripción es requerida.'),
       nonEmpty('La descripción es requerida')
     ),
+    area_venta: pipe(
+      string('El área de destino es requerida.'),
+      nonEmpty('El área de destino es requerida')
+    ),
     tipo: enum_(TiposGastos, 'Tipo de gasto requerido.'),
     frecuencia: optional(
       enum_(FrecuenciasGastos, 'La frecuencia es requerida.')

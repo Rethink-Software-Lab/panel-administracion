@@ -41,8 +41,15 @@ import {
   TiposGastos,
 } from '@/app/(with-layout)/gastos/types';
 import { addGasto, editGasto } from '@/app/(with-layout)/gastos/actions';
+import { AreaVenta } from '@/app/(with-layout)/areas-de-venta/types';
 
-export default function SheetGastos({ data }: { data?: Gasto }) {
+export default function SheetGastos({
+  data,
+  areas,
+}: {
+  data?: Gasto;
+  areas: AreaVenta[];
+}) {
   const [open, setOpen] = useState(false);
   const [error, setError] = useState('');
   const formRef = useRef<HTMLFormElement>(null);
@@ -51,6 +58,7 @@ export default function SheetGastos({ data }: { data?: Gasto }) {
     resolver: valibotResolver(GastosSchema),
     defaultValues: {
       descripcion: data?.descripcion || '',
+      area_venta: data?.area_venta?.id?.toLocaleString() || '',
       tipo: data?.tipo || undefined,
       frecuencia: data?.frecuencia || undefined,
       cantidad: data?.cantidad || 0,
@@ -130,6 +138,37 @@ export default function SheetGastos({ data }: { data?: Gasto }) {
               />
               <FormField
                 control={form.control}
+                name="area_venta"
+                render={({ field }) => (
+                  <FormItem className="w-full">
+                    <Label>Área de venta</Label>
+                    <Select
+                      disabled={!areas || areas.length < 1}
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                    >
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue
+                            className="line-clamp-1"
+                            placeholder="Selecciona un área de venta"
+                          />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        {areas?.map((area) => (
+                          <SelectItem key={area.id} value={area.id?.toString()}>
+                            {area.nombre}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
                 name="tipo"
                 render={({ field }) => (
                   <FormItem className="w-full text-left">
@@ -187,6 +226,9 @@ export default function SheetGastos({ data }: { data?: Gasto }) {
                           </SelectTrigger>
                         </FormControl>
                         <SelectContent>
+                          <SelectItem value={FrecuenciasGastos.LUNES_SABADO}>
+                            Lunes - Sábado
+                          </SelectItem>
                           <SelectItem value={FrecuenciasGastos.MENSUAL}>
                             Mensual
                           </SelectItem>

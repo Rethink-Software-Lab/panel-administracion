@@ -10,6 +10,7 @@ import {
   ColumnDef,
   SortingState,
   ColumnFiltersState,
+  TableOptions,
 } from '@tanstack/react-table';
 
 import {
@@ -24,19 +25,27 @@ import {
 import { useState } from 'react';
 import { DataTablePagination } from '@/components/ui/data-table-pagination';
 import { Gasto } from '@/app/(with-layout)/gastos/types';
+import { AreaVenta } from '@/app/(with-layout)/areas-de-venta/types';
+
+export interface CustomTableOptions<T> extends TableOptions<T> {
+  areas: AreaVenta[];
+}
 
 export function DataTable({
   columns,
   data,
+  areas,
 }: {
   columns: ColumnDef<Gasto>[];
   data: Gasto[];
+  areas?: AreaVenta[];
 }) {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const table = useReactTable({
     data,
     columns,
+    areas,
     getCoreRowModel: getCoreRowModel(),
     initialState: {
       pagination: {
@@ -55,7 +64,7 @@ export function DataTable({
     getPaginationRowModel: getPaginationRowModel(),
     onColumnFiltersChange: setColumnFilters,
     getFilteredRowModel: getFilteredRowModel(),
-  });
+  } as CustomTableOptions<Gasto>);
 
   return (
     <div className="p-2 rounded-md border bg-white">

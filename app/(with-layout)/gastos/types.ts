@@ -1,3 +1,4 @@
+import { AreaVenta } from '../areas-de-venta/types';
 import { Usuario } from '../users/types';
 
 export enum TiposGastos {
@@ -6,6 +7,7 @@ export enum TiposGastos {
 }
 
 export enum FrecuenciasGastos {
+  LUNES_SABADO = 'LUNES_SABADO',
   SEMANAL = 'SEMANAL',
   MENSUAL = 'MENSUAL',
 }
@@ -15,6 +17,7 @@ export interface Gasto {
   descripcion: string;
   created_at: string;
   cantidad: number;
+  area_venta: AreaVenta;
   tipo: TiposGastos;
   frecuencia: FrecuenciasGastos | null;
   dia_mes: number | null;
