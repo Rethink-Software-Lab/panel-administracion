@@ -109,51 +109,44 @@ export default async function ReporteVentas({
             ))}
           </TableBody>
           <TableFooter>
-            {data.pago_trabajador > 0 && (
-              <>
-                <TableRow>
-                  <TableCell
-                    colSpan={3}
-                    className="font-medium px-4 print:px-0"
-                  >
-                    Subtotal:
-                  </TableCell>
-                  <TableCell className="text-right px-4 print:px-0">
-                    ${data.subtotal}
-                  </TableCell>
-                </TableRow>
+            <>
+              <TableRow>
+                <TableCell colSpan={3} className="font-medium px-4 print:px-0">
+                  Subtotal:
+                </TableCell>
+                <TableCell className="text-right px-4 print:px-0">
+                  ${data.subtotal}
+                </TableCell>
+              </TableRow>
 
-                <TableRow>
-                  <TableCell colSpan={3} className="px-4 print:px-0">
-                    Total efectivo
-                  </TableCell>
-                  <TableCell className="text-right px-4 print:px-0">
-                    ${data.efectivo}
-                  </TableCell>
-                </TableRow>
-                <TableRow>
-                  <TableCell
-                    colSpan={3}
-                    className="border-b border-gray-300 px-4 print:px-0"
-                  >
-                    Total transferencia
-                  </TableCell>
-                  <TableCell className="text-right border-b border-gray-300 px-4 print:px-0">
-                    ${data.transferencia}
-                  </TableCell>
-                </TableRow>
-                <TableRow className="border-t border-t-gray-300">
-                  <TableCell
-                    colSpan={3}
-                    className="font-medium px-4 print:px-0"
-                  >
-                    Costos de producto
-                  </TableCell>
-                  <TableCell className="text-right font-medium px-4 print:px-0">
-                    - ${data.costo_producto}
-                  </TableCell>
-                </TableRow>
-
+              <TableRow>
+                <TableCell colSpan={3} className="px-4 print:px-0">
+                  Total efectivo
+                </TableCell>
+                <TableCell className="text-right px-4 print:px-0">
+                  ${data.efectivo}
+                </TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell
+                  colSpan={3}
+                  className="border-b border-gray-300 px-4 print:px-0"
+                >
+                  Total transferencia
+                </TableCell>
+                <TableCell className="text-right border-b border-gray-300 px-4 print:px-0">
+                  ${data.transferencia}
+                </TableCell>
+              </TableRow>
+              <TableRow className="border-t border-t-gray-300">
+                <TableCell colSpan={3} className="font-medium px-4 print:px-0">
+                  Costos de producto
+                </TableCell>
+                <TableCell className="text-right font-medium px-4 print:px-0">
+                  - ${data.costo_producto}
+                </TableCell>
+              </TableRow>
+              {data.pago_trabajador > 0 && (
                 <TableRow>
                   <TableCell colSpan={3} className="px-4 print:px-0">
                     Pago al trabajador
@@ -162,29 +155,29 @@ export default async function ReporteVentas({
                     - ${data.pago_trabajador}
                   </TableCell>
                 </TableRow>
-                {data.gastos_variables > 0 && (
-                  <TableRow>
-                    <TableCell colSpan={3} className="px-4 print:px-0">
-                      Gastos Variables
-                    </TableCell>
-                    <TableCell className="text-right px-4 print:px-0">
-                      - ${data.gastos_variables}
-                    </TableCell>
-                  </TableRow>
-                )}
+              )}
+              {data.gastos_variables > 0 && (
+                <TableRow>
+                  <TableCell colSpan={3} className="px-4 print:px-0">
+                    Gastos Variables
+                  </TableCell>
+                  <TableCell className="text-right px-4 print:px-0">
+                    - ${data.gastos_variables}
+                  </TableCell>
+                </TableRow>
+              )}
 
-                {data.gastos_fijos > 0 && (
-                  <TableRow>
-                    <TableCell colSpan={3} className="px-4 print:px-0">
-                      Gastos Fijos
-                    </TableCell>
-                    <TableCell className="text-right px-4 print:px-0">
-                      - ${data.gastos_fijos}
-                    </TableCell>
-                  </TableRow>
-                )}
-              </>
-            )}
+              {data.gastos_fijos > 0 && (
+                <TableRow>
+                  <TableCell colSpan={3} className="px-4 print:px-0">
+                    Gastos Fijos
+                  </TableCell>
+                  <TableCell className="text-right px-4 print:px-0">
+                    - ${data.gastos_fijos}
+                  </TableCell>
+                </TableRow>
+              )}
+            </>
             <TableRow>
               <TableCell
                 colSpan={3}
