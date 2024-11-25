@@ -8,7 +8,7 @@ import { DataTable } from '@/components/ui/data-table';
 import ModalCategoria from '@/components/functionals/ModalCategoria';
 
 export default async function Proyectos() {
-  const { data, errors } = await getCategorias();
+  const { data } = await getCategorias();
   return (
     <main className="flex flex-1 flex-col gap-4 p-4 lg:gap-6 lg:p-6">
       <div className="flex justify-between items-center">

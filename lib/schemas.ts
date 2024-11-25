@@ -1,7 +1,9 @@
+import { METODOS_PAGO } from '@/app/(with-layout)/entradas-cafeteria/types';
 import {
   FrecuenciasGastos,
   TiposGastos,
 } from '@/app/(with-layout)/gastos/types';
+import { ALMACENES, ROLES } from '@/app/(with-layout)/users/types';
 import {
   enum_,
   pipe,
@@ -24,12 +26,6 @@ import {
   transform,
 } from 'valibot';
 
-enum ROLES {
-  ADMIN = 'ADMIN',
-  ALMACENERO = 'ALMACENERO',
-  VENDEDOR = 'VENDEDOR',
-}
-
 export const UserSchema = pipe(
   object({
     username: pipe(
@@ -38,6 +34,7 @@ export const UserSchema = pipe(
     ),
     rol: enum_(ROLES, 'Rol invalido'),
     area_venta: optional(pipe(string(), nonEmpty())),
+    almacen: optional(enum_(ALMACENES, 'Almacén invalido')),
     password: pipe(
       string('La contraseña es requerida'),
       minLength(1, 'La contraseña es requerida')
@@ -55,6 +52,19 @@ export const UserSchema = pipe(
       'Debe asignarle un área de venta al vendedor.'
     ),
     ['area_venta']
+  ),
+  forward(
+    partialCheck(
+      [['rol'], ['almacen']],
+      (input) => {
+        if (input.rol === ROLES.ALMACENERO && !input.almacen) {
+          return false;
+        }
+        return true;
+      },
+      'Debe asignarle un almacén al almacenero.'
+    ),
+    ['almacen']
   )
 );
 
@@ -90,12 +100,6 @@ export const ProductSchema = object({
   ),
   deletePhoto: boolean('debe ser un booleano'),
 });
-
-enum METODOS_PAGO {
-  EFECTIVO = 'EFECTIVO',
-  TRANSFERENCIA = 'TRANSFERENCIA',
-  MIXTO = 'MIXTO',
-}
 
 export const EntradaSchema = object({
   proveedor: pipe(
@@ -148,6 +152,27 @@ export const EntradaSchema = object({
   ),
 });
 
+export const EntradaCafeteriaSchema = object({
+  proveedor: pipe(
+    string('El proveedor es requerido'),
+    nonEmpty('El proveedor es requerido')
+  ),
+  comprador: pipe(
+    string('El comprador es requerido.'),
+    nonEmpty('El comprador es requerido.')
+  ),
+  metodoPago: enum_(METODOS_PAGO, 'Método de pago requerido.'),
+  producto: pipe(
+    string('El producto es requerido.'),
+    nonEmpty('El producto es requerido.')
+  ),
+  cantidad: pipe(
+    number(),
+    minValue(1, 'Valor mínimo 1'),
+    maxValue(2000, 'Valor máximo 2000')
+  ),
+});
+
 export const SalidaSchema = object({
   area_venta: pipe(
     string('El área de venta es requerida.'),
@@ -161,6 +186,14 @@ export const SalidaSchema = object({
   ),
   cantidad: optional(pipe(number(), integer(), minValue(1))),
   producto_info: pipe(
+    string('El producto es requerido.'),
+    nonEmpty('El producto es requerido.')
+  ),
+});
+
+export const SalidaCafeteriaSchema = object({
+  cantidad: pipe(number(), integer(), minValue(1)),
+  producto: pipe(
     string('El producto es requerido.'),
     nonEmpty('El producto es requerido.')
   ),

@@ -21,6 +21,7 @@ import {
 } from 'lucide-react';
 
 import { cn } from '@/lib/utils';
+import { ALMACENES } from '@/app/(with-layout)/users/types';
 
 export default function SideBar({ areasVenta, session }) {
   const path = usePathname();
@@ -70,6 +71,10 @@ export default function SideBar({ areasVenta, session }) {
                   <FileText className="h-4 w-4" />
                   Reportes
                 </Link>
+              </>
+            )}
+            {session.isAdmin && (
+              <>
                 <Link
                   href="/categorias"
                   className={cn(
@@ -80,10 +85,6 @@ export default function SideBar({ areasVenta, session }) {
                   <Tags className="h-4 w-4" />
                   Categorías
                 </Link>
-              </>
-            )}
-            {session.isAdmin && (
-              <>
                 <Link
                   href="/users"
                   className={cn(
@@ -137,7 +138,9 @@ export default function SideBar({ areasVenta, session }) {
               <PackageOpen className="h-4 w-4" />
               Inventario
             </Link>
-            {session.isStaff && (
+            {session.isAdmin ||
+            (session.isAlmacenero &&
+              session.almacen === ALMACENES.PRINCIPAL) ? (
               <>
                 <Link
                   href="/entradas"
@@ -159,29 +162,71 @@ export default function SideBar({ areasVenta, session }) {
                   <ArrowUpRight className="h-4 w-4" />
                   Salidas
                 </Link>
-                <span className="p-2">Almacén Revoltosa</span>
+              </>
+            ) : null}
+            <span className="p-2">Almacén Revoltosa</span>
+            <Link
+              href="/inventario-revoltosa"
+              className={cn(
+                'flex flex-1 items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary',
+                path === '/inventario-revoltosa' && 'bg-muted text-primary'
+              )}
+            >
+              <PackageOpen className="h-4 w-4" />
+              Inventario
+            </Link>
+            {session.isAdmin ||
+            (session.isAlmacenero &&
+              session.almacen === ALMACENES.REVOLTOSA) ? (
+              <Link
+                href="/salidas-revoltosa"
+                className={cn(
+                  'flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary',
+                  path === '/salidas-revoltosa' && 'bg-muted text-primary'
+                )}
+              >
+                <ArrowUpRight className="h-4 w-4" />
+                Salidas
+              </Link>
+            ) : null}
+
+            <span className="p-2">Almacén Cafetería</span>
+            <Link
+              href="/inventario-cafeteria"
+              className={cn(
+                'flex flex-1 items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary',
+                path === '/inventario-cafeteria' && 'bg-muted text-primary'
+              )}
+            >
+              <PackageOpen className="h-4 w-4" />
+              Inventario
+            </Link>
+            {session.isAdmin ||
+            (session.isAlmacenero &&
+              session.almacen === ALMACENES.CAFETERIA) ? (
+              <>
                 <Link
-                  href="/inventario-revoltosa"
+                  href="/entradas-cafeteria"
                   className={cn(
                     'flex flex-1 items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary',
-                    path === '/inventario-revoltosa' && 'bg-muted text-primary'
+                    path === '/entradas-cafeteria' && 'bg-muted text-primary'
                   )}
                 >
-                  <PackageOpen className="h-4 w-4" />
-                  Inventario
+                  <ArrowDownLeft className="h-4 w-4" />
+                  Entradas
                 </Link>
                 <Link
-                  href="/salidas-revoltosa"
+                  href="/salidas-cafeteria"
                   className={cn(
                     'flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary',
-                    path === '/salidas-revoltosa' && 'bg-muted text-primary'
+                    path === '/salidas-cafeteria' && 'bg-muted text-primary'
                   )}
                 >
                   <ArrowUpRight className="h-4 w-4" />
                   Salidas
                 </Link>
               </>
-            )}
+            ) : null}
 
             <span className="p-2">Áreas de venta</span>
             {session.isStaff && (

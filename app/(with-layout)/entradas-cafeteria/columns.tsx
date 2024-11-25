@@ -1,6 +1,6 @@
 'use client';
 import EspecialWarningDelete from '@/components/functionals/EspecialWarningDelete';
-import { deleteEntrada } from './actions';
+import { deleteEntradaCafeteria } from './actions';
 import { Badge } from '@/components/ui/badge';
 import { DateTime } from 'luxon';
 import { Row } from '@tanstack/react-table';
@@ -27,7 +27,7 @@ export const columns = [
       ),
   },
   {
-    accessorKey: 'producto__info__descripcion',
+    accessorKey: 'info_producto.descripcion',
     header: 'Producto',
   },
   {
@@ -51,7 +51,7 @@ export const columns = [
   },
 
   {
-    accessorKey: 'usuario__username',
+    accessorKey: 'usuario.username',
     header: 'Usuario',
   },
 
@@ -61,7 +61,7 @@ export const columns = [
       <EspecialWarningDelete
         id={row.original.id}
         text="Al eliminar la entrada se eliminarán todas las salidas, productos y ventas asociadas a ella."
-        action={deleteEntrada}
+        action={deleteEntradaCafeteria}
       />
     ),
   },

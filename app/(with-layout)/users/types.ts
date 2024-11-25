@@ -6,3 +6,15 @@ export interface Usuario {
   rol: string;
   area_venta_id: AreaVenta | null;
 }
+
+export enum ALMACENES {
+  PRINCIPAL = 'PRINCIPAL',
+  CAFETERIA = 'CAFETERIA',
+  REVOLTOSA = 'REVOLTOSA',
+}
+
+export enum ROLES {
+  ADMIN = 'ADMIN',
+  ALMACENERO = 'ALMACENERO',
+  VENDEDOR = 'VENDEDOR',
+}
