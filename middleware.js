@@ -17,6 +17,7 @@ export async function middleware(request) {
   const requestHeaders = new Headers(request.headers);
   requestHeaders.set('x-user-rol', verifyToken?.rol);
   requestHeaders.set('x-user-punto', verifyToken?.area_venta);
+  requestHeaders.set('x-user-almacen', verifyToken?.almacen);
   return NextResponse.next({
     request: {
       headers: requestHeaders,

@@ -31,19 +31,26 @@ export const columns = [
 
   {
     header: ' ',
-    cell: ({ row }: { row: Row<Data> }) => (
-      <div className="flex items-center justify-end gap-2">
-        <ModalAreasVenta
-          data={row.original}
-          trigger={
-            <Button variant="outline" size="icon">
-              <span className="sr-only">Editar</span>
-              <Edit2 size={18} />
-            </Button>
-          }
-        />
-        <TableDeleteV2 id={row.original.id} action={deleteAreaVenta} />
-      </div>
-    ),
+    cell: ({ row }: { row: Row<Data> }) => {
+      if (
+        row.original.nombre !== 'Revoltosa' &&
+        row.original.nombre !== 'Cafetería'
+      ) {
+        return (
+          <div className="flex items-center justify-end gap-2">
+            <ModalAreasVenta
+              data={row.original}
+              trigger={
+                <Button variant="outline" size="icon">
+                  <span className="sr-only">Editar</span>
+                  <Edit2 size={18} />
+                </Button>
+              }
+            />
+            <TableDeleteV2 id={row.original.id} action={deleteAreaVenta} />
+          </div>
+        );
+      }
+    },
   },
 ];

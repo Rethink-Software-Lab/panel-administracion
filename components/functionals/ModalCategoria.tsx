@@ -34,19 +34,27 @@ import { toast } from 'sonner';
 import { CircleX, LoaderCircle } from 'lucide-react';
 import { useState } from 'react';
 import { Label } from '../ui/label';
+import { Categoria } from '@/app/(with-layout)/categorias/types';
+import { InferInput } from 'valibot';
 
-export default function ModalCategoria({ data = null, trigger }) {
+export default function ModalCategoria({
+  data,
+  trigger,
+}: {
+  data?: Categoria;
+  trigger: React.ReactNode;
+}) {
   const [isOpen, setIsOpen] = useState(false);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const form = useForm({
     resolver: valibotResolver(onlyNombreSchema),
     defaultValues: {
-      nombre: data?.nombre,
+      nombre: data?.nombre || '',
     },
   });
 
-  const onSubmit = async (dataForm) => {
+  const onSubmit = async (dataForm: InferInput<typeof onlyNombreSchema>) => {
     setIsLoading(true);
     if (!data) {
       const { data, error } = await addCategoria(dataForm);
@@ -58,14 +66,15 @@ export default function ModalCategoria({ data = null, trigger }) {
       }
       setError(error);
     } else {
-      const { data: dataResponse, error } = await updateCategoria({
-        ...dataForm,
-        id: data?.id,
-      });
+      const { data: dataResponse, error } = await updateCategoria(
+        dataForm,
+        data?.id
+      );
       setIsLoading(false);
       if (!error) {
         setIsOpen(false);
         toast.success(dataResponse);
+        setError(null);
       }
       setError(error);
     }
@@ -83,7 +92,7 @@ export default function ModalCategoria({ data = null, trigger }) {
           <Alert variant="destructive">
             <CircleX className="h-5 w-5" />
             <AlertTitle>Error!</AlertTitle>
-            <AlertDescription>{error?.message}</AlertDescription>
+            <AlertDescription>{error}</AlertDescription>
           </Alert>
         )}
         <Form {...form}>

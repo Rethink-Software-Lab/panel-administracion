@@ -4,6 +4,8 @@ import { deleteCategoria } from '@/app/(with-layout)/categorias/actions';
 import ModalCategoria from '@/components/functionals/ModalCategoria';
 import { Button } from '@/components/ui/button';
 import { Edit2 } from 'lucide-react';
+import { Row } from '@tanstack/react-table';
+import { Categoria } from './types';
 
 export const columns = [
   {
@@ -13,8 +15,11 @@ export const columns = [
 
   {
     header: ' ',
-    cell: ({ row }) => {
-      if (row.original.nombre !== 'Zapatos') {
+    cell: ({ row }: { row: Row<Categoria> }) => {
+      if (
+        row.original.nombre !== 'Zapatos' &&
+        row.original.nombre !== 'Cafetería'
+      ) {
         return (
           <div className="flex items-center justify-end gap-2">
             <ModalCategoria

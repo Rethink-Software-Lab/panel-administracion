@@ -1,9 +1,11 @@
 'use server';
 
+import { onlyNombreSchema } from '@/lib/schemas';
 import { revalidatePath } from 'next/cache';
 import { cookies } from 'next/headers';
+import { InferInput } from 'valibot';
 
-export async function addCategoria(data) {
+export async function addCategoria(data: InferInput<typeof onlyNombreSchema>) {
   const token = cookies().get('session')?.value || null;
   const res = await fetch(process.env.BACKEND_URL_V2 + '/categorias/', {
     method: 'POST',
@@ -16,18 +18,12 @@ export async function addCategoria(data) {
     if (res.status === 401)
       return {
         data: null,
-        error: {
-          message: 'No autorizado',
-          description: 'Usted no está autorizado para esta acción',
-        },
+        error: 'No autorizado',
       };
 
     return {
       data: null,
-      error: {
-        message: 'Algo salió mal.',
-        description: 'Por favor contacte con soporte',
-      },
+      error: 'Algo salió mal.',
     };
   }
   revalidatePath('/categorias');
@@ -37,10 +33,13 @@ export async function addCategoria(data) {
   };
 }
 
-export async function updateCategoria(data) {
+export async function updateCategoria(
+  data: InferInput<typeof onlyNombreSchema>,
+  id: number
+) {
   const token = cookies().get('session')?.value || null;
   const res = await fetch(
-    process.env.BACKEND_URL_V2 + '/categorias/' + data?.id + '/',
+    process.env.BACKEND_URL_V2 + '/categorias/' + id + '/',
     {
       method: 'PUT',
       headers: {
@@ -53,18 +52,12 @@ export async function updateCategoria(data) {
     if (res.status === 401)
       return {
         data: null,
-        error: {
-          message: 'No autorizado',
-          description: 'Usted no está autorizado para esta acción',
-        },
+        error: 'No autorizado',
       };
 
     return {
       data: null,
-      error: {
-        message: 'Algo salió mal.',
-        description: 'Por favor contacte con soporte',
-      },
+      error: 'Algo salió mal.',
     };
   }
   revalidatePath('/categorias');
@@ -74,7 +67,7 @@ export async function updateCategoria(data) {
   };
 }
 
-export async function deleteCategoria({ id }) {
+export async function deleteCategoria({ id }: { id: number }) {
   const token = cookies().get('session')?.value || null;
   const res = await fetch(process.env.BACKEND_URL_V2 + '/categorias/' + id, {
     method: 'DELETE',
@@ -86,26 +79,16 @@ export async function deleteCategoria({ id }) {
     if (res.status === 401)
       return {
         data: null,
-        error: {
-          message: 'No autorizado',
-          description: 'Usted no está autorizado para esta acción',
-        },
+        error: 'No autorizado',
       };
     if (res.status === 404)
       return {
         data: null,
-        error: {
-          message: 'Categoría no encontrada',
-          description:
-            'No fué posible encontrar la categoría que desea eliminar',
-        },
+        error: 'Categoría no encontrada',
       };
     return {
       data: null,
-      error: {
-        message: 'Algo salió mal.',
-        description: 'Por favor contacte con soporte',
-      },
+      error: 'Algo salió mal.',
     };
   }
   revalidatePath('/categorias');

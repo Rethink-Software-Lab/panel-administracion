@@ -72,6 +72,9 @@ export default function FormReportes({ areas }: { areas: AreaVenta[] }) {
                   <SelectItem value="almacen-revoltosa">
                     Almacén Revoltosa
                   </SelectItem>
+                  <SelectItem value="almacen-cafeteria">
+                    Almacén Cafetería
+                  </SelectItem>
                 </>
               )}
 

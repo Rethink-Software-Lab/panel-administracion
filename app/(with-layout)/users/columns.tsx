@@ -20,6 +20,7 @@ interface User {
   username: string;
   rol: UserRole;
   area_venta: { id: string; nombre: string; color: string } | null;
+  almacen: string | null;
 }
 
 export const columns = [
@@ -48,6 +49,20 @@ export const columns = [
 
       if (area) {
         return area;
+      } else {
+        return <Badge variant="outline">Vacio</Badge>;
+      }
+    },
+  },
+
+  {
+    accessorKey: 'almacen',
+    header: 'Almacén',
+    cell: ({ row }: { row: Row<User> }) => {
+      const almacen = row.original.almacen;
+
+      if (almacen) {
+        return almacen;
       } else {
         return <Badge variant="outline">Vacio</Badge>;
       }

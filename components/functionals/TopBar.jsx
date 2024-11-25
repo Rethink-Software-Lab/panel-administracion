@@ -31,7 +31,12 @@ import {
   Wrench,
 } from 'lucide-react';
 import SearchForm from '@/components/functionals/SeachForm';
-import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
+import {
+  Sheet,
+  SheetContent,
+  SheetTitle,
+  SheetTrigger,
+} from '@/components/ui/sheet';
 import { cn } from '@/lib/utils';
 import { usePathname, useRouter } from 'next/navigation';
 import { logout } from '@/lib/actions';
@@ -52,14 +57,24 @@ export default function TopBar({ session, areasVenta }) {
             <span className="sr-only">Toggle navigation menu</span>
           </Button>
         </SheetTrigger>
-        <SheetContent side="left" className="flex flex-col overflow-y-auto">
+        <SheetContent
+          aria-description="Barra de navegación"
+          side="left"
+          className="flex flex-col overflow-y-auto"
+        >
           <nav className="grid gap-2 text-lg font-medium">
-            <div className="flex h-14 items-center border-b px-4 lg:h-[60px] lg:px-6">
-              <Link href="/" className="flex items-center gap-2 font-semibold">
-                <ClipboardCheck className="h-6 w-6" />
-                <span className=" text-sm">Panel de administración</span>
-              </Link>
-            </div>
+            <SheetTitle>
+              <div className="flex h-14 items-center border-b px-4 lg:h-[60px] lg:px-6">
+                <Link
+                  href="/"
+                  className="flex items-center gap-2 font-semibold"
+                >
+                  <ClipboardCheck className="h-6 w-6" />
+                  <span className=" text-sm">Panel de administración</span>
+                </Link>
+              </div>
+            </SheetTitle>
+
             {session.isStaff && (
               <>
                 <Link
@@ -93,6 +108,10 @@ export default function TopBar({ session, areasVenta }) {
                   <FileText className="h-4 w-4" />
                   Reportes
                 </Link>
+              </>
+            )}
+            {session.isAdmin && (
+              <>
                 <Link
                   href="/categorias"
                   className={cn(
@@ -103,10 +122,6 @@ export default function TopBar({ session, areasVenta }) {
                   <Tags className="h-4 w-4" />
                   Categorías
                 </Link>
-              </>
-            )}
-            {session.isAdmin && (
-              <>
                 <Link
                   href="/users"
                   className={cn(
@@ -149,7 +164,7 @@ export default function TopBar({ session, areasVenta }) {
                 </Link>
               </>
             )}
-            <span className="p-2">Almacén</span>
+            <span className="p-2">Almacén Principal</span>
             <Link
               href="/inventario"
               className={cn(
@@ -160,7 +175,9 @@ export default function TopBar({ session, areasVenta }) {
               <PackageOpen className="h-4 w-4" />
               Inventario
             </Link>
-            {session.isStaff && (
+            {session.isAdmin ||
+            (session.isAlmacenero &&
+              session.almacen === ALMACENES.PRINCIPAL) ? (
               <>
                 <Link
                   href="/entradas"
@@ -182,29 +199,71 @@ export default function TopBar({ session, areasVenta }) {
                   <ArrowUpRight className="h-4 w-4" />
                   Salidas
                 </Link>
-                <span className="p-2">Almacén Revoltosa</span>
+              </>
+            ) : null}
+            <span className="p-2">Almacén Revoltosa</span>
+            <Link
+              href="/inventario-revoltosa"
+              className={cn(
+                'flex flex-1 items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary',
+                path === '/inventario-revoltosa' && 'bg-muted text-primary'
+              )}
+            >
+              <PackageOpen className="h-4 w-4" />
+              Inventario
+            </Link>
+            {session.isAdmin ||
+            (session.isAlmacenero &&
+              session.almacen === ALMACENES.REVOLTOSA) ? (
+              <Link
+                href="/salidas-revoltosa"
+                className={cn(
+                  'flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary',
+                  path === '/salidas-revoltosa' && 'bg-muted text-primary'
+                )}
+              >
+                <ArrowUpRight className="h-4 w-4" />
+                Salidas
+              </Link>
+            ) : null}
+
+            <span className="p-2">Almacén Cafetería</span>
+            <Link
+              href="/inventario-cafeteria"
+              className={cn(
+                'flex flex-1 items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary',
+                path === '/inventario-cafeteria' && 'bg-muted text-primary'
+              )}
+            >
+              <PackageOpen className="h-4 w-4" />
+              Inventario
+            </Link>
+            {session.isAdmin ||
+            (session.isAlmacenero &&
+              session.almacen === ALMACENES.CAFETERIA) ? (
+              <>
                 <Link
-                  href="/inventario-revoltosa"
+                  href="/entradas-cafeteria"
                   className={cn(
                     'flex flex-1 items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary',
-                    path === '/inventario-revoltosa' && 'bg-muted text-primary'
+                    path === '/entradas-cafeteria' && 'bg-muted text-primary'
                   )}
                 >
-                  <PackageOpen className="h-4 w-4" />
-                  Inventario
+                  <ArrowDownLeft className="h-4 w-4" />
+                  Entradas
                 </Link>
                 <Link
-                  href="/salidas-revoltosa"
+                  href="/salidas-cafeteria"
                   className={cn(
                     'flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary',
-                    path === '/salidas-revoltosa' && 'bg-muted text-primary'
+                    path === '/salidas-cafeteria' && 'bg-muted text-primary'
                   )}
                 >
                   <ArrowUpRight className="h-4 w-4" />
                   Salidas
                 </Link>
               </>
-            )}
+            ) : null}
 
             <span className="p-2">Áreas de venta</span>
             {session.isStaff && (

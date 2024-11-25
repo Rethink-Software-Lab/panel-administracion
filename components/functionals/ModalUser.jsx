@@ -37,6 +37,7 @@ import { toast } from 'sonner';
 import { CircleX, LoaderCircle } from 'lucide-react';
 import { useState } from 'react';
 import { Label } from '@/components/ui/label';
+import { ALMACENES, ROLES } from '@/app/(with-layout)/users/types';
 
 export default function ModalUser({ data = null, trigger, areas }) {
   const [isOpen, setIsOpen] = useState(false);
@@ -50,6 +51,7 @@ export default function ModalUser({ data = null, trigger, areas }) {
       rol: data?.rol || '',
       password: '',
       area_venta: data?.area_venta?.id?.toString(),
+      almacen: data?.almacen,
     },
   });
 
@@ -142,7 +144,7 @@ export default function ModalUser({ data = null, trigger, areas }) {
                 </FormItem>
               )}
             />
-            {rol === 'VENDEDOR' && (
+            {rol === ROLES.VENDEDOR && (
               <FormField
                 control={form.control}
                 name="area_venta"
@@ -172,6 +174,40 @@ export default function ModalUser({ data = null, trigger, areas }) {
                 )}
               />
             )}
+            {rol === ROLES.ALMACENERO && (
+              <FormField
+                control={form.control}
+                name="almacen"
+                render={({ field }) => (
+                  <FormItem>
+                    <Label>Almacén</Label>
+                    <Select
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                    >
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Selecciona un almacén" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        <SelectItem value={ALMACENES.PRINCIPAL}>
+                          Principal
+                        </SelectItem>
+                        <SelectItem value={ALMACENES.CAFETERIA}>
+                          Cafetería
+                        </SelectItem>
+                        <SelectItem value={ALMACENES.REVOLTOSA}>
+                          Revoltosa
+                        </SelectItem>
+                      </SelectContent>
+                    </Select>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            )}
+
             <FormField
               control={form.control}
               name="password"
