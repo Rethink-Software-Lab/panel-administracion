@@ -40,6 +40,7 @@ import {
 import { cn } from '@/lib/utils';
 import { usePathname, useRouter } from 'next/navigation';
 import { logout } from '@/lib/actions';
+import { ALMACENES } from '@/app/(with-layout)/users/types';
 
 export default function TopBar({ session, areasVenta }) {
   const path = usePathname();
