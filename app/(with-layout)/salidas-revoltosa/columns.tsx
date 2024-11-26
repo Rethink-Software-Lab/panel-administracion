@@ -5,31 +5,17 @@ import { DateTime } from 'luxon';
 import { Row } from '@tanstack/react-table';
 
 import { SalidasRevoltosa } from './types';
+import { Badge } from '@/components/ui/badge';
 
 export const columns = [
   {
     accessorKey: 'created_at',
     header: 'Fecha',
-    cell: ({ row }: { row: Row<SalidasRevoltosa> }) => {
-      const date = DateTime.fromISO(row.getValue('created_at'));
-      const now = DateTime.now();
-      const diff = now.diff(date, 'days').days;
-
-      if (diff < 1) {
-        return <span>hoy</span>;
-      } else if (diff < 2) {
-        return <span>ayer</span>;
-      } else {
-        return (
-          <span>
-            {date.toRelative({
-              unit: 'days',
-              locale: 'es',
-            })}
-          </span>
-        );
-      }
-    },
+    cell: ({ row }: { row: Row<SalidasRevoltosa> }) =>
+      DateTime.fromISO(row.getValue('created_at')).toLocaleString(
+        DateTime.DATETIME_MED,
+        { locale: 'es' }
+      ),
   },
   {
     accessorKey: 'producto__info__descripcion',
@@ -43,6 +29,14 @@ export const columns = [
   {
     accessorKey: 'usuario__username',
     header: 'Usuario',
+    cell: ({ row }: { row: Row<SalidasRevoltosa> }) => {
+      const username = row.original.usuario__username;
+      if (username) {
+        return username;
+      } else {
+        return <Badge variant="outline">Usuario eliminado</Badge>;
+      }
+    },
   },
 
   {
