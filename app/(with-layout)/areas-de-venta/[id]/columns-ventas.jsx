@@ -42,6 +42,14 @@ export const columns = [
   {
     accessorKey: 'usuario__username',
     header: 'Usuario',
+    cell: ({ row }) => {
+      const username = row.original.usuario__username;
+      if (username) {
+        return username;
+      } else {
+        return <Badge variant="outline">Usuario eliminado</Badge>;
+      }
+    },
   },
   {
     header: ' ',
