@@ -6,22 +6,14 @@ import { Button } from '@/components/ui/button';
 import { Edit2 } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Row } from '@tanstack/react-table';
+import { ROLES, Usuario } from './types';
 
-type UserRole = 'ADMIN' | 'ALMACENERO' | 'VENDEDOR';
-
-const ROLES: Record<UserRole, string> = {
+const ROLES_A: Record<ROLES, string> = {
   ADMIN: 'Administrador',
   ALMACENERO: 'Almacenero',
   VENDEDOR: 'Vendedor',
+  SUPERVISOR: 'Supervisor',
 };
-
-interface User {
-  id: string;
-  username: string;
-  rol: UserRole;
-  area_venta: { id: string; nombre: string; color: string } | null;
-  almacen: string | null;
-}
 
 export const columns = [
   {
@@ -32,8 +24,8 @@ export const columns = [
   {
     accessorKey: 'rol',
     header: 'Rol',
-    cell: ({ row }: { row: Row<User> }) => (
-      <Badge variant="outline">{ROLES[row.original.rol]}</Badge>
+    cell: ({ row }: { row: Row<Usuario> }) => (
+      <Badge variant="outline">{ROLES_A[row.original.rol]}</Badge>
     ),
   },
 
@@ -41,10 +33,10 @@ export const columns = [
     id: 'area_venta',
     accessorKey: 'area_venta',
     header: 'Área de venta',
-    filterFn: (row: Row<User>, _: any, rowValue: string) => {
+    filterFn: (row: Row<Usuario>, _: any, rowValue: string) => {
       return row.original.area_venta?.nombre === rowValue;
     },
-    cell: ({ row }: { row: Row<User> }) => {
+    cell: ({ row }: { row: Row<Usuario> }) => {
       const area = row.original.area_venta?.nombre;
 
       if (area) {
@@ -58,7 +50,7 @@ export const columns = [
   {
     accessorKey: 'almacen',
     header: 'Almacén',
-    cell: ({ row }: { row: Row<User> }) => {
+    cell: ({ row }: { row: Row<Usuario> }) => {
       const almacen = row.original.almacen;
 
       if (almacen) {
@@ -75,7 +67,7 @@ export const columns = [
       row,
       table,
     }: {
-      row: Row<User>;
+      row: Row<Usuario>;
       table: {
         options: {
           areas: { id: string; nombre: string; color: string }[];

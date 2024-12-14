@@ -18,6 +18,7 @@ import {
   Wrench,
   BookUser,
   CircleDollarSign,
+  CreditCard,
 } from 'lucide-react';
 
 import { cn } from '@/lib/utils';
@@ -61,17 +62,19 @@ export default function SideBar({ areasVenta, session }) {
                   <Package className="h-4 w-4" />
                   Productos
                 </Link>
-                <Link
-                  href="/reportes"
-                  className={cn(
-                    'flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary',
-                    path === '/reportes' && 'bg-muted text-primary'
-                  )}
-                >
-                  <FileText className="h-4 w-4" />
-                  Reportes
-                </Link>
               </>
+            )}
+            {(session.isStaff || session.isSupervisor) && (
+              <Link
+                href="/reportes"
+                className={cn(
+                  'flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary',
+                  path === '/reportes' && 'bg-muted text-primary'
+                )}
+              >
+                <FileText className="h-4 w-4" />
+                Reportes
+              </Link>
             )}
             {session.isAdmin && (
               <>
@@ -105,6 +108,22 @@ export default function SideBar({ areasVenta, session }) {
                   <CircleDollarSign className="h-4 w-4" />
                   Gastos
                 </Link>
+              </>
+            )}
+            {(session.isAdmin || session.isSupervisor) && (
+              <Link
+                href="/tarjetas"
+                className={cn(
+                  'flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary',
+                  path === '/tarjetas' && 'bg-muted text-primary'
+                )}
+              >
+                <CreditCard className="h-4 w-4" />
+                Tarjetas
+              </Link>
+            )}
+            {session.isAdmin && (
+              <>
                 <Link
                   href="/transferencias"
                   className={cn(

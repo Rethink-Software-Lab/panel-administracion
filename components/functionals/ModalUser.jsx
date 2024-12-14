@@ -135,9 +135,14 @@ export default function ModalUser({ data = null, trigger, areas }) {
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      <SelectItem value="ADMIN">Administrador</SelectItem>
-                      <SelectItem value="ALMACENERO">Almacenero</SelectItem>
-                      <SelectItem value="VENDEDOR">Vendedor</SelectItem>
+                      <SelectItem value={ROLES.ADMIN}>Administrador</SelectItem>
+                      <SelectItem value={ROLES.ALMACENERO}>
+                        Almacenero
+                      </SelectItem>
+                      <SelectItem value={ROLES.VENDEDOR}>Vendedor</SelectItem>
+                      <SelectItem value={ROLES.SUPERVISOR}>
+                        Supervisor
+                      </SelectItem>
                     </SelectContent>
                   </Select>
                   <FormMessage />

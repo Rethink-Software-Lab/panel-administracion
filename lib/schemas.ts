@@ -3,6 +3,7 @@ import {
   FrecuenciasGastos,
   TiposGastos,
 } from '@/app/(with-layout)/gastos/types';
+import { Banco, TipoTransferencia } from '@/app/(with-layout)/tarjetas/types';
 import { ALMACENES, ROLES } from '@/app/(with-layout)/users/types';
 import {
   enum_,
@@ -219,36 +220,60 @@ export const SalidaRevoltosaSchema = object({
   ),
 });
 
-export const VentasSchema = object({
-  metodoPago: enum_(METODOS_PAGO, 'Método requerido: Efectivo o transferencia'),
-  efectivo: optional(
-    pipe(
-      number('El efectivo debe ser un número'),
-      integer('El efectivo debe ser un número entero'),
-      minValue(1, 'El efectivo debe ser mayor que 0')
-    )
-  ),
+export const VentasSchema = pipe(
+  object({
+    metodoPago: enum_(
+      METODOS_PAGO,
+      'Método requerido: Efectivo o transferencia'
+    ),
+    efectivo: optional(
+      pipe(
+        number('El efectivo debe ser un número'),
+        integer('El efectivo debe ser un número entero'),
+        minValue(1, 'El efectivo debe ser mayor que 0')
+      )
+    ),
 
-  transferencia: optional(
-    pipe(
-      number('La transferencia debe ser un número'),
-      integer('La transferencia debe ser un número entero'),
-      minValue(1, 'La transferencia debe ser mayor que 0')
-    )
-  ),
+    transferencia: optional(
+      pipe(
+        number('La transferencia debe ser un número'),
+        integer('La transferencia debe ser un número entero'),
+        minValue(1, 'La transferencia debe ser mayor que 0')
+      )
+    ),
 
-  zapatos_id: optional(
-    pipe(
-      array(string(), 'Productos no puede estar vacio'),
-      minLength(1, 'Productos no puede estar vacio')
-    )
-  ),
-  cantidad: optional(pipe(number(), integer(), minValue(1))),
-  producto_info: pipe(
-    string('El producto es requerido.'),
-    nonEmpty('El producto es requerido.')
-  ),
-});
+    tarjeta: optional(string('El producto es requerido.')),
+
+    zapatos_id: optional(
+      pipe(
+        array(string(), 'Productos no puede estar vacio'),
+        minLength(1, 'Productos no puede estar vacio')
+      )
+    ),
+    cantidad: optional(pipe(number(), integer(), minValue(1))),
+    producto_info: pipe(
+      string('El producto es requerido.'),
+      nonEmpty('El producto es requerido.')
+    ),
+  }),
+  forward(
+    partialCheck(
+      [['tarjeta'], ['metodoPago']],
+      (input) => {
+        if (
+          (input.metodoPago === METODOS_PAGO.MIXTO ||
+            input.metodoPago === METODOS_PAGO.TRANSFERENCIA) &&
+          !input.tarjeta
+        ) {
+          return false;
+        }
+        return true;
+      },
+      'Debe ingresar una tarjeta.'
+    ),
+    ['tarjeta']
+  )
+);
 
 export const SearchSchema = object({
   codigo: pipe(string('Ingresa un código'), minLength(1, 'Ingresa un código')),
@@ -478,3 +503,31 @@ export const GastosSchema = pipe(
     ['dia_semana']
   )
 );
+
+export const TarjetasSchema = object({
+  nombre: pipe(
+    string('El nombre es requerido'),
+    nonEmpty('El nombre es requerido')
+  ),
+  banco: enum_(Banco, 'Banco requerido.'),
+  saldo_inicial: pipe(
+    string('El saldo inicial es requerido'),
+    nonEmpty('El saldo inicial es requerido')
+  ),
+});
+
+export const TransferenciasTarjetas = object({
+  tarjeta: pipe(
+    string('La tarjeta es requerida.'),
+    nonEmpty('La tarjeta es requerida.')
+  ),
+  cantidad: pipe(
+    string('El valor es requerido'),
+    nonEmpty('El valor es requerido')
+  ),
+  descripcion: pipe(
+    string('La descripción es requerida.'),
+    nonEmpty('La descripción es requerida.')
+  ),
+  tipo: enum_(TipoTransferencia, 'El tipo de la transferencia es requerido.'),
+});

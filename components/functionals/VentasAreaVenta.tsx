@@ -8,6 +8,7 @@ import { columns } from '@/app/(with-layout)/areas-de-venta/[id]/columns-ventas'
 
 import Link from 'next/link';
 import { Productos } from './InventarioAreaVenta';
+import { Tarjetas } from '@/app/(with-layout)/tarjetas/types';
 
 enum Metodo {
   Transferencia = 'TRANSFERENCIA',
@@ -29,12 +30,14 @@ interface Props {
   id: string;
   ventas: Ventas[];
   productos: Productos[];
+  tarjetas: Tarjetas[];
 }
 
 export default async function VentasAreaVenta({
   id,
   ventas,
   productos,
+  tarjetas,
 }: Props) {
   return (
     <main className="flex flex-1 flex-col gap-4 pb-4 lg:gap-6 lg:pb-6 px-4 h-full">
@@ -57,6 +60,7 @@ export default async function VentasAreaVenta({
           <ModalVentas
             idPunto={Number(id)}
             productosInfo={productos}
+            tarjetas={tarjetas}
             trigger={
               <Button className="gap-1 items-center">
                 <PackagePlus size={18} />

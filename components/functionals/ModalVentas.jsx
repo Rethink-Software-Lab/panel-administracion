@@ -56,8 +56,15 @@ import { useRef, useState } from 'react';
 
 import { Label } from '../ui/label';
 import { Input } from '../ui/input';
+import { METODOS_PAGO } from '@/app/(with-layout)/entradas-cafeteria/types';
+import { Banco } from '@/app/(with-layout)/tarjetas/types';
 
-export default function ModalVentas({ trigger, idPunto, productosInfo }) {
+export default function ModalVentas({
+  trigger,
+  idPunto,
+  productosInfo,
+  tarjetas,
+}) {
   const [open, setOpen] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const [errors, setErrors] = useState(null);
@@ -109,6 +116,9 @@ export default function ModalVentas({ trigger, idPunto, productosInfo }) {
     setErrors(error);
   };
 
+  const MAX_TRANF_MES = 120000;
+  const MAX_TRANF_DIA = 80000;
+
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>{trigger}</DialogTrigger>
@@ -142,6 +152,8 @@ export default function ModalVentas({ trigger, idPunto, productosInfo }) {
                       if (value === 'MIXTO') {
                         form.setValue('efectivo', 0);
                         form.setValue('transferencia', 0);
+                      } else if (value === METODOS_PAGO.EFECTIVO) {
+                        form.setValue('tarjeta', undefined);
                       } else {
                         form.setValue('efectivo', undefined);
                         form.setValue('transferencia', undefined);
@@ -217,6 +229,61 @@ export default function ModalVentas({ trigger, idPunto, productosInfo }) {
                 />
               </div>
             )}
+
+            {metodo === METODOS_PAGO.TRANSFERENCIA ||
+            metodo === METODOS_PAGO.MIXTO ? (
+              <FormField
+                control={form.control}
+                name="tarjeta"
+                render={({ field }) => (
+                  <FormItem>
+                    <Label>Tarjeta</Label>
+                    <Select
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                    >
+                      <FormControl>
+                        <SelectTrigger
+                          className={cn(
+                            form.formState.errors?.metodoPago &&
+                              'border-destructive'
+                          )}
+                        >
+                          <SelectValue placeholder="Selecciona una tarjeta" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        {tarjetas?.map((tarjeta) => (
+                          <SelectItem
+                            key={tarjeta.id}
+                            value={tarjeta.id.toString()}
+                            disabled={
+                              tarjeta.total_transferencias_mes >=
+                                MAX_TRANF_MES ||
+                              tarjetas.total_transferencias_dia >= MAX_TRANF_DIA
+                            }
+                          >
+                            <div className="flex gap-2 items-center ">
+                              <div
+                                className={cn(
+                                  'w-6 aspect-square rounded-full bg-gradient-to-br',
+                                  tarjeta.banco === Banco.BANDEC &&
+                                    'from-[#6c0207] to-[#bc1f26]',
+                                  tarjeta.banco === Banco.BPA &&
+                                    'from-[#1d6156] to-[#1d6156]'
+                                )}
+                              ></div>
+                              <p>{tarjeta.nombre}</p>
+                            </div>
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            ) : null}
 
             <FormField
               control={form.control}
