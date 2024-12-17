@@ -10,13 +10,13 @@ export default async function CardsInicio({
   data,
 }: {
   description: string;
-  data: number;
+  data: string;
 }) {
   return (
     <Card>
       <CardHeader>
         <CardDescription>{description}</CardDescription>
-        <CardTitle className="text-4xl">${data}</CardTitle>
+        <CardTitle className="text-2xl">{data}</CardTitle>
       </CardHeader>
     </Card>
   );

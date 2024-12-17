@@ -17,7 +17,6 @@ import { CalendarIcon } from 'lucide-react';
 import { Calendar } from '../ui/calendar';
 import { cn } from '@/lib/utils';
 import {
-  endOfWeek,
   lastDayOfMonth,
   format,
   startOfMonth,
@@ -26,12 +25,21 @@ import {
 } from 'date-fns';
 import { es } from 'date-fns/locale';
 import { Label } from '../ui/label';
+import { Categoria } from '@/app/(with-layout)/categorias/types';
 
-export default function FormReportes({ areas }: { areas: AreaVenta[] }) {
+interface Props {
+  areas: AreaVenta[];
+  categorias: Categoria[];
+}
+
+export default function FormReportes({ data }: { data: Props }) {
   const [type, setType] = useQueryState('type', { shallow: false });
   const [area, setArea] = useQueryState('area', { shallow: false });
   const [from, setFrom] = useQueryState('desde', parseAsIsoDateTime);
   const [to, setTo] = useQueryState('hasta', parseAsIsoDateTime);
+  const [categoria, setCategoria] = useQueryState('categoria', {
+    shallow: false,
+  });
 
   return (
     <div className="flex items-center gap-2 max-sm:block max-sm:space-y-2">
@@ -78,7 +86,7 @@ export default function FormReportes({ areas }: { areas: AreaVenta[] }) {
                 </>
               )}
 
-              {areas?.map((area) => (
+              {data?.areas?.map((area) => (
                 <SelectItem key={area.id} value={area.id.toString()}>
                   {area.nombre}
                 </SelectItem>
@@ -146,6 +154,23 @@ export default function FormReportes({ areas }: { areas: AreaVenta[] }) {
               </div>
             </PopoverContent>
           </Popover>
+        </div>
+      )}
+      {type === 'inventario' && (
+        <div className="flex flex-col sm:space-y-2">
+          <Label className="max-sm:hidden">Categoría</Label>
+          <Select value={categoria || ''} onValueChange={setCategoria}>
+            <SelectTrigger className="w-[180px] max-sm:w-full">
+              <SelectValue placeholder="Todas" />
+            </SelectTrigger>
+            <SelectContent>
+              {data?.categorias?.map((categoria) => (
+                <SelectItem key={categoria.id} value={categoria.id.toString()}>
+                  {categoria.nombre}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
         </div>
       )}
     </div>
