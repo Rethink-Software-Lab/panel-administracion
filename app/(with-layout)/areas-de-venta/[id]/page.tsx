@@ -41,6 +41,7 @@ export default async function AreaVenta({ params }: { params: Params }) {
             <VentasAreaVenta
               ventas={data?.ventas}
               productos={data?.all_productos}
+              tarjetas={data?.tarjetas}
               id={params?.id}
             />
           </TabsContent>

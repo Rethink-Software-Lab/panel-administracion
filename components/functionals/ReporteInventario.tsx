@@ -9,10 +9,12 @@ import {
 } from '@/components/ui/table';
 
 import { DateTime } from 'luxon';
-import { ArchiveX, FolderSearch } from 'lucide-react';
+import { ArchiveX } from 'lucide-react';
 
 interface Producto {
+  id: number;
   descripcion: string;
+  codigo: string;
   cantidad: number;
 }
 
@@ -52,6 +54,9 @@ export default async function ReporteInventario({
               <TableHead className="border-b border-gray-300 px-4 print:px-0">
                 Descripción
               </TableHead>
+              <TableHead className="border-b border-gray-300 px-4 print:px-0">
+                Código
+              </TableHead>
               <TableHead className="text-right border-b border-gray-300 px-4 print:px-0">
                 Cantidad
               </TableHead>
@@ -59,9 +64,12 @@ export default async function ReporteInventario({
           </TableHeader>
           <TableBody>
             {data?.productos?.map((p: Producto, index: number) => (
-              <TableRow key={`${p.descripcion}-${index}`}>
+              <TableRow key={p.id}>
                 <TableCell className="border-b border-gray-300 px-4 print:px-0">
                   {p.descripcion}
+                </TableCell>
+                <TableCell className="border-b border-gray-300 px-4 print:px-0">
+                  {p.codigo}
                 </TableCell>
                 <TableCell className="text-right font-medium border-b border-gray-300 px-4 print:px-0">
                   {p.cantidad}
@@ -71,7 +79,9 @@ export default async function ReporteInventario({
           </TableBody>
           <TableFooter>
             <TableRow>
-              <TableCell className="font-bold px-4 print:px-0">Total</TableCell>
+              <TableCell colSpan={2} className="font-bold px-4 print:px-0">
+                Total
+              </TableCell>
               <TableCell className="text-right font-bold px-4 print:px-0">
                 {data?.productos?.reduce(
                   (total, producto) => total + producto.cantidad,

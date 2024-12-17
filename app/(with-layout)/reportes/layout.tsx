@@ -1,13 +1,13 @@
 import ButtonPrint from '@/components/functionals/ButtonPrint';
 import FormReportes from '@/components/functionals/FormReportes';
-import { getAreasVentas } from '@/lib/services';
+import { getReporteFormData } from './services';
 
 export default async function LayoutReportes({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const { data: areas, error } = await getAreasVentas();
+  const { data, error } = await getReporteFormData();
   return (
     <main className="flex flex-1 flex-col pt-4 lg:pt-6">
       <div className="flex flex-col gap-4 border-b border-b-gray-200 pb-4 px-4 lg:px-6">
@@ -15,7 +15,7 @@ export default async function LayoutReportes({
           Reportes
         </h1>
         <div className="flex items-center justify-between max-sm:block max-sm:space-y-2">
-          <FormReportes areas={areas} />
+          <FormReportes data={data} />
           <ButtonPrint disabled={!!error} className="max-sm:w-full" />
         </div>
       </div>

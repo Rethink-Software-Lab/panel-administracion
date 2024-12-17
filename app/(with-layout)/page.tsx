@@ -19,15 +19,31 @@ export default async function Initial() {
   return (
     <main className="flex flex-1 flex-col gap-4 p-4 lg:gap-6 lg:p-6">
       <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-2 xl:grid-cols-4">
-        <CardsInicio description="Hoy" data={data?.ventasHoy} />
-        <CardsInicio description="Esta semana" data={data?.ventasSemana} />
-        <CardsInicio description="Este mes" data={data?.ventasMes} />
-        <Card className="opacity-50 ">
-          <CardTitle className="flex text-lg gap-2 items-center p-6 opacity-50">
-            <Hourglass className="" size={20} />
-            Próximamente
-          </CardTitle>
-        </Card>
+        <CardsInicio
+          description="Hoy"
+          data={Intl.NumberFormat('es-ES', {
+            style: 'currency',
+            currency: 'CUP',
+          }).format(data?.ventasHoy)}
+        />
+        <CardsInicio
+          description="Esta semana"
+          data={Intl.NumberFormat('es-ES', {
+            style: 'currency',
+            currency: 'CUP',
+          }).format(data?.ventasSemana)}
+        />
+        <CardsInicio
+          description="Este mes"
+          data={Intl.NumberFormat('es-ES', {
+            style: 'currency',
+            currency: 'CUP',
+          }).format(data?.ventasMes)}
+        />
+        <CardsInicio
+          description="Total de zapatos"
+          data={data?.total_zapatos}
+        />
       </div>
       <div className="grid grid-cols-3 gap-6">
         <ChartVentaPorArea data={data?.ventasPorArea} />

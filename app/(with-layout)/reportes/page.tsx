@@ -10,6 +10,7 @@ interface SearchParams {
   area?: string;
   desde?: string;
   hasta?: string;
+  categoria?: string;
 }
 
 export default async function Reportes({

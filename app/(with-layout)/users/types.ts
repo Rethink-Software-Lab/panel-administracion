@@ -1,10 +1,10 @@
 import { AreaVenta } from '../areas-de-venta/types';
 
-export interface Usuario {
-  id: number;
-  username: string;
-  rol: string;
-  area_venta_id: AreaVenta | null;
+export enum ROLES {
+  ADMIN = 'ADMIN',
+  ALMACENERO = 'ALMACENERO',
+  VENDEDOR = 'VENDEDOR',
+  SUPERVISOR = 'SUPERVISOR',
 }
 
 export enum ALMACENES {
@@ -13,8 +13,10 @@ export enum ALMACENES {
   REVOLTOSA = 'REVOLTOSA',
 }
 
-export enum ROLES {
-  ADMIN = 'ADMIN',
-  ALMACENERO = 'ALMACENERO',
-  VENDEDOR = 'VENDEDOR',
+export interface Usuario {
+  id: number;
+  username: string;
+  rol: ROLES;
+  area_venta: AreaVenta | null;
+  almacen: ALMACENES | null;
 }

@@ -17,6 +17,7 @@ import {
   CircleDollarSign,
   CircleUser,
   ClipboardCheck,
+  CreditCard,
   FileText,
   Home,
   LifeBuoy,
@@ -142,6 +143,16 @@ export default function TopBar({ session, areasVenta }) {
                 >
                   <CircleDollarSign className="h-4 w-4" />
                   Gastos
+                </Link>
+                <Link
+                  href="/tarjetas"
+                  className={cn(
+                    'flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary',
+                    path === '/tarjetas' && 'bg-muted text-primary'
+                  )}
+                >
+                  <CreditCard className="h-4 w-4" />
+                  Tarjetas
                 </Link>
                 <Link
                   href="/transferencias"
