@@ -35,7 +35,7 @@ export default async function Tarjetas() {
         <h1 className="text-lg font-semibold md:text-2xl">Tarjetas</h1>
       </div>
       <div
-        className="w-full h-full flex overflow-x-auto p-4 scroll-p-4 gap-4"
+        className="w-full h-full max-h-[14rem] flex overflow-x-auto p-4 scroll-p-4 gap-4"
         style={{ scrollSnapType: 'x mandatory' }}
       >
         {data?.tarjetas?.map((tarjeta) => (
