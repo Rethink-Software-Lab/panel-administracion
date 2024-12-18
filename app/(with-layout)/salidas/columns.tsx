@@ -3,6 +3,7 @@ import TableDeleteV2 from '@/components/functionals/TableDeleteV2';
 import { deleteSalida } from './actions';
 import { DateTime } from 'luxon';
 import { Row } from '@tanstack/react-table';
+import { Badge } from '@/components/ui/badge';
 
 interface Data {
   id: number;
@@ -39,6 +40,14 @@ export const columns = [
   {
     accessorKey: 'usuario__username',
     header: 'Usuario',
+    cell: ({ row }: { row: Row<Data> }) => {
+      const username = row.original.usuario__username;
+      if (username) {
+        return username;
+      } else {
+        return <Badge variant="outline">Usuario eliminado</Badge>;
+      }
+    },
   },
 
   {
