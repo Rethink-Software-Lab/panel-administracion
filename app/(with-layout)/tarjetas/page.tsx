@@ -35,70 +35,66 @@ export default async function Tarjetas() {
         <h1 className="text-lg font-semibold md:text-2xl">Tarjetas</h1>
       </div>
       <div
-        className="w-full h-full flex overflow-x-auto p-4 scroll-p-4"
+        className="w-full h-full flex overflow-x-auto p-4 scroll-p-4 gap-4"
         style={{ scrollSnapType: 'x mandatory' }}
       >
-        <div className="flex gap-4">
-          {data?.tarjetas?.map((tarjeta) => (
-            <Card
-              key={tarjeta.id}
-              style={{ flex: '0 0 auto', scrollSnapAlign: 'start' }}
-              className={cn(
-                'bg-gradient-to-br  text-white aspect-video',
-                tarjeta.banco === Banco.BANDEC && 'from-[#6c0207] to-[#bc1f26]',
-                tarjeta.banco === Banco.BPA && 'from-[#1d6156] to-[#1d6156]'
-              )}
-            >
-              <CardHeader className="flex flex-row items-center justify-between gap-2">
-                <CardTitle className="line-clamp-1">{tarjeta.nombre}</CardTitle>
-                <DropdownMenu>
-                  <DropdownMenuTrigger>
-                    <EllipsisVertical size={18} />
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent className="w-40">
-                    <DropdownMenuLabel>{tarjeta.nombre}</DropdownMenuLabel>
-                    <DropdownMenuSeparator />
-                    <Delete id={tarjeta.id} />
-                  </DropdownMenuContent>
-                </DropdownMenu>
-              </CardHeader>
-              <CardContent>
-                <p className="text-xl font-bold">
+        {data?.tarjetas?.map((tarjeta) => (
+          <Card
+            key={tarjeta.id}
+            style={{ flex: '0 0 auto', scrollSnapAlign: 'start' }}
+            className={cn(
+              'bg-gradient-to-br  text-white aspect-video',
+              tarjeta.banco === Banco.BANDEC && 'from-[#6c0207] to-[#bc1f26]',
+              tarjeta.banco === Banco.BPA && 'from-[#1d6156] to-[#1d6156]'
+            )}
+          >
+            <CardHeader className="flex flex-row items-center justify-between gap-2">
+              <CardTitle className="line-clamp-1">{tarjeta.nombre}</CardTitle>
+              <DropdownMenu>
+                <DropdownMenuTrigger>
+                  <EllipsisVertical size={18} />
+                </DropdownMenuTrigger>
+                <DropdownMenuContent className="w-40">
+                  <DropdownMenuLabel>{tarjeta.nombre}</DropdownMenuLabel>
+                  <DropdownMenuSeparator />
+                  <Delete id={tarjeta.id} />
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </CardHeader>
+            <CardContent>
+              <p className="text-xl font-bold">
+                {Intl.NumberFormat('es-ES', {
+                  style: 'currency',
+                  currency: 'CUP',
+                }).format(tarjeta.balance.valor)}
+              </p>
+            </CardContent>
+            <CardFooter>
+              <div className="w-full">
+                <p className="text-xs text-right">
                   {Intl.NumberFormat('es-ES', {
-                    style: 'currency',
-                    currency: 'CUP',
-                  }).format(tarjeta.balance.valor)}
+                    style: 'decimal',
+                    maximumFractionDigits: 2,
+                  }).format(tarjeta.total_transferencias_mes)}
+                  /{MAX_TRANF_MES}
                 </p>
-              </CardContent>
-              <CardFooter>
-                <div className="w-full">
-                  <p className="text-xs text-right">
-                    {Intl.NumberFormat('es-ES', {
-                      style: 'decimal',
-                      maximumFractionDigits: 2,
-                    }).format(tarjeta.total_transferencias_mes)}
-                    /{MAX_TRANF_MES}
-                  </p>
-                  <Progress
-                    className={cn(
-                      '[&>div]:bg-white mt-2',
-                      (tarjeta.total_transferencias_mes * 100) /
-                        MAX_TRANF_MES >=
-                        80 && '[&>div]:bg-red-600',
-                      (tarjeta.total_transferencias_mes * 100) /
-                        MAX_TRANF_MES >=
-                        60 && '[&>div]:bg-yellow-400'
-                    )}
-                    value={
-                      (tarjeta.total_transferencias_mes * 100) / MAX_TRANF_MES
-                    }
-                  />
-                </div>
-              </CardFooter>
-            </Card>
-          ))}
-          <SheetTarjetas isError={!!error} />
-        </div>
+                <Progress
+                  className={cn(
+                    '[&>div]:bg-white mt-2',
+                    (tarjeta.total_transferencias_mes * 100) / MAX_TRANF_MES >=
+                      80 && '[&>div]:bg-red-600',
+                    (tarjeta.total_transferencias_mes * 100) / MAX_TRANF_MES >=
+                      60 && '[&>div]:bg-yellow-400'
+                  )}
+                  value={
+                    (tarjeta.total_transferencias_mes * 100) / MAX_TRANF_MES
+                  }
+                />
+              </div>
+            </CardFooter>
+          </Card>
+        ))}
+        <SheetTarjetas isError={!!error} />
       </div>
       <div className="p-4 m-0 bg-muted/40 h-full border-t-2 border-muted">
         <div className="flex justify-between items-center mb-4">
