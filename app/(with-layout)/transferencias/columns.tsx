@@ -5,6 +5,7 @@ import { DateTime } from 'luxon';
 import { Row } from '@tanstack/react-table';
 import SheetInfoTransferencias from '@/components/functionals/SheetInfoTransferencias';
 import { Transferencia } from './types';
+import { Badge } from '@/components/ui/badge';
 
 export const columns = [
   {
@@ -19,14 +20,38 @@ export const columns = [
   {
     accessorKey: 'de.nombre',
     header: 'Área de origen',
+    cell: ({ row }: { row: Row<Transferencia> }) => {
+      const username = row.original.de?.nombre;
+      if (username) {
+        return username;
+      } else {
+        return <Badge variant="outline">Área de venta eliminada</Badge>;
+      }
+    },
   },
   {
     accessorKey: 'para.nombre',
     header: 'Área de destino',
+    cell: ({ row }: { row: Row<Transferencia> }) => {
+      const username = row.original.de?.nombre;
+      if (username) {
+        return username;
+      } else {
+        return <Badge variant="outline">Área de venta eliminada</Badge>;
+      }
+    },
   },
   {
     accessorKey: 'usuario.username',
     header: 'Usuario',
+    cell: ({ row }: { row: Row<Transferencia> }) => {
+      const username = row.original.usuario?.username;
+      if (username) {
+        return username;
+      } else {
+        return <Badge variant="outline">Usuario eliminado</Badge>;
+      }
+    },
   },
 
   {

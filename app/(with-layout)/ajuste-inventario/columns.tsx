@@ -5,6 +5,7 @@ import { DateTime } from 'luxon';
 import { Row } from '@tanstack/react-table';
 import SheetInfoAjusteInventario from '@/components/functionals/SheetInfoAjusteInventario';
 import { AjusteInventario } from '@/app/(with-layout)/ajuste-inventario/types';
+import { Badge } from '@/components/ui/badge';
 
 export const columns = [
   {
@@ -23,6 +24,14 @@ export const columns = [
   {
     accessorKey: 'usuario.username',
     header: 'Usuario',
+    cell: ({ row }: { row: Row<AjusteInventario> }) => {
+      const username = row.original.usuario?.username;
+      if (username) {
+        return username;
+      } else {
+        return <Badge variant="outline">Usuario eliminado</Badge>;
+      }
+    },
   },
 
   {

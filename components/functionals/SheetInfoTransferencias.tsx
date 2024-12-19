@@ -38,7 +38,7 @@ export default function SheetInfoTransferencias({
       <SheetContent className="w-full sm:max-w-[600px] overflow-y-scroll">
         <SheetHeader>
           <SheetTitle className="flex items-center gap-2">
-            {data.de.nombre} <ArrowRight size={18} /> {data.para.nombre}
+            {data?.de?.nombre} <ArrowRight size={18} /> {data?.para?.nombre}
           </SheetTitle>
           <SheetDescription className="pb-6 flex items-center gap-2 justify-between">
             <span>
@@ -46,7 +46,7 @@ export default function SheetInfoTransferencias({
                 DateTime.DATE_FULL
               )}
             </span>
-            <span>creada por : {data.usuario.username}</span>
+            <span>creada por : {data?.usuario?.username}</span>
           </SheetDescription>
         </SheetHeader>
         <Table>

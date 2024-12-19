@@ -5,6 +5,7 @@ import { Row } from '@tanstack/react-table';
 import { Gasto } from './types';
 import { DateTime } from 'luxon';
 import { deleteGasto } from '@/app/(with-layout)/gastos/actions';
+import { Badge } from '@/components/ui/badge';
 
 export const columns = [
   {
@@ -19,6 +20,14 @@ export const columns = [
   {
     accessorKey: 'area_venta.nombre',
     header: 'Área de venta',
+    cell: ({ row }: { row: Row<Gasto> }) => {
+      const username = row.original.area_venta?.nombre;
+      if (username) {
+        return username;
+      } else {
+        return <Badge variant="outline">Área de venta eliminada</Badge>;
+      }
+    },
   },
   {
     accessorKey: 'descripcion',
@@ -31,6 +40,14 @@ export const columns = [
   {
     accessorKey: 'usuario.username',
     header: 'Usuario',
+    cell: ({ row }: { row: Row<Gasto> }) => {
+      const username = row.original.usuario?.username;
+      if (username) {
+        return username;
+      } else {
+        return <Badge variant="outline">Usuario eliminado</Badge>;
+      }
+    },
   },
   {
     header: ' ',
