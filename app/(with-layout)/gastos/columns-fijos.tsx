@@ -1,7 +1,7 @@
 'use client';
 
 import TableDeleteV2 from '@/components/functionals/TableDeleteV2';
-import { ColumnDef, Row, Table } from '@tanstack/react-table';
+import { ColumnDef, Row } from '@tanstack/react-table';
 import { Gasto } from './types';
 import { deleteGasto } from '@/app/(with-layout)/gastos/actions';
 import { Badge } from '@/components/ui/badge';
@@ -26,6 +26,14 @@ export const columns: ColumnDef<Gasto>[] = [
   {
     accessorKey: 'area_venta.nombre',
     header: 'Área de venta',
+    cell: ({ row }: { row: Row<Gasto> }) => {
+      const username = row.original.area_venta?.nombre;
+      if (username) {
+        return username;
+      } else {
+        return <Badge variant="outline">Área de venta eliminada</Badge>;
+      }
+    },
   },
 
   {
@@ -50,6 +58,14 @@ export const columns: ColumnDef<Gasto>[] = [
   {
     accessorKey: 'usuario.username',
     header: 'Usuario',
+    cell: ({ row }: { row: Row<Gasto> }) => {
+      const username = row.original.usuario?.username;
+      if (username) {
+        return username;
+      } else {
+        return <Badge variant="outline">Usuario eliminado</Badge>;
+      }
+    },
   },
   {
     header: ' ',

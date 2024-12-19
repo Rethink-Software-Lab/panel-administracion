@@ -15,8 +15,8 @@ export default async function AjusteInventario() {
         <h1 className="text-lg font-semibold md:text-2xl">Ajuste Inventario</h1>
 
         <SheetAjusteInventario
-          areas={data.areas_ventas}
-          productosInfo={data.productos_info}
+          areas={data?.areas_ventas}
+          productosInfo={data?.productos_info}
         />
       </div>
 
