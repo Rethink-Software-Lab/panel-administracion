@@ -46,7 +46,7 @@ export default function SheetInfoAjusteInventario({
                 DateTime.DATE_FULL
               )}
             </span>
-            <span>creada por : {data.usuario.username}</span>
+            <span>creada por : {data?.usuario?.username}</span>
           </SheetDescription>
         </SheetHeader>
         <Table>
