@@ -33,6 +33,7 @@ export interface Transferenciastarjetas {
   tipo: TipoTransferencia;
   usuario: Usuario;
   venta: number | null;
+  venta_cafeteria: number | null;
 }
 
 export interface ResponseTarjetas {

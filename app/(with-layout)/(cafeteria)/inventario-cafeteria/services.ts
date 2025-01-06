@@ -1,25 +1,19 @@
 import { cookies } from 'next/headers';
-import { SalidasCafeteria as SalidasCafeteriaTypes } from '@/app/(with-layout)/salidas-cafeteria/types';
-import { ProductoCodigoCategoria } from '@/components/functionals/sheets/SheetEntradasCafeteria';
+import { ProductoCafeteria } from './types';
 
-interface Response {
-  salidas: SalidasCafeteriaTypes[];
-  productos: ProductoCodigoCategoria[];
-}
-
-export async function SalidasCafeteria(): Promise<{
-  data: Response | null;
+export async function inventarioAlmacenCafeteria(): Promise<{
+  data: ProductoCafeteria[] | null;
   error: string | null;
 }> {
   const token = cookies().get('session')?.value;
   try {
     const res = await fetch(
-      process.env.BACKEND_URL_V2 + '/salidas-cafeteria/',
+      process.env.BACKEND_URL_V2 + '/cafeteria/inventario/',
       {
         headers: {
           Authorization: `Bearer ${token}`,
         },
-        next: { tags: ['salidas-cafeteria'] },
+        next: { tags: ['inventario-cafeteria'] },
       }
     );
     if (!res.ok) {

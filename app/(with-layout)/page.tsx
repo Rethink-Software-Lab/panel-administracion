@@ -12,9 +12,9 @@ import { getSession } from '@/lib/getSession';
 import { redirect } from 'next/navigation';
 
 export default async function Initial() {
-  const { isVendedor, punto } = getSession();
+  const { isVendedor, area_venta } = getSession();
   const { data } = await graficas();
-  if (isVendedor) return redirect(`areas-de-venta/${punto}`);
+  if (isVendedor) return redirect(`areas-de-venta/${area_venta}`);
 
   return (
     <main className="flex flex-1 flex-col gap-4 p-4 lg:gap-6 lg:p-6">

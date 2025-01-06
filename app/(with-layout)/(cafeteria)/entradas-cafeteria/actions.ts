@@ -9,7 +9,7 @@ export async function addEntradaCafeteria(
   entrada: InferInput<typeof EntradaCafeteriaSchema>
 ): Promise<{ data: string | null; error: string | null }> {
   const token = cookies().get('session')?.value || null;
-  const res = await fetch(process.env.BACKEND_URL_V2 + '/entradas/cafeteria/', {
+  const res = await fetch(process.env.BACKEND_URL_V2 + '/cafeteria/entradas/', {
     method: 'POST',
     headers: {
       Authorization: `Bearer ${token}`,
@@ -42,7 +42,7 @@ export async function addEntradaCafeteria(
   revalidateTag('entrada-cafeteria');
   revalidateTag('inventario-cafeteria');
   return {
-    data: 'Gasto agregado con éxito.',
+    data: 'Entrada agregada con éxito.',
     error: null,
   };
 }
@@ -50,7 +50,7 @@ export async function addEntradaCafeteria(
 export async function deleteEntradaCafeteria(id: number) {
   const token = cookies().get('session')?.value || null;
   const res = await fetch(
-    process.env.BACKEND_URL_V2 + '/entradas/cafeteria/' + id + '/',
+    process.env.BACKEND_URL_V2 + '/cafeteria/entradas/' + id + '/',
     {
       method: 'DELETE',
       headers: {

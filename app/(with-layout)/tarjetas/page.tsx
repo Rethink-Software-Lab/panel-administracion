@@ -28,6 +28,7 @@ const MAX_TRANF_MES = 120000;
 
 export default async function Tarjetas() {
   const { data, error } = await GetTarjetas();
+  console.log(data);
 
   return (
     <main className="flex flex-1 flex-col gap-4 py-4 lg:gap-6 lg:py-6 h-full">

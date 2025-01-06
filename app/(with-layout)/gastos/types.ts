@@ -18,6 +18,7 @@ export interface Gasto {
   created_at: string;
   cantidad: number;
   area_venta: AreaVenta;
+  is_cafeteria: boolean;
   tipo: TiposGastos;
   frecuencia: FrecuenciasGastos | null;
   dia_mes: number | null;

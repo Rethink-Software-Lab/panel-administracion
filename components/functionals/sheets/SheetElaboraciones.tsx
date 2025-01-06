@@ -9,7 +9,13 @@ import {
   SheetTrigger,
 } from '@/components/ui/sheet';
 import { Button } from '@/components/ui/button';
-import { CirclePlus, CircleX, MinusCircle, PlusCircle } from 'lucide-react';
+import {
+  CirclePlus,
+  CircleX,
+  MinusCircle,
+  Pen,
+  PlusCircle,
+} from 'lucide-react';
 import {
   Form,
   FormControl,
@@ -18,29 +24,10 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Label } from '@/components/ui/label';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
+
 import { useFieldArray, useForm } from 'react-hook-form';
 import { valibotResolver } from '@hookform/resolvers/valibot';
-import { EntradaCafeteriaSchema } from '@/lib/schemas';
-
-import { Input } from '@/components/ui/input';
-import { InferInput } from 'valibot';
-import { toast } from 'sonner';
-import { useRef, useState } from 'react';
-
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
-import { addEntradaCafeteria } from '@/app/(with-layout)/(cafeteria)/entradas-cafeteria/actions';
-
-import {
-  METODOS_PAGO,
-  ProductoEntrada,
-} from '@/app/(with-layout)/(cafeteria)/entradas-cafeteria/types';
+import { ElaboracionesSchema } from '@/lib/schemas';
 import {
   Table,
   TableBody,
@@ -50,42 +37,59 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-import SelectProductoEntradaCafeteria from '../SelectProductoEntradaCafeteria';
+import { Input } from '@/components/ui/input';
+import { InferInput } from 'valibot';
+import { toast } from 'sonner';
+import { useRef, useState } from 'react';
 
-export default function SheetEntradasCafeteria({
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import SelectProductoElaboraciones from '../SelectProductoElaboraciones';
+import {
+  addElaboracion,
+  editElaboracion,
+} from '@/app/(with-layout)/(cafeteria)/elaboraciones/actions';
+import { ProductoEntrada } from '@/app/(with-layout)/(cafeteria)/entradas-cafeteria/types';
+import { Elaboraciones } from '@/app/(with-layout)/(cafeteria)/elaboraciones/types';
+
+export default function SheetElaboraciones({
+  data,
   productos,
 }: {
-  productos: ProductoEntrada[];
+  data?: Elaboraciones;
+  productos?: ProductoEntrada[];
 }) {
   const [open, setOpen] = useState(false);
   const [error, setError] = useState('');
   const formRef = useRef<HTMLFormElement>(null);
 
-  const form = useForm<InferInput<typeof EntradaCafeteriaSchema>>({
-    resolver: valibotResolver(EntradaCafeteriaSchema),
+  const form = useForm<InferInput<typeof ElaboracionesSchema>>({
+    resolver: valibotResolver(ElaboracionesSchema),
     defaultValues: {
-      proveedor: '',
-      comprador: '',
-      metodo_pago: undefined,
-      productos: [{ producto: '', cantidad: '0' }],
+      nombre: data?.nombre || '',
+      precio: data?.precio.toLocaleString() || '',
+      mano_obra: data?.mano_obra.toLocaleString() || '',
+      ingredientes: data?.ingredientes_cantidad.map((ing) => ({
+        producto: ing.ingrediente.id.toLocaleString(),
+        cantidad: ing.cantidad.toLocaleString(),
+      })) || [{ producto: '', cantidad: '0' }],
     },
   });
 
   const { fields, append, remove } = useFieldArray({
     control: form.control,
-    name: 'productos',
+    name: 'ingredientes',
   });
 
   const onSubmit = async (
-    dataForm: InferInput<typeof EntradaCafeteriaSchema>
+    dataForm: InferInput<typeof ElaboracionesSchema>
   ): Promise<void> => {
-    const { data: dataRes, error } = await addEntradaCafeteria(dataForm);
-
+    const { data: dataRes, error } = data
+      ? await editElaboracion(dataForm, data.id)
+      : await addElaboracion(dataForm);
     if (error) {
       setError(error);
     } else {
       form.reset();
-      setError('');
       toast.success(dataRes);
       setOpen(false);
     }
@@ -93,19 +97,25 @@ export default function SheetEntradasCafeteria({
   return (
     <Sheet open={open} onOpenChange={setOpen} modal={true}>
       <SheetTrigger asChild>
-        <Button className="gap-1 items-center">
-          <PlusCircle size={18} />
-          <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
-            Agregar
-          </span>
-        </Button>
+        {data ? (
+          <Button variant="outline" size="icon">
+            <span className="sr-only">Editar</span>
+            <Pen size={18} />
+          </Button>
+        ) : (
+          <Button className="gap-1 items-center">
+            <PlusCircle size={18} />
+            <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
+              Agregar
+            </span>
+          </Button>
+        )}
       </SheetTrigger>
       <SheetContent className="w-full sm:max-w-[600px] overflow-y-scroll">
         <SheetHeader>
-          <SheetTitle>Agregar entrada</SheetTitle>
+          <SheetTitle>{data ? 'Editar' : 'Agregar'} elaboración</SheetTitle>
           <SheetDescription className="pb-4">
-            Ingrese los detalles de la entrada del producto al almacén de la
-            cafetería, incluyendo la cantidad, el proveedor y el comprador.
+            Rellene el formulario para agregar un producto.
           </SheetDescription>
           {error && (
             <Alert className="text-left" variant="destructive">
@@ -114,16 +124,15 @@ export default function SheetEntradasCafeteria({
               <AlertDescription>{error}</AlertDescription>
             </Alert>
           )}
-          {form.formState.errors.productos?.root && (
+          {form.formState.errors.ingredientes?.root && (
             <Alert className="text-left" variant="destructive">
               <CircleX className="h-5 w-5" />
               <AlertTitle>Error!</AlertTitle>
               <AlertDescription>
-                {form.formState.errors.productos.root?.message}
+                {form.formState.errors.ingredientes.root?.message}
               </AlertDescription>
             </Alert>
           )}
-
           <Form {...form}>
             <form
               ref={formRef}
@@ -132,10 +141,10 @@ export default function SheetEntradasCafeteria({
             >
               <FormField
                 control={form.control}
-                name="proveedor"
+                name="nombre"
                 render={({ field }) => (
-                  <FormItem className="w-full text-left">
-                    <Label>Proveedor</Label>
+                  <FormItem>
+                    <Label>Nombre</Label>
                     <FormControl>
                       <Input {...field} />
                     </FormControl>
@@ -145,12 +154,12 @@ export default function SheetEntradasCafeteria({
               />
               <FormField
                 control={form.control}
-                name="comprador"
+                name="precio"
                 render={({ field }) => (
-                  <FormItem className="w-full text-left">
-                    <Label>Comprador</Label>
+                  <FormItem>
+                    <Label>Precio</Label>
                     <FormControl>
-                      <Input {...field} />
+                      <Input type="number" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -158,32 +167,18 @@ export default function SheetEntradasCafeteria({
               />
               <FormField
                 control={form.control}
-                name="metodo_pago"
+                name="mano_obra"
                 render={({ field }) => (
-                  <FormItem className="w-full text-left">
-                    <Label>Método de pago</Label>
-                    <Select
-                      onValueChange={field.onChange}
-                      defaultValue={field.value}
-                    >
-                      <FormControl>
-                        <SelectTrigger>
-                          <SelectValue placeholder="Seleccione un método de pago" />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent>
-                        <SelectItem value={METODOS_PAGO.EFECTIVO}>
-                          Efectivo
-                        </SelectItem>
-                        <SelectItem value={METODOS_PAGO.TRANSFERENCIA}>
-                          Transferecia
-                        </SelectItem>
-                      </SelectContent>
-                    </Select>
+                  <FormItem>
+                    <Label>Mano de obra</Label>
+                    <FormControl>
+                      <Input type="number" {...field} />
+                    </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
               />
+
               <Table>
                 <TableHeader>
                   <TableRow>
@@ -195,7 +190,7 @@ export default function SheetEntradasCafeteria({
                   {fields.map((producto, index) => (
                     <TableRow key={producto.id}>
                       <TableCell className="font-semibold align-top w-1/2">
-                        <SelectProductoEntradaCafeteria
+                        <SelectProductoElaboraciones
                           form={form}
                           index={index}
                           productos={productos || []}
@@ -206,14 +201,14 @@ export default function SheetEntradasCafeteria({
                       <TableCell>
                         <FormField
                           control={form.control}
-                          name={`productos.${index}.cantidad`}
+                          name={`ingredientes.${index}.cantidad`}
                           render={({ field }) => (
                             <FormItem>
                               <FormControl>
                                 <Input
                                   type="number"
-                                  min={1}
-                                  step="1"
+                                  min={0.01}
+                                  step="0.01"
                                   {...field}
                                 />
                               </FormControl>
@@ -255,9 +250,8 @@ export default function SheetEntradasCafeteria({
                   </Button>
                 </TableCaption>
               </Table>
-
               <div className="flex justify-end">
-                <Button type="submit">Agregar</Button>
+                <Button type="submit">{data ? 'Editar' : 'Agregar'}</Button>
               </div>
             </form>
           </Form>

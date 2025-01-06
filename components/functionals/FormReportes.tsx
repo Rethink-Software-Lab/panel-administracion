@@ -67,11 +67,11 @@ export default function FormReportes({ data }: { data: Props }) {
         <Label className="max-sm:hidden">Localización</Label>
         <Select value={area || ''} onValueChange={setArea}>
           <SelectTrigger className="w-[180px] max-sm:w-full">
-            <SelectValue placeholder="General" />
+            <SelectValue placeholder="Todas las áreas" />
           </SelectTrigger>
           <SelectContent>
             <>
-              <SelectItem value="general">General</SelectItem>
+              <SelectItem value="cafeteria">Cafetería</SelectItem>
               {type === 'inventario' && (
                 <>
                   <SelectItem value="almacen-principal">
@@ -80,11 +80,9 @@ export default function FormReportes({ data }: { data: Props }) {
                   <SelectItem value="almacen-revoltosa">
                     Almacén Revoltosa
                   </SelectItem>
-                  <SelectItem value="almacen-cafeteria">
-                    Almacén Cafetería
-                  </SelectItem>
                 </>
               )}
+              <SelectItem value="general">Todas las áreas</SelectItem>
 
               {data?.areas?.map((area) => (
                 <SelectItem key={area.id} value={area.id.toString()}>
@@ -156,7 +154,7 @@ export default function FormReportes({ data }: { data: Props }) {
           </Popover>
         </div>
       )}
-      {type === 'inventario' && (
+      {type === 'inventario' && area !== 'cafeteria' && (
         <div className="flex flex-col sm:space-y-2">
           <Label className="max-sm:hidden">Categoría</Label>
           <Select value={categoria || ''} onValueChange={setCategoria}>
