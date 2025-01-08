@@ -72,7 +72,19 @@ export default function TopBar({ session, areasVenta }: Props) {
           side="left"
           className="flex flex-col overflow-y-auto"
         >
-          <nav className="grid items-start px-2 text-sm font-medium lg:px-4 max-w-64">
+          <nav className="grid gap-2 text-lg font-medium">
+            <SheetTitle>
+              <div className="flex h-14 items-center border-b px-4 lg:h-[60px] lg:px-6">
+                <Link
+                  href="/"
+                  className="flex items-center gap-2 font-semibold"
+                >
+                  <ClipboardCheck className="h-6 w-6" />
+                  <span className=" text-sm">Panel de administración</span>
+                </Link>
+              </div>
+            </SheetTitle>
+
             {session.isStaff && (
               <>
                 <Link
