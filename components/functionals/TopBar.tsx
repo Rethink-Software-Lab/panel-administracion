@@ -26,6 +26,7 @@ import {
   PackageOpen,
   Pizza,
   Settings2,
+  ShoppingCart,
   Store,
   Tags,
   Users,
@@ -71,19 +72,7 @@ export default function TopBar({ session, areasVenta }: Props) {
           side="left"
           className="flex flex-col overflow-y-auto"
         >
-          <nav className="grid gap-2 text-lg font-medium">
-            <SheetTitle>
-              <div className="flex h-14 items-center border-b px-4 lg:h-[60px] lg:px-6">
-                <Link
-                  href="/"
-                  className="flex items-center gap-2 font-semibold"
-                >
-                  <ClipboardCheck className="h-6 w-6" />
-                  <span className=" text-sm">Panel de administración</span>
-                </Link>
-              </div>
-            </SheetTitle>
-
+          <nav className="grid items-start px-2 text-sm font-medium lg:px-4 max-w-64">
             {session.isStaff && (
               <>
                 <Link
@@ -107,17 +96,19 @@ export default function TopBar({ session, areasVenta }: Props) {
                   <Package className="h-4 w-4" />
                   Productos
                 </Link>
-                <Link
-                  href="/reportes"
-                  className={cn(
-                    'flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary',
-                    path === '/reportes' && 'bg-muted text-primary'
-                  )}
-                >
-                  <FileText className="h-4 w-4" />
-                  Reportes
-                </Link>
               </>
+            )}
+            {(session.isStaff || session.isSupervisor) && (
+              <Link
+                href="/reportes"
+                className={cn(
+                  'flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary',
+                  path === '/reportes' && 'bg-muted text-primary'
+                )}
+              >
+                <FileText className="h-4 w-4" />
+                Reportes
+              </Link>
             )}
             {session.isAdmin && (
               <>
@@ -151,26 +142,22 @@ export default function TopBar({ session, areasVenta }: Props) {
                   <CircleDollarSign className="h-4 w-4" />
                   Gastos
                 </Link>
-                <Link
-                  href="/elaboraciones"
-                  className={cn(
-                    'flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary',
-                    path === '/elaboraciones' && 'bg-muted text-primary'
-                  )}
-                >
-                  <Pizza className="h-4 w-4" />
-                  Elaboraciones
-                </Link>
-                <Link
-                  href="/tarjetas"
-                  className={cn(
-                    'flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary',
-                    path === '/tarjetas' && 'bg-muted text-primary'
-                  )}
-                >
-                  <CreditCard className="h-4 w-4" />
-                  Tarjetas
-                </Link>
+              </>
+            )}
+            {(session.isAdmin || session.isSupervisor) && (
+              <Link
+                href="/tarjetas"
+                className={cn(
+                  'flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary',
+                  path === '/tarjetas' && 'bg-muted text-primary'
+                )}
+              >
+                <CreditCard className="h-4 w-4" />
+                Tarjetas
+              </Link>
+            )}
+            {session.isAdmin && (
+              <>
                 <Link
                   href="/transferencias"
                   className={cn(
@@ -256,21 +243,41 @@ export default function TopBar({ session, areasVenta }: Props) {
               </Link>
             ) : null}
 
-            <span className="p-2">Almacén Cafetería</span>
-            <Link
-              href="/inventario-cafeteria"
-              className={cn(
-                'flex flex-1 items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary',
-                path === '/inventario-cafeteria' && 'bg-muted text-primary'
-              )}
-            >
-              <PackageOpen className="h-4 w-4" />
-              Inventario
-            </Link>
             {session.isAdmin ||
             (session.isAlmacenero &&
               session.almacen === ALMACENES.CAFETERIA) ? (
               <>
+                <span className="p-2">Cafetería</span>
+                <Link
+                  href="/productos-cafeteria"
+                  className={cn(
+                    'flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary',
+                    path === '/productos-cafeteria' && 'bg-muted text-primary'
+                  )}
+                >
+                  <Package className="h-4 w-4" />
+                  Productos
+                </Link>
+                <Link
+                  href="/elaboraciones"
+                  className={cn(
+                    'flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary',
+                    path === '/elaboraciones' && 'bg-muted text-primary'
+                  )}
+                >
+                  <Pizza className="h-4 w-4" />
+                  Elaboraciones
+                </Link>
+                <Link
+                  href="/inventario-cafeteria"
+                  className={cn(
+                    'flex flex-1 items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary',
+                    path === '/inventario-cafeteria' && 'bg-muted text-primary'
+                  )}
+                >
+                  <PackageOpen className="h-4 w-4" />
+                  Inventario
+                </Link>
                 <Link
                   href="/entradas-cafeteria"
                   className={cn(
@@ -282,14 +289,14 @@ export default function TopBar({ session, areasVenta }: Props) {
                   Entradas
                 </Link>
                 <Link
-                  href="/salidas-cafeteria"
+                  href="/ventas-cafeteria"
                   className={cn(
-                    'flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary',
-                    path === '/salidas-cafeteria' && 'bg-muted text-primary'
+                    'flex flex-1 items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary',
+                    path === '/ventas-cafeteria' && 'bg-muted text-primary'
                   )}
                 >
-                  <ArrowUpRight className="h-4 w-4" />
-                  Salidas
+                  <ShoppingCart className="h-4 w-4" />
+                  Ventas
                 </Link>
               </>
             ) : null}
