@@ -12,6 +12,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from '@/components/ui/tooltip';
+import { Badge } from '@/components/ui/badge';
 
 export const columns = [
   {
@@ -76,12 +77,20 @@ export const columns = [
   {
     accessorKey: 'usuario.username',
     header: 'Usuario',
+    cell: ({ row }: { row: Row<Transferenciastarjetas> }) => {
+      const username = row.original.usuario?.username;
+      if (username) {
+        return username;
+      } else {
+        return <Badge variant="outline">Usuario eliminado</Badge>;
+      }
+    },
   },
 
   {
     header: ' ',
     cell: ({ row }: { row: Row<Transferenciastarjetas> }) => {
-      if (!row.original.venta) {
+      if (!row.original.venta && !row.original.venta_cafeteria) {
         return (
           <TableDeleteV2
             id={row.original.id}

@@ -1,15 +1,15 @@
 import { cookies } from 'next/headers';
 
-export async function inventarioAlmacenCafeteria() {
+export async function getEntradasCafeteria() {
   const token = cookies().get('session')?.value;
   try {
     const res = await fetch(
-      process.env.BACKEND_URL_V2 + '/inventario/almacen-cafeteria/',
+      process.env.BACKEND_URL_V2 + '/cafeteria/entradas/',
       {
         headers: {
           Authorization: `Bearer ${token}`,
         },
-        next: { tags: ['inventario-cafeteria'] },
+        next: { tags: ['entrada-cafeteria'] },
       }
     );
     if (!res.ok) {

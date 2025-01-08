@@ -15,3 +15,6 @@ export function formatBytes(bytes: number) {
 
   return `${parseFloat((bytes / Math.pow(k, i)).toFixed(1))} ${sizes[i]}`;
 }
+
+export const MAX_TRANF_MES = 120000;
+export const MAX_TRANF_DIA = 80000;

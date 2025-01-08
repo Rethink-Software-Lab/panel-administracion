@@ -27,9 +27,12 @@ export const columns: ColumnDef<Gasto>[] = [
     accessorKey: 'area_venta.nombre',
     header: 'Área de venta',
     cell: ({ row }: { row: Row<Gasto> }) => {
-      const username = row.original.area_venta?.nombre;
-      if (username) {
-        return username;
+      const area = row.original.area_venta?.nombre;
+      const is_cafeteria = row.original.is_cafeteria;
+      if (area) {
+        return area;
+      } else if (!area && is_cafeteria) {
+        return 'Cafetería';
       } else {
         return <Badge variant="outline">Área de venta eliminada</Badge>;
       }

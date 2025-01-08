@@ -156,6 +156,7 @@ export default function SheetGastos({
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
+                        <SelectItem value="cafeteria">Cafetería</SelectItem>
                         {areas?.map((area) => (
                           <SelectItem key={area.id} value={area.id?.toString()}>
                             {area.nombre}

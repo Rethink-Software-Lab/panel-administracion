@@ -29,7 +29,7 @@ import {
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { CheckIcon, X, PlusCircle, ChevronDown } from 'lucide-react';
 
-import { cn } from '@/lib/utils';
+import { cn, MAX_TRANF_DIA, MAX_TRANF_MES } from '@/lib/utils';
 import {
   Command,
   CommandEmpty,
@@ -56,7 +56,7 @@ import { useRef, useState } from 'react';
 
 import { Label } from '../ui/label';
 import { Input } from '../ui/input';
-import { METODOS_PAGO } from '@/app/(with-layout)/entradas-cafeteria/types';
+import { METODOS_PAGO } from '@/app/(with-layout)/(cafeteria)/entradas-cafeteria/types';
 import { Banco } from '@/app/(with-layout)/tarjetas/types';
 
 export default function ModalVentas({
@@ -115,9 +115,6 @@ export default function ModalVentas({
     }
     setErrors(error);
   };
-
-  const MAX_TRANF_MES = 120000;
-  const MAX_TRANF_DIA = 80000;
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>

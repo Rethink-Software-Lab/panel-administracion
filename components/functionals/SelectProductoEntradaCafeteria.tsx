@@ -17,16 +17,17 @@ import {
 import { InferInput } from 'valibot';
 import { EntradaCafeteriaSchema } from '@/lib/schemas';
 import { RefObject, useState } from 'react';
-import { ProductoCodigoCategoria } from './sheets/SheetEntradasCafeteria';
-import { Label } from '../ui/label';
+import { ProductoEntrada } from '@/app/(with-layout)/(cafeteria)/entradas-cafeteria/types';
 
-export default function ComboboxEntradasCafeteria({
+export default function SelectProductoEntradaCafeteria({
   form,
-  productosInfo,
+  index,
+  productos,
   formRef,
 }: {
   form: UseFormReturn<InferInput<typeof EntradaCafeteriaSchema>>;
-  productosInfo: ProductoCodigoCategoria[];
+  index: number;
+  productos: ProductoEntrada[];
   formRef: RefObject<HTMLElement>;
 }) {
   const [openPopover, setOpenPopover] = useState(false);
@@ -34,10 +35,9 @@ export default function ComboboxEntradasCafeteria({
   return (
     <FormField
       control={form.control}
-      name="producto"
+      name={`productos.${index}.producto`}
       render={({ field }) => (
         <FormItem className="flex flex-col">
-          <Label>Producto</Label>
           <Popover open={openPopover} onOpenChange={setOpenPopover}>
             <PopoverTrigger asChild>
               <FormControl>
@@ -50,9 +50,9 @@ export default function ComboboxEntradasCafeteria({
                   )}
                 >
                   {field.value
-                    ? productosInfo?.find(
+                    ? productos?.find(
                         (producto) => producto?.id.toString() === field.value
-                      )?.codigo
+                      )?.nombre
                     : 'Seleccione un producto'}
                   <ChevronDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                 </Button>
@@ -64,11 +64,11 @@ export default function ComboboxEntradasCafeteria({
                 <CommandList>
                   <CommandEmpty>Ningún resultado encontrado.</CommandEmpty>
                   <CommandGroup heading="Sugerencias">
-                    {productosInfo?.map((producto: ProductoCodigoCategoria) => (
+                    {productos?.map((producto: ProductoEntrada) => (
                       <CommandItem
                         key={producto.id}
                         value={producto.id.toString()}
-                        keywords={[producto.descripcion, producto.codigo]}
+                        keywords={[producto.nombre]}
                         onSelect={(currentValue) => {
                           field.onChange(
                             currentValue === field.value ? '' : currentValue
@@ -76,10 +76,7 @@ export default function ComboboxEntradasCafeteria({
                           setOpenPopover(false);
                         }}
                       >
-                        <div>
-                          <p className="font-semibold">{producto.codigo}</p>
-                          <span>{producto.descripcion}</span>
-                        </div>
+                        {producto.nombre}
                         <CheckIcon
                           className={cn(
                             'ml-auto h-4 w-4',

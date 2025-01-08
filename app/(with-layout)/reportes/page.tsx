@@ -3,9 +3,11 @@ import { getReporte } from '@/lib/services';
 import { Suspense } from 'react';
 import { CloudOff, FilePenLine, Loader2 } from 'lucide-react';
 import ReporteVentas from '@/components/functionals/ReporteVentas';
+import ReporteVentasCafeteria from '@/components/functionals/ReporteVentasCafeteria';
 import ReporteInventario from '@/components/functionals/ReporteInventario';
+import { getReporteCafeteria } from './services';
 
-interface SearchParams {
+export interface ReportesSearchParams {
   type?: 'ventas' | 'inventario';
   area?: string;
   desde?: string;
@@ -16,12 +18,15 @@ interface SearchParams {
 export default async function Reportes({
   searchParams,
 }: {
-  searchParams: SearchParams;
+  searchParams: ReportesSearchParams;
 }) {
   const area = searchParams?.area || '';
   const type = searchParams?.type || '';
 
-  const { data: reportes, error } = await getReporte(searchParams);
+  const { data: reportes, error } =
+    type === 'ventas' && area === 'cafeteria'
+      ? await getReporteCafeteria(searchParams)
+      : await getReporte(searchParams);
 
   return (
     <>
@@ -33,7 +38,12 @@ export default async function Reportes({
           </div>
         }
       >
-        {type === 'ventas' && <ReporteVentas data={reportes} error={error} />}
+        {type === 'ventas' &&
+          (area === 'cafeteria' ? (
+            <ReporteVentasCafeteria data={reportes} error={error} />
+          ) : (
+            <ReporteVentas data={reportes} error={error} />
+          ))}
         {type === 'inventario' && (
           <ReporteInventario data={reportes} error={error} />
         )}

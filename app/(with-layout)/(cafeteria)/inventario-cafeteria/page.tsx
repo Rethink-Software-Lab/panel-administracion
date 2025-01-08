@@ -1,12 +1,11 @@
-import { columns as columnsNew } from '@/app/(with-layout)/areas-de-venta/[id]/columns';
-import { DataTable as DataTableNew } from '@/components/ui/data-table-inventario-almacen-2';
+import { DataTable } from '@/components/ui/data-table';
 
-import { inventarioAlmacenCafeteria } from '@/app/(with-layout)/inventario-cafeteria/services';
+import { inventarioAlmacenCafeteria } from '@/app/(with-layout)/(cafeteria)/inventario-cafeteria/services';
 import { CloudOff } from 'lucide-react';
+import { columns } from './columns';
 
 export default async function Inventario() {
   const { data } = await inventarioAlmacenCafeteria();
-  const productos = data?.productos;
 
   return (
     <main className="flex flex-1 flex-col gap-4 py-4 lg:gap-6 lg:py-6 h-full">
@@ -16,13 +15,9 @@ export default async function Inventario() {
         </h1>
       </div>
 
-      {productos ? (
+      {data ? (
         <div className="p-4 m-0 bg-muted/40 h-full border-t-2 border-muted">
-          <DataTableNew
-            columns={columnsNew}
-            data={productos}
-            categorias={data?.categorias}
-          />
+          <DataTable columns={columns} data={data} />
         </div>
       ) : (
         <div className="flex flex-1 items-center justify-center rounded-lg border border-dashed shadow-sm">

@@ -15,7 +15,7 @@ interface Producto {
   id: number;
   descripcion: string;
   codigo: string;
-  cantidad: number;
+  cantidad: string;
 }
 
 interface Params {
@@ -54,9 +54,11 @@ export default async function ReporteInventario({
               <TableHead className="border-b border-gray-300 px-4 print:px-0">
                 Descripción
               </TableHead>
-              <TableHead className="border-b border-gray-300 px-4 print:px-0">
-                Código
-              </TableHead>
+              {data.area !== 'Cafetería' && (
+                <TableHead className="border-b border-gray-300 px-4 print:px-0">
+                  Código
+                </TableHead>
+              )}
               <TableHead className="text-right border-b border-gray-300 px-4 print:px-0">
                 Cantidad
               </TableHead>
@@ -68,28 +70,17 @@ export default async function ReporteInventario({
                 <TableCell className="border-b border-gray-300 px-4 print:px-0">
                   {p.descripcion}
                 </TableCell>
-                <TableCell className="border-b border-gray-300 px-4 print:px-0">
-                  {p.codigo}
-                </TableCell>
+                {data.area !== 'Cafetería' && (
+                  <TableCell className="border-b border-gray-300 px-4 print:px-0">
+                    {p.codigo}
+                  </TableCell>
+                )}
                 <TableCell className="text-right font-medium border-b border-gray-300 px-4 print:px-0">
                   {p.cantidad}
                 </TableCell>
               </TableRow>
             ))}
           </TableBody>
-          <TableFooter>
-            <TableRow>
-              <TableCell colSpan={2} className="font-bold px-4 print:px-0">
-                Total
-              </TableCell>
-              <TableCell className="text-right font-bold px-4 print:px-0">
-                {data?.productos?.reduce(
-                  (total, producto) => total + producto.cantidad,
-                  0
-                )}
-              </TableCell>
-            </TableRow>
-          </TableFooter>
         </Table>
       </div>
     );

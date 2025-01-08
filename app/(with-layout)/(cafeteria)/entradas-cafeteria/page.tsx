@@ -1,9 +1,9 @@
 import { CloudOff } from 'lucide-react';
 
-import { getEntradasCafeteria } from '@/app/(with-layout)/entradas-cafeteria/services';
+import { getEntradasCafeteria } from '@/app/(with-layout)/(cafeteria)/entradas-cafeteria/services';
 
 import { DataTable } from '@/components/ui/data-table-entradas';
-import { columns } from '@/app/(with-layout)/entradas-cafeteria/columns';
+import { columns } from '@/app/(with-layout)/(cafeteria)/entradas-cafeteria/columns';
 
 import SheetEntradasCafeteria from '@/components/functionals/sheets/SheetEntradasCafeteria';
 
