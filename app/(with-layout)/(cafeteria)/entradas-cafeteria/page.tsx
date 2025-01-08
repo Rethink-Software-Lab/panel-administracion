@@ -9,7 +9,6 @@ import SheetEntradasCafeteria from '@/components/functionals/sheets/SheetEntrada
 
 export default async function Entradas() {
   const { data } = await getEntradasCafeteria();
-  console.log(data);
 
   return (
     <main className="flex flex-1 flex-col gap-4 p-4 lg:gap-6 lg:p-6">

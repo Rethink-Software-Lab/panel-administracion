@@ -28,8 +28,6 @@ export default async function Reportes({
       ? await getReporteCafeteria(searchParams)
       : await getReporte(searchParams);
 
-  console.log(reportes);
-
   return (
     <>
       <Suspense

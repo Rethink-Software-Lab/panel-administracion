@@ -2,9 +2,9 @@ import { ROLES } from '@/app/(with-layout)/users/types';
 import { headers } from 'next/headers';
 
 export interface Session {
-  rol: ROLES;
-  area_venta: string;
-  almacen: string;
+  rol: string | null;
+  area_venta: string | null;
+  almacen: string | null;
   isAdmin: boolean;
   isAlmacenero: boolean;
   isSupervisor: boolean;

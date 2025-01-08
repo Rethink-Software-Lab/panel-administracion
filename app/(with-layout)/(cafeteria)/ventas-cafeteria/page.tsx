@@ -8,8 +8,6 @@ import SheetVentasCafeteria from '@/components/functionals/sheets/SheetVentasCaf
 export default async function Elaboraciones() {
   const { data } = await GetVentasCafeteria();
 
-  console.log(data);
-
   return (
     <main className="flex flex-1 flex-col gap-4 p-4 lg:gap-6 lg:p-6">
       <div className="flex justify-between items-center">
