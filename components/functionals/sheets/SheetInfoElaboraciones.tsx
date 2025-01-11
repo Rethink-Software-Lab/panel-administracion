@@ -53,7 +53,7 @@ export default function SheetInfoElaboraciones({
                   {ingrediente.ingrediente.nombre}
                 </TableCell>
                 <TableCell className="text-right">
-                  {ingrediente.cantidad}
+                  {Intl.NumberFormat('es-ES').format(ingrediente.cantidad)}
                 </TableCell>
               </TableRow>
             ))}
