@@ -207,8 +207,8 @@ export default function SheetElaboraciones({
                               <FormControl>
                                 <Input
                                   type="number"
-                                  min={0.01}
-                                  step="0.01"
+                                  min={0.001}
+                                  step="0.001"
                                   {...field}
                                 />
                               </FormControl>
