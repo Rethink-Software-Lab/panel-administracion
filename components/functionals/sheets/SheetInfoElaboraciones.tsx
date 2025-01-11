@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import {
   Sheet,
   SheetContent,
+  SheetDescription,
   SheetHeader,
   SheetTitle,
   SheetTrigger,
@@ -38,6 +39,7 @@ export default function SheetInfoElaboraciones({
           <SheetTitle className="flex items-center gap-2">
             Información de elaboración
           </SheetTitle>
+          <SheetDescription />
         </SheetHeader>
         <Table className="mt-4">
           <TableHeader>

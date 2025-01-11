@@ -57,6 +57,7 @@ export function DataTable({ columns, data }) {
                 return (
                   <TableHead
                     style={{ maxWidth: `${header.column.getSize()}px` }}
+                    className="whitespace-nowrap"
                     key={header.id}
                   >
                     {header.isPlaceholder
@@ -80,6 +81,7 @@ export function DataTable({ columns, data }) {
               >
                 {row.getVisibleCells().map((cell) => (
                   <TableCell
+                    className="whitespace-nowrap"
                     style={{ maxWidth: `${cell.column.getSize()}px` }}
                     key={cell.id}
                   >
