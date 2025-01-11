@@ -149,7 +149,7 @@ export default function SheetVentasCafeteria({
                 name="metodo_pago"
                 render={({ field }) => (
                   <FormItem>
-                    <Label>Método de pago</Label>
+                    <Label className="flex justify-start">Método de pago</Label>
                     <Select
                       onValueChange={(value) => {
                         field.onChange(value);
@@ -195,7 +195,7 @@ export default function SheetVentasCafeteria({
                     name="efectivo"
                     render={({ field }) => (
                       <FormItem>
-                        <Label>Efectivo</Label>
+                        <Label className="flex justify-start">Efectivo</Label>
                         <FormControl>
                           <Input
                             {...field}
@@ -214,7 +214,9 @@ export default function SheetVentasCafeteria({
                     name="transferencia"
                     render={({ field }) => (
                       <FormItem>
-                        <Label>Transferencia</Label>
+                        <Label className="flex justify-start">
+                          Transferencia
+                        </Label>
                         <FormControl>
                           <Input
                             {...field}
@@ -237,7 +239,7 @@ export default function SheetVentasCafeteria({
                   name="tarjeta"
                   render={({ field }) => (
                     <FormItem>
-                      <Label>Tarjeta</Label>
+                      <Label className="flex justify-start">Tarjeta</Label>
                       <Select
                         onValueChange={field.onChange}
                         defaultValue={field.value}

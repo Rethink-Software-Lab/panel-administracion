@@ -31,7 +31,7 @@ export const columns = [
   {
     header: ' ',
     cell: ({ row }: { row: Row<ProductoCafeteria> }) => (
-      <span className="space-x-2">
+      <span className="flex space-x-2">
         <SheetProductosCafeteria data={row.original} />
         <TableDeleteV2 id={row.original.id} action={deleteProductoCafeteria} />
       </span>

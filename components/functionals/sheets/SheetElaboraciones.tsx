@@ -144,7 +144,7 @@ export default function SheetElaboraciones({
                 name="nombre"
                 render={({ field }) => (
                   <FormItem>
-                    <Label>Nombre</Label>
+                    <Label className="flex justify-start">Nombre</Label>
                     <FormControl>
                       <Input {...field} />
                     </FormControl>
@@ -157,7 +157,7 @@ export default function SheetElaboraciones({
                 name="precio"
                 render={({ field }) => (
                   <FormItem>
-                    <Label>Precio</Label>
+                    <Label className="flex justify-start">Precio</Label>
                     <FormControl>
                       <Input type="number" {...field} />
                     </FormControl>
@@ -170,7 +170,7 @@ export default function SheetElaboraciones({
                 name="mano_obra"
                 render={({ field }) => (
                   <FormItem>
-                    <Label>Mano de obra</Label>
+                    <Label className="flex justify-start">Mano de obra</Label>
                     <FormControl>
                       <Input type="number" {...field} />
                     </FormControl>

@@ -36,6 +36,7 @@ import SearchForm from '@/components/functionals/SeachForm';
 import {
   Sheet,
   SheetContent,
+  SheetDescription,
   SheetTitle,
   SheetTrigger,
 } from '@/components/ui/sheet';
@@ -84,6 +85,7 @@ export default function TopBar({ session, areasVenta }: Props) {
                 </Link>
               </div>
             </SheetTitle>
+            <SheetDescription />
 
             {session.isStaff && (
               <>
