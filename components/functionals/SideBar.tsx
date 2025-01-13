@@ -21,6 +21,7 @@ import {
   Pizza,
   ShoppingCart,
   CoffeeIcon,
+  Package2,
 } from 'lucide-react';
 
 import { cn } from '@/lib/utils';
@@ -48,7 +49,7 @@ export default function SideBar({ areasVenta, session }: Props) {
         </div>
         <div className="flex-1 pb-4">
           <nav className="grid items-start px-2 text-sm font-medium lg:px-4 max-w-64">
-            {session.isStaff && (
+            {session.isAdmin && (
               <>
                 <Link
                   href="/"
@@ -73,7 +74,37 @@ export default function SideBar({ areasVenta, session }: Props) {
                 </Link>
               </>
             )}
-            {(session.isStaff || session.isSupervisor) && (
+
+            {session.isAdmin ||
+            (session.isAlmacenero &&
+              session.almacen === ALMACENES.CAFETERIA) ? (
+              <>
+                <Link
+                  href="/productos-cafeteria"
+                  className={cn(
+                    'flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary',
+                    path === '/productos-cafeteria' && 'bg-muted text-primary'
+                  )}
+                >
+                  <Package2 className="h-4 w-4" />
+                  Productos Cafetería
+                </Link>
+                <Link
+                  href="/elaboraciones"
+                  className={cn(
+                    'flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary',
+                    path === '/elaboraciones' && 'bg-muted text-primary'
+                  )}
+                >
+                  <Pizza className="h-4 w-4" />
+                  Elaboraciones
+                </Link>
+              </>
+            ) : null}
+
+            {(session.isStaff ||
+              session.isSupervisor ||
+              session.isVendedorCafeteria) && (
               <Link
                 href="/reportes"
                 className={cn(
@@ -85,26 +116,7 @@ export default function SideBar({ areasVenta, session }: Props) {
                 Reportes
               </Link>
             )}
-            <Link
-              href="/productos-cafeteria"
-              className={cn(
-                'flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary',
-                path === '/productos-cafeteria' && 'bg-muted text-primary'
-              )}
-            >
-              <Package className="h-4 w-4" />
-              Productos
-            </Link>
-            <Link
-              href="/elaboraciones"
-              className={cn(
-                'flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary',
-                path === '/elaboraciones' && 'bg-muted text-primary'
-              )}
-            >
-              <Pizza className="h-4 w-4" />
-              Elaboraciones
-            </Link>
+
             {session.isAdmin && (
               <>
                 <Link
@@ -175,67 +187,81 @@ export default function SideBar({ areasVenta, session }: Props) {
                 </Link>
               </>
             )}
-            <span className="p-2">Almacén Principal</span>
-            <Link
-              href="/inventario"
-              className={cn(
-                'flex flex-1 items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary',
-                path === '/inventario' && 'bg-muted text-primary'
-              )}
-            >
-              <PackageOpen className="h-4 w-4" />
-              Inventario
-            </Link>
             {session.isAdmin ||
+            session.isSupervisor ||
             (session.isAlmacenero &&
-              session.almacen === ALMACENES.PRINCIPAL) ? (
+              session.almacen !== ALMACENES.CAFETERIA) ? (
               <>
+                <span className="p-2">Almacén Principal</span>
                 <Link
-                  href="/entradas"
+                  href="/inventario"
                   className={cn(
                     'flex flex-1 items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary',
-                    path === '/entradas' && 'bg-muted text-primary'
+                    path === '/inventario' && 'bg-muted text-primary'
                   )}
                 >
-                  <ArrowDownLeft className="h-4 w-4" />
-                  Entradas
+                  <PackageOpen className="h-4 w-4" />
+                  Inventario
                 </Link>
-                <Link
-                  href="/salidas"
-                  className={cn(
-                    'flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary',
-                    path === '/salidas' && 'bg-muted text-primary'
-                  )}
-                >
-                  <ArrowUpRight className="h-4 w-4" />
-                  Salidas
-                </Link>
+                {session.isAdmin ||
+                (session.isAlmacenero &&
+                  session.almacen === ALMACENES.PRINCIPAL) ? (
+                  <>
+                    <Link
+                      href="/entradas"
+                      className={cn(
+                        'flex flex-1 items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary',
+                        path === '/entradas' && 'bg-muted text-primary'
+                      )}
+                    >
+                      <ArrowDownLeft className="h-4 w-4" />
+                      Entradas
+                    </Link>
+                    <Link
+                      href="/salidas"
+                      className={cn(
+                        'flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary',
+                        path === '/salidas' && 'bg-muted text-primary'
+                      )}
+                    >
+                      <ArrowUpRight className="h-4 w-4" />
+                      Salidas
+                    </Link>
+                  </>
+                ) : null}
               </>
             ) : null}
-            <span className="p-2">Almacén Revoltosa</span>
-            <Link
-              href="/inventario-revoltosa"
-              className={cn(
-                'flex flex-1 items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary',
-                path === '/inventario-revoltosa' && 'bg-muted text-primary'
-              )}
-            >
-              <PackageOpen className="h-4 w-4" />
-              Inventario
-            </Link>
             {session.isAdmin ||
+            session.isSupervisor ||
             (session.isAlmacenero &&
-              session.almacen === ALMACENES.REVOLTOSA) ? (
-              <Link
-                href="/salidas-revoltosa"
-                className={cn(
-                  'flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary',
-                  path === '/salidas-revoltosa' && 'bg-muted text-primary'
-                )}
-              >
-                <ArrowUpRight className="h-4 w-4" />
-                Salidas
-              </Link>
+              session.almacen !== ALMACENES.CAFETERIA) ? (
+              <>
+                <span className="p-2">Almacén Revoltosa</span>
+                <Link
+                  href="/inventario-revoltosa"
+                  className={cn(
+                    'flex flex-1 items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary',
+                    path === '/inventario-revoltosa' && 'bg-muted text-primary'
+                  )}
+                >
+                  <PackageOpen className="h-4 w-4" />
+                  Inventario
+                </Link>
+                {session.isAdmin ||
+                (session.isAlmacenero &&
+                  session.almacen === ALMACENES.REVOLTOSA) ? (
+                  <Link
+                    href="/salidas-revoltosa"
+                    className={cn(
+                      'flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary',
+                      path === '/salidas-revoltosa' && 'bg-muted text-primary'
+                    )}
+                  >
+                    <ArrowUpRight className="h-4 w-4" />
+                    Salidas
+                  </Link>
+                ) : null}
+              </>
             ) : null}
 
             {session.isAdmin ||
@@ -278,45 +304,55 @@ export default function SideBar({ areasVenta, session }: Props) {
               </>
             ) : null}
 
-            <span className="p-2">Áreas de venta</span>
-            {session.isStaff && (
+            {session.almacen !== ALMACENES.CAFETERIA ? (
               <>
-                <Link
-                  href="/areas-de-venta"
-                  className={cn(
-                    'flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary',
-                    path === '/areas-de-venta' && 'bg-muted text-primary'
-                  )}
-                >
-                  <Settings2 className="h-4 w-4" />
-                  Administrar áreas
-                </Link>
-                <Link
-                  href="/cafeteria"
-                  className={cn(
-                    'flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary',
-                    path === '/cafeteria' && 'bg-muted text-primary'
-                  )}
-                >
-                  <CoffeeIcon className="h-4 w-4" />
-                  Cafetería
-                </Link>
-              </>
-            )}
-            {areasVenta?.map((area) => (
-              <Link
-                key={area.id}
-                href={`/areas-de-venta/${area.id}`}
-                className={cn(
-                  'flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary',
-                  path === `/areas-de-venta/${area.id}` &&
-                    'bg-muted text-primary'
+                {!session.isVendedorCafeteria && (
+                  <span className="p-2">Áreas de venta</span>
                 )}
-              >
-                <Store className="h-4 w-4" />
-                <span className="line-clamp-1">{area.nombre}</span>
-              </Link>
-            ))}
+                {session.isAdmin && (
+                  <Link
+                    href="/areas-de-venta"
+                    className={cn(
+                      'flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary',
+                      path === '/areas-de-venta' && 'bg-muted text-primary'
+                    )}
+                  >
+                    <Settings2 className="h-4 w-4" />
+                    Administrar áreas
+                  </Link>
+                )}
+                {(session.isAdmin || session.isVendedorCafeteria) && (
+                  <Link
+                    href="/cafeteria"
+                    className={cn(
+                      'flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary',
+                      path === '/cafeteria' && 'bg-muted text-primary'
+                    )}
+                  >
+                    <CoffeeIcon className="h-4 w-4" />
+                    Cafetería
+                  </Link>
+                )}
+                {!session.isVendedorCafeteria && (
+                  <>
+                    {areasVenta?.map((area) => (
+                      <Link
+                        key={area.id}
+                        href={`/areas-de-venta/${area.id}`}
+                        className={cn(
+                          'flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary',
+                          path === `/areas-de-venta/${area.id}` &&
+                            'bg-muted text-primary'
+                        )}
+                      >
+                        <Store className="h-4 w-4" />
+                        <span className="line-clamp-1">{area.nombre}</span>
+                      </Link>
+                    ))}
+                  </>
+                )}
+              </>
+            ) : null}
           </nav>
         </div>
       </div>
