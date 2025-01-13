@@ -291,6 +291,7 @@ export const VentasSchema = pipe(
 
 export const SearchSchema = object({
   codigo: pipe(string('Ingresa un código'), minLength(1, 'Ingresa un código')),
+  numero: string('Ingresa un número'),
 });
 
 export const FiltersSchema = object({

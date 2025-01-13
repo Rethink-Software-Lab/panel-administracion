@@ -9,6 +9,7 @@ import {
   Table,
   TableBody,
   TableCell,
+  TableFooter,
   TableHead,
   TableHeader,
   TableRow,
@@ -16,9 +17,18 @@ import {
 import { getSession } from '@/lib/getSession';
 import { Fragment } from 'react';
 
-export default async function Search({ params }) {
+interface SearchParams {
+  codigo: string;
+  numero?: string;
+}
+
+export default async function Search({
+  searchParams,
+}: {
+  searchParams: SearchParams;
+}) {
   const { isStaff } = getSession();
-  const { data, error } = await searchProduct(params.codigo);
+  const { data, error } = await searchProduct(searchParams);
   const info = data?.info;
   const inventario = data?.inventario;
   const isZapato = data?.zapato;
@@ -102,7 +112,7 @@ export default async function Search({ params }) {
             <Separator />
             <CardContent className="p-6 text-sm">
               {isZapato ? (
-                inventario?.map((res) => (
+                inventario?.map((res: any) => (
                   <Fragment key={res.area}>
                     <h2 className="font-bold pb-2">{res.area}</h2>
 
@@ -115,7 +125,7 @@ export default async function Search({ params }) {
                         </TableRow>
                       </TableHeader>
                       <TableBody>
-                        {res.productos.map((p) => (
+                        {res.productos.map((p: any) => (
                           <TableRow key={p.id}>
                             <TableCell>{p?.id}</TableCell>
                             <TableCell>{p?.numero}</TableCell>
@@ -123,6 +133,14 @@ export default async function Search({ params }) {
                           </TableRow>
                         ))}
                       </TableBody>
+                      <TableFooter>
+                        <TableRow>
+                          <TableCell colSpan={2} className="font-bold">
+                            Total
+                          </TableCell>
+                          <TableCell>{res?.productos.length}</TableCell>
+                        </TableRow>
+                      </TableFooter>
                     </Table>
                   </Fragment>
                 ))
@@ -135,7 +153,7 @@ export default async function Search({ params }) {
                     </TableRow>
                   </TableHeader>
                   <TableBody>
-                    {inventario?.map((res) => (
+                    {inventario?.map((res: any) => (
                       <TableRow key={res.area}>
                         <TableCell>{res?.area}</TableCell>
                         <TableCell>{res?.cantidad}</TableCell>

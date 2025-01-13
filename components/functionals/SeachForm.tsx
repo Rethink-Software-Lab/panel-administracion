@@ -8,16 +8,21 @@ import { valibotResolver } from '@hookform/resolvers/valibot';
 import { Button } from '../ui/button';
 import { cn } from '@/lib/utils';
 import { useRouter } from 'next/navigation';
+import { InferInput } from 'valibot';
 
 export default function SearchForm() {
   const router = useRouter();
   const form = useForm({
     resolver: valibotResolver(SearchSchema),
-    defaultValues: { codigo: '' },
+    defaultValues: { codigo: '', numero: '' },
   });
 
-  const onSubmit = (dataForm) => {
-    router.push(`/search/${dataForm?.codigo}`);
+  const onSubmit = (dataForm: InferInput<typeof SearchSchema>) => {
+    router.push(
+      `/search?codigo=${dataForm.codigo}${
+        dataForm?.numero ? `&numero=${dataForm?.numero}` : ''
+      }`
+    );
   };
 
   return (
@@ -32,7 +37,17 @@ export default function SearchForm() {
             form.formState.errors?.codigo &&
               'border-destructive focus-visible:ring-destructive'
           )}
-        ></Input>
+        />
+        <Input
+          {...form.register('numero')}
+          type="number"
+          placeholder="Número"
+          className={cn(
+            'appearance-none bg-background shadow-none w-14  md:w-24',
+            form.formState.errors?.numero &&
+              'border-destructive focus-visible:ring-destructive'
+          )}
+        />
         <Button
           type="submit"
           size="icon"
