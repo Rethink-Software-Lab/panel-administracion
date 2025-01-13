@@ -7,7 +7,7 @@ import ModalAreasVenta from '@/components/functionals/ModalAreasVenta';
 import { DataTable } from '@/components/ui/data-table-areas';
 import { columns } from './columns';
 
-export default async function AreasVenta({ searchParams }) {
+export default async function AreasVenta() {
   const { data } = await getAreasVentas();
 
   return (

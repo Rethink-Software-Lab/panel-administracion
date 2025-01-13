@@ -5,7 +5,7 @@ import { cookies } from 'next/headers';
 
 interface CreateArea {
   nombre: string;
-  color: number;
+  color: string;
 }
 
 export async function addArea(data: CreateArea) {

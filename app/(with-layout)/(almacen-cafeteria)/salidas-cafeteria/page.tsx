@@ -1,27 +1,28 @@
 import { CloudOff } from 'lucide-react';
 
-import { getEntradasCafeteria } from '@/app/(with-layout)/(cafeteria)/entradas-cafeteria/services';
+import { getEntradasCafeteria } from '@/app/(with-layout)/(almacen-cafeteria)/entradas-cafeteria/services';
 
 import { DataTable } from '@/components/ui/data-table-entradas';
-import { columns } from '@/app/(with-layout)/(cafeteria)/entradas-cafeteria/columns';
+import { columns } from './columns';
 
-import SheetEntradasCafeteria from '@/components/functionals/sheets/SheetEntradasCafeteria';
+import SheetSalidasAlmacenCafeteria from '@/components/functionals/sheets/SheetSalidasAlmacenCafeteria';
+import { getSalidasAlmacenCafeteria } from './services';
 
-export default async function Entradas() {
-  const { data } = await getEntradasCafeteria();
+export default async function SalidasAlmacenCafeteria() {
+  const { data } = await getSalidasAlmacenCafeteria();
+  console.log(data);
 
   return (
     <main className="flex flex-1 flex-col gap-4 p-4 lg:gap-6 lg:p-6">
       <div className="flex justify-between items-center">
         <h1 className="text-lg font-semibold md:text-2xl">
-          Entradas Cafetería
+          Salidas Almacén Cafetería
         </h1>
-
-        <SheetEntradasCafeteria productos={data?.productos} />
+        <SheetSalidasAlmacenCafeteria productos={data?.productos} />
       </div>
 
       {data ? (
-        <DataTable columns={columns} data={data?.entradas} />
+        <DataTable columns={columns} data={data.salidas} />
       ) : (
         <div className="flex flex-1 items-center justify-center rounded-lg border border-dashed shadow-sm">
           <div className="flex flex-col items-center gap-1 text-center">

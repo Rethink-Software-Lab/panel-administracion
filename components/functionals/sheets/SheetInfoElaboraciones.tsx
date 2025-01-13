@@ -19,7 +19,7 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-import { Elaboraciones } from '@/app/(with-layout)/(cafeteria)/elaboraciones/types';
+import { Elaboraciones } from '@/app/(with-layout)/(almacen-cafeteria)/elaboraciones/types';
 
 export default function SheetInfoElaboraciones({
   data,

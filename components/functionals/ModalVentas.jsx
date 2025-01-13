@@ -56,7 +56,7 @@ import { useRef, useState } from 'react';
 
 import { Label } from '../ui/label';
 import { Input } from '../ui/input';
-import { METODOS_PAGO } from '@/app/(with-layout)/(cafeteria)/entradas-cafeteria/types';
+import { METODOS_PAGO } from '@/app/(with-layout)/(almacen-cafeteria)/entradas-cafeteria/types';
 import { Banco } from '@/app/(with-layout)/tarjetas/types';
 
 export default function ModalVentas({

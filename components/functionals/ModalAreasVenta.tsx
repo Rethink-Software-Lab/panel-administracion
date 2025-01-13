@@ -25,9 +25,9 @@ import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 
 import { useForm } from 'react-hook-form';
 import { valibotResolver } from '@hookform/resolvers/valibot';
+import { InferInput } from 'valibot';
 import { AreaVentaSchema } from '@/lib/schemas';
 
-import { createAreaVenta, editAreaVenta } from '@/lib/actions';
 import {
   addArea,
   updateArea,
@@ -36,16 +36,22 @@ import { toast } from 'sonner';
 import { CircleX, LoaderCircle } from 'lucide-react';
 import { useState } from 'react';
 
-export default function ModalAreasVenta({ data, trigger }) {
+export default function ModalAreasVenta({
+  data,
+  trigger,
+}: {
+  data?: any;
+  trigger: any;
+}) {
   const [isOpen, setIsOpen] = useState(false);
-  const [errors, setErrors] = useState(null);
+  const [errors, setErrors] = useState<Error[] | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const form = useForm({
     resolver: valibotResolver(AreaVentaSchema),
     defaultValues: { ...data },
   });
 
-  const onSubmit = async (dataForm) => {
+  const onSubmit = async (dataForm: InferInput<typeof AreaVentaSchema>) => {
     setIsLoading(true);
     if (!data) {
       const { data, error } = await addArea(dataForm);

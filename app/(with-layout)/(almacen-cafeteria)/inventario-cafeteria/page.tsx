@@ -1,6 +1,6 @@
 import { DataTable } from '@/components/ui/data-table';
 
-import { inventarioAlmacenCafeteria } from '@/app/(with-layout)/(cafeteria)/inventario-cafeteria/services';
+import { inventarioAlmacenCafeteria } from '@/app/(with-layout)/(almacen-cafeteria)/inventario-cafeteria/services';
 import { CloudOff } from 'lucide-react';
 import { columns } from './columns';
 

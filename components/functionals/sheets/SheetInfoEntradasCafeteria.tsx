@@ -20,7 +20,7 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import { DateTime } from 'luxon';
-import { EntradaCafeteria } from '@/app/(with-layout)/(cafeteria)/entradas-cafeteria/types';
+import { EntradaCafeteria } from '@/app/(with-layout)/(almacen-cafeteria)/entradas-cafeteria/types';
 
 export default function SheetInfoEntradasCafeteria({
   data,

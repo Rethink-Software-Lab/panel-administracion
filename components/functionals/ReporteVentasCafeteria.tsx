@@ -11,8 +11,8 @@ import {
 import { DateTime } from 'luxon';
 import { ClipboardX, FolderSearch } from 'lucide-react';
 
-import { ProductoCafeteria } from '@/app/(with-layout)/(cafeteria)/inventario-cafeteria/types';
-import { Elaboraciones } from '@/app/(with-layout)/(cafeteria)/elaboraciones/types';
+import { ProductoCafeteria } from '@/app/(with-layout)/(almacen-cafeteria)/inventario-cafeteria/types';
+import { Elaboraciones } from '@/app/(with-layout)/(almacen-cafeteria)/elaboraciones/types';
 
 interface Producto extends ProductoCafeteria {
   cantidad: string;
@@ -60,7 +60,10 @@ export default async function ReporteVentasCafeteria({
         </div>
       </div>
     );
-  } else if (data && data.productos.length > 0) {
+  } else if (
+    data &&
+    (data.productos.length > 0 || data.elaboraciones.length > 0)
+  ) {
     return (
       <div
         id="tablaParaImprimir"

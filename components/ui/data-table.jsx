@@ -20,6 +20,7 @@ import {
 
 import { useState } from 'react';
 import { DataTablePagination } from '@/components/ui/data-table-pagination';
+import { Button } from './button';
 
 export function DataTable({ columns, data }) {
   const [sorting, setSorting] = useState([]);

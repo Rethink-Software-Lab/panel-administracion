@@ -24,8 +24,8 @@ import {
 
 import { useState } from 'react';
 import { DataTablePagination } from '@/components/ui/data-table-pagination';
-import { ProductoEntrada } from '@/app/(with-layout)/(cafeteria)/entradas-cafeteria/types';
-import { Elaboraciones } from '@/app/(with-layout)/(cafeteria)/elaboraciones/types';
+import { ProductoEntrada } from '@/app/(with-layout)/(almacen-cafeteria)/entradas-cafeteria/types';
+import { Elaboraciones } from '@/app/(with-layout)/(almacen-cafeteria)/elaboraciones/types';
 
 export interface CustomTableOptions<T> extends TableOptions<T> {
   productos: ProductoEntrada[];
