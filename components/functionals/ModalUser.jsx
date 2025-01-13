@@ -140,6 +140,9 @@ export default function ModalUser({ data = null, trigger, areas }) {
                         Almacenero
                       </SelectItem>
                       <SelectItem value={ROLES.VENDEDOR}>Vendedor</SelectItem>
+                      <SelectItem value={ROLES.VENDEDOR_CAFETERIA}>
+                        Vendedor Cafetería
+                      </SelectItem>
                       <SelectItem value={ROLES.SUPERVISOR}>
                         Supervisor
                       </SelectItem>

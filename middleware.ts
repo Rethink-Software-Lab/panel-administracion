@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { verifyAuth } from '@/lib/auth';
-import { ROLES } from '@/app/(with-layout)/users/types';
+import { ALMACENES, ROLES } from '@/app/(with-layout)/users/types';
 
 export async function middleware(request: NextRequest) {
   const token = request.cookies.get('session')?.value;
@@ -23,6 +23,17 @@ export async function middleware(request: NextRequest) {
   if (verifyToken?.rol !== ROLES.ADMIN && request.nextUrl.pathname == '/') {
     if (verifyToken?.rol === ROLES.SUPERVISOR) {
       return NextResponse.redirect(new URL('/tarjetas', request.url));
+    }
+    if (
+      verifyToken?.rol === ROLES.ALMACENERO &&
+      verifyToken?.almacen === ALMACENES.CAFETERIA
+    ) {
+      return NextResponse.redirect(
+        new URL('/inventario-cafeteria', request.url)
+      );
+    }
+    if (verifyToken?.rol === ROLES.VENDEDOR_CAFETERIA) {
+      return NextResponse.redirect(new URL('/cafeteria', request.url));
     }
   }
 

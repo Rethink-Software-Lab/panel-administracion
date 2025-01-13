@@ -9,6 +9,7 @@ export interface Session {
   isAlmacenero: boolean;
   isSupervisor: boolean;
   isVendedor: boolean;
+  isVendedorCafeteria: boolean;
   isStaff: boolean;
 }
 
@@ -22,6 +23,7 @@ export function getSession() {
   const isSupervisor = rol === ROLES.SUPERVISOR;
   const isStaff = isAdmin || isAlmacenero;
   const isVendedor = rol === 'VENDEDOR';
+  const isVendedorCafeteria = rol === ROLES.VENDEDOR_CAFETERIA;
 
   return {
     rol,
@@ -31,6 +33,7 @@ export function getSession() {
     isAlmacenero,
     isSupervisor,
     isVendedor,
+    isVendedorCafeteria,
     isStaff,
   };
 }

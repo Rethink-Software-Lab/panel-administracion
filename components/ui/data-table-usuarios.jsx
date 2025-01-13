@@ -63,6 +63,8 @@ export function DataTable({ columns, data, areas }) {
     ADMIN: 'Administrador',
     ALMACENERO: 'Almacenero',
     VENDEDOR: 'Vendedor',
+    'VENDEDOR CAFETERÍA': 'Vendedor Cafetería',
+    SUPERVISOR: 'Supervisor',
   };
 
   return (

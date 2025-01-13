@@ -12,6 +12,7 @@ const ROLES_A: Record<ROLES, string> = {
   ADMIN: 'Administrador',
   ALMACENERO: 'Almacenero',
   VENDEDOR: 'Vendedor',
+  'VENDEDOR CAFETERÍA': 'Vendedor Cafetería',
   SUPERVISOR: 'Supervisor',
 };
 
