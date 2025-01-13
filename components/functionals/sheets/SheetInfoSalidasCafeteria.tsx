@@ -19,13 +19,12 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-import { VentasCafeteria } from '@/app/(with-layout)/(almacen-cafeteria)/ventas-cafeteria/types';
-import { METODOS_PAGO } from '@/app/(with-layout)/(almacen-cafeteria)/entradas-cafeteria/types';
+import { SalidasCafeteria } from '@/app/(with-layout)/(almacen-cafeteria)/salidas-cafeteria/types';
 
-export default function SheetInfoVentasCafeteria({
+export default function SheetInfoSalidasCafeteria({
   data,
 }: {
-  data: VentasCafeteria;
+  data: SalidasCafeteria;
 }) {
   const [open, setOpen] = useState(false);
   return (
@@ -38,18 +37,9 @@ export default function SheetInfoVentasCafeteria({
       <SheetContent className="w-full sm:max-w-[600px] overflow-y-scroll">
         <SheetHeader>
           <SheetTitle className="flex items-center gap-2">
-            Información de venta
+            Información de salida
           </SheetTitle>
-          <SheetDescription className="flex justify-between items-center gap-2">
-            <span className="text-sm text-muted-foreground">
-              Método de pago: {data.metodo_pago}
-            </span>
-            {data.metodo_pago !== METODOS_PAGO.EFECTIVO && (
-              <span className="text-sm text-muted-foreground">
-                Tarjeta: {data.tarjeta}
-              </span>
-            )}
-          </SheetDescription>
+          <SheetDescription />
         </SheetHeader>
         <Table className="mt-4">
           <TableHeader>
@@ -59,23 +49,13 @@ export default function SheetInfoVentasCafeteria({
             </TableRow>
           </TableHeader>
           <TableBody>
-            {data.elaboraciones.map((elaboracion) => (
-              <TableRow key={elaboracion.producto.id}>
-                <TableCell className="font-semibold align-top w-1/2">
-                  {elaboracion.producto.nombre}
-                </TableCell>
-                <TableCell className="text-right">
-                  {elaboracion.cantidad}
-                </TableCell>
-              </TableRow>
-            ))}
             {data.productos.map((producto) => (
               <TableRow key={producto.producto.id}>
                 <TableCell className="font-semibold align-top w-1/2">
                   {producto.producto.nombre}
                 </TableCell>
                 <TableCell className="text-right">
-                  {producto.cantidad}
+                  {Intl.NumberFormat('es-ES').format(producto.cantidad)}
                 </TableCell>
               </TableRow>
             ))}

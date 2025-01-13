@@ -20,6 +20,7 @@ import {
   CreditCard,
   Pizza,
   ShoppingCart,
+  CoffeeIcon,
 } from 'lucide-react';
 
 import { cn } from '@/lib/utils';
@@ -84,6 +85,26 @@ export default function SideBar({ areasVenta, session }: Props) {
                 Reportes
               </Link>
             )}
+            <Link
+              href="/productos-cafeteria"
+              className={cn(
+                'flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary',
+                path === '/productos-cafeteria' && 'bg-muted text-primary'
+              )}
+            >
+              <Package className="h-4 w-4" />
+              Productos
+            </Link>
+            <Link
+              href="/elaboraciones"
+              className={cn(
+                'flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary',
+                path === '/elaboraciones' && 'bg-muted text-primary'
+              )}
+            >
+              <Pizza className="h-4 w-4" />
+              Elaboraciones
+            </Link>
             {session.isAdmin && (
               <>
                 <Link
@@ -221,27 +242,8 @@ export default function SideBar({ areasVenta, session }: Props) {
             (session.isAlmacenero &&
               session.almacen === ALMACENES.CAFETERIA) ? (
               <>
-                <span className="p-2">Cafetería</span>
-                <Link
-                  href="/productos-cafeteria"
-                  className={cn(
-                    'flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary',
-                    path === '/productos-cafeteria' && 'bg-muted text-primary'
-                  )}
-                >
-                  <Package className="h-4 w-4" />
-                  Productos
-                </Link>
-                <Link
-                  href="/elaboraciones"
-                  className={cn(
-                    'flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary',
-                    path === '/elaboraciones' && 'bg-muted text-primary'
-                  )}
-                >
-                  <Pizza className="h-4 w-4" />
-                  Elaboraciones
-                </Link>
+                <span className="p-2">Almacén Cafetería</span>
+
                 <Link
                   href="/inventario-cafeteria"
                   className={cn(
@@ -262,31 +264,44 @@ export default function SideBar({ areasVenta, session }: Props) {
                   <ArrowDownLeft className="h-4 w-4" />
                   Entradas
                 </Link>
+
                 <Link
-                  href="/ventas-cafeteria"
+                  href="/salidas-cafeteria"
                   className={cn(
-                    'flex flex-1 items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary',
-                    path === '/ventas-cafeteria' && 'bg-muted text-primary'
+                    'flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary',
+                    path === '/salidas-cafeteria' && 'bg-muted text-primary'
                   )}
                 >
-                  <ShoppingCart className="h-4 w-4" />
-                  Ventas
+                  <ArrowUpRight className="h-4 w-4" />
+                  Salidas
                 </Link>
               </>
             ) : null}
 
             <span className="p-2">Áreas de venta</span>
             {session.isStaff && (
-              <Link
-                href="/areas-de-venta"
-                className={cn(
-                  'flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary',
-                  path === '/areas-de-venta' && 'bg-muted text-primary'
-                )}
-              >
-                <Settings2 className="h-4 w-4" />
-                Administrar áreas
-              </Link>
+              <>
+                <Link
+                  href="/areas-de-venta"
+                  className={cn(
+                    'flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary',
+                    path === '/areas-de-venta' && 'bg-muted text-primary'
+                  )}
+                >
+                  <Settings2 className="h-4 w-4" />
+                  Administrar áreas
+                </Link>
+                <Link
+                  href="/cafeteria"
+                  className={cn(
+                    'flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary',
+                    path === '/cafeteria' && 'bg-muted text-primary'
+                  )}
+                >
+                  <CoffeeIcon className="h-4 w-4" />
+                  Cafetería
+                </Link>
+              </>
             )}
             {areasVenta?.map((area) => (
               <Link

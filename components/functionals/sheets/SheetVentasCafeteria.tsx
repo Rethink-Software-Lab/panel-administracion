@@ -44,7 +44,7 @@ import { useRef, useState } from 'react';
 
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 
-import { METODOS_PAGO } from '@/app/(with-layout)/(cafeteria)/entradas-cafeteria/types';
+import { METODOS_PAGO } from '@/app/(with-layout)/(almacen-cafeteria)/entradas-cafeteria/types';
 import {
   Select,
   SelectContent,
@@ -58,8 +58,8 @@ import SelectProductoVentaCafeteria from '../SelectProductoVentasCafeteria';
 import {
   Productos_Elaboraciones,
   TarjetasVentas,
-} from '@/app/(with-layout)/(cafeteria)/ventas-cafeteria/types';
-import { addVentaCafeteria } from '@/app/(with-layout)/(cafeteria)/ventas-cafeteria/actions';
+} from '@/app/(with-layout)/(almacen-cafeteria)/ventas-cafeteria/types';
+import { addVentaCafeteria } from '@/app/(with-layout)/(almacen-cafeteria)/ventas-cafeteria/actions';
 
 export default function SheetVentasCafeteria({
   productos,
@@ -112,7 +112,7 @@ export default function SheetVentasCafeteria({
         <Button className="gap-1 items-center">
           <PlusCircle size={18} />
           <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
-            Agregar
+            Agregar venta
           </span>
         </Button>
       </SheetTrigger>

@@ -35,12 +35,12 @@ import { toast } from 'sonner';
 import { useRef, useState } from 'react';
 
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
-import { addEntradaCafeteria } from '@/app/(with-layout)/(cafeteria)/entradas-cafeteria/actions';
+import { addEntradaCafeteria } from '@/app/(with-layout)/(almacen-cafeteria)/entradas-cafeteria/actions';
 
 import {
   METODOS_PAGO,
   ProductoEntrada,
-} from '@/app/(with-layout)/(cafeteria)/entradas-cafeteria/types';
+} from '@/app/(with-layout)/(almacen-cafeteria)/entradas-cafeteria/types';
 import {
   Table,
   TableBody,

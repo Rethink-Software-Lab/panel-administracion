@@ -1,4 +1,4 @@
-import { METODOS_PAGO } from '@/app/(with-layout)/(cafeteria)/entradas-cafeteria/types';
+import { METODOS_PAGO } from '@/app/(with-layout)/(almacen-cafeteria)/entradas-cafeteria/types';
 import {
   FrecuenciasGastos,
   TiposGastos,
@@ -625,6 +625,40 @@ export const VentasCafeteriaSchema = pipe(
           pipe(string(), nonEmpty('La cantidad debe ser > 0'))
         ),
         isElaboracion: boolean(),
+      })
+    ),
+  }),
+  forward(
+    partialCheck(
+      ['productos'] as any[],
+      (input) => {
+        const productosIds = input.productos.map(
+          (producto) => producto.producto
+        );
+        const uniqueProductos = new Set(productosIds);
+        if (productosIds.length !== uniqueProductos.size) {
+          return false;
+        }
+        return true;
+      },
+      'No se deben tener productos repetidos.'
+    ),
+    ['productos']
+  )
+);
+
+export const SalidaAlmacenCafeteriaSchema = pipe(
+  object({
+    productos: array(
+      object({
+        producto: pipe(
+          string('El producto es requerido'),
+          nonEmpty('El producto es requerido')
+        ),
+        cantidad: pipe(
+          string('La cantidad es requerida'),
+          nonEmpty('La cantidad es requerida')
+        ),
       })
     ),
   }),

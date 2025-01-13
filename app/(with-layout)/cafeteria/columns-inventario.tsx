@@ -1,20 +1,20 @@
 'use client';
-import { Row } from '@tanstack/react-table';
+import { ColumnDef } from '@tanstack/react-table';
 import { ProductoCafeteria } from './types';
 
-export const columns = [
+export const columns: ColumnDef<ProductoCafeteria>[] = [
   {
     accessorKey: 'nombre',
     header: 'Nombre',
   },
   {
-    accessorKey: 'inventario.cantidad',
+    accessorKey: 'inventario_area.cantidad',
     header: 'Cantidad',
   },
   {
     accessorKey: 'precio_venta',
     header: 'Precio de venta',
-    cell: ({ row }: { row: Row<ProductoCafeteria> }) =>
+    cell: ({ row }) =>
       Intl.NumberFormat('es-ES', {
         style: 'currency',
         currency: 'CUP',

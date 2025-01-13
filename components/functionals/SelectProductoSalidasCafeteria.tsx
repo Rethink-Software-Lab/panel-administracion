@@ -15,17 +15,20 @@ import {
   CommandList,
 } from '../ui/command';
 import { InferInput } from 'valibot';
-import { EntradaCafeteriaSchema } from '@/lib/schemas';
+import {
+  EntradaCafeteriaSchema,
+  SalidaAlmacenCafeteriaSchema,
+} from '@/lib/schemas';
 import { RefObject, useState } from 'react';
 import { ProductoEntrada } from '@/app/(with-layout)/(almacen-cafeteria)/entradas-cafeteria/types';
 
-export default function SelectProductoEntradaCafeteria({
+export default function SelectProductoSalidaCafeteria({
   form,
   index,
   productos,
   formRef,
 }: {
-  form: UseFormReturn<InferInput<typeof EntradaCafeteriaSchema>>;
+  form: UseFormReturn<InferInput<typeof SalidaAlmacenCafeteriaSchema>>;
   index: number;
   productos: ProductoEntrada[];
   formRef: RefObject<HTMLElement>;

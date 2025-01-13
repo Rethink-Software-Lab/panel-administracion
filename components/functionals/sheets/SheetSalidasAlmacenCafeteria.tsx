@@ -9,13 +9,7 @@ import {
   SheetTrigger,
 } from '@/components/ui/sheet';
 import { Button } from '@/components/ui/button';
-import {
-  CirclePlus,
-  CircleX,
-  MinusCircle,
-  Pen,
-  PlusCircle,
-} from 'lucide-react';
+import { CirclePlus, CircleX, MinusCircle, PlusCircle } from 'lucide-react';
 import {
   Form,
   FormControl,
@@ -23,11 +17,10 @@ import {
   FormItem,
   FormMessage,
 } from '@/components/ui/form';
-import { Label } from '@/components/ui/label';
 
 import { useFieldArray, useForm } from 'react-hook-form';
 import { valibotResolver } from '@hookform/resolvers/valibot';
-import { ElaboracionesSchema } from '@/lib/schemas';
+import { SalidaAlmacenCafeteriaSchema } from '@/lib/schemas';
 import {
   Table,
   TableBody,
@@ -43,49 +36,36 @@ import { toast } from 'sonner';
 import { useRef, useState } from 'react';
 
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
-import SelectProductoElaboraciones from '../SelectProductoElaboraciones';
-import {
-  addElaboracion,
-  editElaboracion,
-} from '@/app/(with-layout)/(almacen-cafeteria)/elaboraciones/actions';
 import { ProductoEntrada } from '@/app/(with-layout)/(almacen-cafeteria)/entradas-cafeteria/types';
-import { Elaboraciones } from '@/app/(with-layout)/(almacen-cafeteria)/elaboraciones/types';
+import SelectProductoSalidaCafeteria from '../SelectProductoSalidasCafeteria';
+import { addSalidaCafeteria } from '@/app/(with-layout)/(almacen-cafeteria)/salidas-cafeteria/actions';
 
 export default function SheetElaboraciones({
-  data,
   productos,
 }: {
-  data?: Elaboraciones;
   productos?: ProductoEntrada[];
 }) {
   const [open, setOpen] = useState(false);
   const [error, setError] = useState('');
   const formRef = useRef<HTMLFormElement>(null);
 
-  const form = useForm<InferInput<typeof ElaboracionesSchema>>({
-    resolver: valibotResolver(ElaboracionesSchema),
+  const form = useForm<InferInput<typeof SalidaAlmacenCafeteriaSchema>>({
+    resolver: valibotResolver(SalidaAlmacenCafeteriaSchema),
     defaultValues: {
-      nombre: data?.nombre || '',
-      precio: data?.precio.toLocaleString() || '',
-      mano_obra: data?.mano_obra.toLocaleString() || '',
-      ingredientes: data?.ingredientes_cantidad.map((ing) => ({
-        producto: ing.ingrediente.id.toLocaleString(),
-        cantidad: ing.cantidad.toLocaleString(),
-      })) || [{ producto: '', cantidad: '0' }],
+      productos: [{ producto: '', cantidad: '0' }],
     },
   });
 
   const { fields, append, remove } = useFieldArray({
     control: form.control,
-    name: 'ingredientes',
+    name: 'productos',
   });
 
   const onSubmit = async (
-    dataForm: InferInput<typeof ElaboracionesSchema>
+    dataForm: InferInput<typeof SalidaAlmacenCafeteriaSchema>
   ): Promise<void> => {
-    const { data: dataRes, error } = data
-      ? await editElaboracion(dataForm, data.id)
-      : await addElaboracion(dataForm);
+    const { data: dataRes, error } = await addSalidaCafeteria(dataForm);
+
     if (error) {
       setError(error);
     } else {
@@ -97,25 +77,18 @@ export default function SheetElaboraciones({
   return (
     <Sheet open={open} onOpenChange={setOpen} modal={true}>
       <SheetTrigger asChild>
-        {data ? (
-          <Button variant="outline" size="icon">
-            <span className="sr-only">Editar</span>
-            <Pen size={18} />
-          </Button>
-        ) : (
-          <Button className="gap-1 items-center">
-            <PlusCircle size={18} />
-            <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
-              Agregar
-            </span>
-          </Button>
-        )}
+        <Button className="gap-1 items-center">
+          <PlusCircle size={18} />
+          <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
+            Agregar
+          </span>
+        </Button>
       </SheetTrigger>
       <SheetContent className="w-full sm:max-w-[600px] overflow-y-scroll">
         <SheetHeader>
-          <SheetTitle>{data ? 'Editar' : 'Agregar'} elaboración</SheetTitle>
+          <SheetTitle>Agregar salida</SheetTitle>
           <SheetDescription className="pb-4">
-            Rellene el formulario para agregar un producto.
+            Rellene el formulario para agregar una salida.
           </SheetDescription>
           {error && (
             <Alert className="text-left" variant="destructive">
@@ -124,12 +97,12 @@ export default function SheetElaboraciones({
               <AlertDescription>{error}</AlertDescription>
             </Alert>
           )}
-          {form.formState.errors.ingredientes?.root && (
+          {form.formState.errors.productos?.root && (
             <Alert className="text-left" variant="destructive">
               <CircleX className="h-5 w-5" />
               <AlertTitle>Error!</AlertTitle>
               <AlertDescription>
-                {form.formState.errors.ingredientes.root?.message}
+                {form.formState.errors.productos.root?.message}
               </AlertDescription>
             </Alert>
           )}
@@ -139,46 +112,6 @@ export default function SheetElaboraciones({
               onSubmit={form.handleSubmit(onSubmit)}
               className="space-y-4"
             >
-              <FormField
-                control={form.control}
-                name="nombre"
-                render={({ field }) => (
-                  <FormItem>
-                    <Label className="flex justify-start">Nombre</Label>
-                    <FormControl>
-                      <Input {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="precio"
-                render={({ field }) => (
-                  <FormItem>
-                    <Label className="flex justify-start">Precio</Label>
-                    <FormControl>
-                      <Input type="number" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="mano_obra"
-                render={({ field }) => (
-                  <FormItem>
-                    <Label className="flex justify-start">Mano de obra</Label>
-                    <FormControl>
-                      <Input type="number" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
               <Table>
                 <TableHeader>
                   <TableRow>
@@ -190,7 +123,7 @@ export default function SheetElaboraciones({
                   {fields.map((producto, index) => (
                     <TableRow key={producto.id}>
                       <TableCell className="font-semibold align-top w-1/2">
-                        <SelectProductoElaboraciones
+                        <SelectProductoSalidaCafeteria
                           form={form}
                           index={index}
                           productos={productos || []}
@@ -201,7 +134,7 @@ export default function SheetElaboraciones({
                       <TableCell>
                         <FormField
                           control={form.control}
-                          name={`ingredientes.${index}.cantidad`}
+                          name={`productos.${index}.cantidad`}
                           render={({ field }) => (
                             <FormItem>
                               <FormControl>
@@ -251,7 +184,7 @@ export default function SheetElaboraciones({
                 </TableCaption>
               </Table>
               <div className="flex justify-end">
-                <Button type="submit">{data ? 'Editar' : 'Agregar'}</Button>
+                <Button type="submit">Agregar</Button>
               </div>
             </form>
           </Form>

@@ -32,8 +32,8 @@ import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import {
   addProductoCafeteria,
   editProductoCafeteria,
-} from '@/app/(with-layout)/(cafeteria)/productos-cafeteria/actions';
-import { ProductoCafeteria } from '@/app/(with-layout)/(cafeteria)/productos-cafeteria/types';
+} from '@/app/(with-layout)/(almacen-cafeteria)/productos-cafeteria/actions';
+import { ProductoCafeteria } from '@/app/(with-layout)/(almacen-cafeteria)/productos-cafeteria/types';
 
 export default function SheetProductosCafeteria({
   data,

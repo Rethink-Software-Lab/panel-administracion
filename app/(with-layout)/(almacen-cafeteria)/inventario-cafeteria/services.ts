@@ -1,15 +1,19 @@
 import { cookies } from 'next/headers';
+import { ProductoCafeteria } from './types';
 
-export async function getEntradasCafeteria() {
+export async function inventarioAlmacenCafeteria(): Promise<{
+  data: ProductoCafeteria[] | null;
+  error: string | null;
+}> {
   const token = cookies().get('session')?.value;
   try {
     const res = await fetch(
-      process.env.BACKEND_URL_V2 + '/cafeteria/entradas/',
+      process.env.BACKEND_URL_V2 + '/almacen-cafeteria/inventario/',
       {
         headers: {
           Authorization: `Bearer ${token}`,
         },
-        next: { tags: ['entrada-cafeteria'] },
+        next: { tags: ['inventario-cafeteria'] },
       }
     );
     if (!res.ok) {
