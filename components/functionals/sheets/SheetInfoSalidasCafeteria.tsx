@@ -49,6 +49,16 @@ export default function SheetInfoSalidasCafeteria({
             </TableRow>
           </TableHeader>
           <TableBody>
+            {data.elaboraciones.map((elaboracion) => (
+              <TableRow key={elaboracion.id}>
+                <TableCell className="font-semibold align-top w-1/2">
+                  {elaboracion.producto.nombre}
+                </TableCell>
+                <TableCell className="text-right">
+                  {Intl.NumberFormat('es-ES').format(elaboracion.cantidad)}
+                </TableCell>
+              </TableRow>
+            ))}
             {data.productos.map((producto) => (
               <TableRow key={producto.producto.id}>
                 <TableCell className="font-semibold align-top w-1/2">

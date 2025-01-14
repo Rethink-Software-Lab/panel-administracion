@@ -36,14 +36,14 @@ import { toast } from 'sonner';
 import { useRef, useState } from 'react';
 
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
-import { ProductoEntrada } from '@/app/(with-layout)/(almacen-cafeteria)/entradas-cafeteria/types';
 import SelectProductoSalidaCafeteria from '../SelectProductoSalidasCafeteria';
 import { addSalidaCafeteria } from '@/app/(with-layout)/(almacen-cafeteria)/salidas-cafeteria/actions';
+import { Productos_Elaboraciones } from '@/app/(with-layout)/cafeteria/types';
 
 export default function SheetElaboraciones({
   productos,
 }: {
-  productos?: ProductoEntrada[];
+  productos?: Productos_Elaboraciones[];
 }) {
   const [open, setOpen] = useState(false);
   const [error, setError] = useState('');
@@ -52,7 +52,7 @@ export default function SheetElaboraciones({
   const form = useForm<InferInput<typeof SalidaAlmacenCafeteriaSchema>>({
     resolver: valibotResolver(SalidaAlmacenCafeteriaSchema),
     defaultValues: {
-      productos: [{ producto: '', cantidad: '0' }],
+      productos: [{ producto: '', cantidad: '0', isElaboracion: false }],
     },
   });
 
@@ -173,6 +173,7 @@ export default function SheetElaboraciones({
                       append({
                         producto: '',
                         cantidad: '0',
+                        isElaboracion: false,
                       })
                     }
                     variant="outline"

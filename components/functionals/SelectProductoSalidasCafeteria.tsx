@@ -15,12 +15,9 @@ import {
   CommandList,
 } from '../ui/command';
 import { InferInput } from 'valibot';
-import {
-  EntradaCafeteriaSchema,
-  SalidaAlmacenCafeteriaSchema,
-} from '@/lib/schemas';
+import { SalidaAlmacenCafeteriaSchema } from '@/lib/schemas';
 import { RefObject, useState } from 'react';
-import { ProductoEntrada } from '@/app/(with-layout)/(almacen-cafeteria)/entradas-cafeteria/types';
+import { Productos_Elaboraciones } from '@/app/(with-layout)/cafeteria/types';
 
 export default function SelectProductoSalidaCafeteria({
   form,
@@ -30,7 +27,7 @@ export default function SelectProductoSalidaCafeteria({
 }: {
   form: UseFormReturn<InferInput<typeof SalidaAlmacenCafeteriaSchema>>;
   index: number;
-  productos: ProductoEntrada[];
+  productos: Productos_Elaboraciones[];
   formRef: RefObject<HTMLElement>;
 }) {
   const [openPopover, setOpenPopover] = useState(false);
@@ -67,7 +64,7 @@ export default function SelectProductoSalidaCafeteria({
                 <CommandList>
                   <CommandEmpty>Ningún resultado encontrado.</CommandEmpty>
                   <CommandGroup heading="Sugerencias">
-                    {productos?.map((producto: ProductoEntrada) => (
+                    {productos?.map((producto: Productos_Elaboraciones) => (
                       <CommandItem
                         key={producto.id}
                         value={producto.id.toString()}
@@ -75,6 +72,12 @@ export default function SelectProductoSalidaCafeteria({
                         onSelect={(currentValue) => {
                           field.onChange(
                             currentValue === field.value ? '' : currentValue
+                          );
+                          form.setValue(
+                            `productos.${index}.isElaboracion`,
+                            productos.find(
+                              (e) => e.id.toLocaleString() === currentValue
+                            )?.isElaboracion || false
                           );
                           setOpenPopover(false);
                         }}

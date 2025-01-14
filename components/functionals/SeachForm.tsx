@@ -19,8 +19,12 @@ export default function SearchForm() {
 
   const onSubmit = (dataForm: InferInput<typeof SearchSchema>) => {
     router.push(
-      `/search?codigo=${dataForm.codigo}${
-        dataForm?.numero ? `&numero=${dataForm?.numero}` : ''
+      `/search${dataForm?.codigo ? `?codigo=${dataForm.codigo}` : ''}${
+        dataForm?.numero
+          ? dataForm?.codigo
+            ? `&numero=${dataForm?.numero}`
+            : `?numero=${dataForm?.numero}`
+          : ''
       }`
     );
   };

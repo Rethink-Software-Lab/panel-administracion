@@ -1,7 +1,5 @@
 import { CloudOff } from 'lucide-react';
 
-import { getEntradasCafeteria } from '@/app/(with-layout)/(almacen-cafeteria)/entradas-cafeteria/services';
-
 import { DataTable } from '@/components/ui/data-table-entradas';
 import { columns } from './columns';
 
@@ -10,7 +8,6 @@ import { getSalidasAlmacenCafeteria } from './services';
 
 export default async function SalidasAlmacenCafeteria() {
   const { data } = await getSalidasAlmacenCafeteria();
-  console.log(data);
 
   return (
     <main className="flex flex-1 flex-col gap-4 p-4 lg:gap-6 lg:p-6">
@@ -18,7 +15,9 @@ export default async function SalidasAlmacenCafeteria() {
         <h1 className="text-lg font-semibold md:text-2xl">
           Salidas Almacén Cafetería
         </h1>
-        <SheetSalidasAlmacenCafeteria productos={data?.productos} />
+        <SheetSalidasAlmacenCafeteria
+          productos={data?.productos_elaboraciones}
+        />
       </div>
 
       {data ? (
