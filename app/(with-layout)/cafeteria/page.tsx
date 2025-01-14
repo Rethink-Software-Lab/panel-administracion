@@ -1,6 +1,5 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
-import dynamic from 'next/dynamic';
 import { inventarioCafeteria } from './services';
 import { DataTable } from '@/components/ui/data-table';
 import { CloudOff } from 'lucide-react';
@@ -10,7 +9,6 @@ import SheetVentasCafeteria from '@/components/functionals/sheets/SheetVentasCaf
 
 export default async function Cafeteria() {
   const { data } = await inventarioCafeteria();
-  console.log(data);
   return (
     <main className="flex flex-1 flex-col gap-4 lg:gap-6 ">
       <div className="flex justify-between items-center px-6 pt-6 pb-0">

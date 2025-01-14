@@ -289,10 +289,25 @@ export const VentasSchema = pipe(
   )
 );
 
-export const SearchSchema = object({
-  codigo: pipe(string('Ingresa un código'), minLength(1, 'Ingresa un código')),
-  numero: string('Ingresa un número'),
-});
+export const SearchSchema = pipe(
+  object({
+    codigo: string('Ingresa un código'),
+    numero: string('Ingresa un número'),
+  }),
+  forward(
+    partialCheck(
+      [['codigo'], ['numero']],
+      (input) => {
+        if (!input.codigo && !input.numero) {
+          return false;
+        }
+        return true;
+      },
+      'Rellene el formulario.'
+    ),
+    ['codigo']
+  )
+);
 
 export const FiltersSchema = object({
   modelo: pipe(
@@ -660,6 +675,7 @@ export const SalidaAlmacenCafeteriaSchema = pipe(
           string('La cantidad es requerida'),
           nonEmpty('La cantidad es requerida')
         ),
+        isElaboracion: boolean(),
       })
     ),
   }),

@@ -51,59 +51,65 @@ export default async function Search({
         </div>
       ) : (
         <div className="grid grid-cols-3 gap-4">
-          {info?.imagen?.url ? (
-            <Image
-              priority
-              className="col-span-3 md:col-span-1 rounded-lg object-cover aspect-square"
-              src={info?.imagen?.url}
-              width={800}
-              height={800}
-              alt={info?.descripcion}
-            />
-          ) : (
-            <div className="col-span-3 md:col-span-1 bg-muted rounded-lg min-h-80 flex justify-center items-center text-muted-foreground">
-              <div className="flex flex-col justify-center items-center">
-                <FileXIcon size={40} />
-                <p className=" font-medium">Sin foto</p>
-              </div>
-            </div>
-          )}
-          <Card className="col-span-3 md:col-span-2 overflow-hidden">
-            <CardHeader className="flex flex-row gap-2 items-start bg-muted/50">
-              <CardTitle className="group flex items-center gap-2 text-lg">
-                {info?.codigo}
-              </CardTitle>
-            </CardHeader>
-            <Separator />
-            <CardContent className="p-6 text-sm">
-              <div className="grid gap-3">
-                <ul className="grid gap-3">
-                  <li className="flex items-center justify-between">
-                    <span className="text-muted-foreground">Descripción</span>
-                    <span>{info?.descripcion}</span>
-                  </li>
-                  {isStaff && (
-                    <>
+          {info && (
+            <>
+              {info?.imagen?.url ? (
+                <Image
+                  priority
+                  className="col-span-3 md:col-span-1 rounded-lg object-cover aspect-square"
+                  src={info?.imagen?.url}
+                  width={800}
+                  height={800}
+                  alt={info?.descripcion}
+                />
+              ) : (
+                <div className="col-span-3 md:col-span-1 bg-muted rounded-lg min-h-80 flex justify-center items-center text-muted-foreground">
+                  <div className="flex flex-col justify-center items-center">
+                    <FileXIcon size={40} />
+                    <p className=" font-medium">Sin foto</p>
+                  </div>
+                </div>
+              )}
+              <Card className="col-span-3 md:col-span-2 overflow-hidden">
+                <CardHeader className="flex flex-row gap-2 items-start bg-muted/50">
+                  <CardTitle className="group flex items-center gap-2 text-lg">
+                    {info?.codigo}
+                  </CardTitle>
+                </CardHeader>
+                <Separator />
+                <CardContent className="p-6 text-sm">
+                  <div className="grid gap-3">
+                    <ul className="grid gap-3">
+                      <li className="flex items-center justify-between">
+                        <span className="text-muted-foreground">
+                          Descripción
+                        </span>
+                        <span>{info?.descripcion}</span>
+                      </li>
+                      {isStaff && (
+                        <>
+                          <Separator className="my-2" />
+                          <li className="flex items-center justify-between">
+                            <span className="text-muted-foreground">
+                              Precio de Costo
+                            </span>
+                            <span>${info?.precio_costo}</span>
+                          </li>
+                        </>
+                      )}
                       <Separator className="my-2" />
                       <li className="flex items-center justify-between">
                         <span className="text-muted-foreground">
-                          Precio de Costo
+                          Precio de Venta
                         </span>
-                        <span>${info?.precio_costo}</span>
+                        <span>${info?.precio_venta}</span>
                       </li>
-                    </>
-                  )}
-                  <Separator className="my-2" />
-                  <li className="flex items-center justify-between">
-                    <span className="text-muted-foreground">
-                      Precio de Venta
-                    </span>
-                    <span>${info?.precio_venta}</span>
-                  </li>
-                </ul>
-              </div>
-            </CardContent>
-          </Card>
+                    </ul>
+                  </div>
+                </CardContent>
+              </Card>
+            </>
+          )}
 
           <Card className="col-span-4 overflow-hidden">
             <CardHeader className="flex flex-row items-start bg-muted/50">
@@ -120,6 +126,9 @@ export default async function Search({
                       <TableHeader>
                         <TableRow>
                           <TableHead className="font-bold">Id</TableHead>
+                          {!info && (
+                            <TableHead className="font-bold">Código</TableHead>
+                          )}
                           <TableHead className="font-bold">Número</TableHead>
                           <TableHead className="font-bold">Color</TableHead>
                         </TableRow>
@@ -128,6 +137,7 @@ export default async function Search({
                         {res.productos.map((p: any) => (
                           <TableRow key={p.id}>
                             <TableCell>{p?.id}</TableCell>
+                            {!info && <TableCell>{p?.info__codigo}</TableCell>}
                             <TableCell>{p?.numero}</TableCell>
                             <TableCell>{p?.color}</TableCell>
                           </TableRow>
@@ -135,7 +145,10 @@ export default async function Search({
                       </TableBody>
                       <TableFooter>
                         <TableRow>
-                          <TableCell colSpan={2} className="font-bold">
+                          <TableCell
+                            colSpan={info ? 2 : 3}
+                            className="font-bold"
+                          >
                             Total
                           </TableCell>
                           <TableCell>{res?.productos.length}</TableCell>
