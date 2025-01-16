@@ -32,10 +32,7 @@ export const columns = [
   {
     header: ' ',
     cell: ({ row }: { row: Row<Data> }) => {
-      if (
-        row.original.nombre !== 'Revoltosa' &&
-        row.original.nombre !== 'Cafetería'
-      ) {
+      if (row.original.nombre !== 'Revoltosa') {
         return (
           <div className="flex items-center justify-end gap-2">
             <ModalAreasVenta

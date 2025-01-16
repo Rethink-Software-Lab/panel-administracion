@@ -81,6 +81,7 @@ export async function deleteSalidaCafeteria(
   }
   revalidateTag('salidas-cafeteria');
   revalidateTag('inventario-cafeteria');
+  revalidateTag('area-cafeteria');
   return {
     data: 'Salida eliminada con éxito.',
     error: null,
