@@ -212,8 +212,8 @@ export default function SheetEntradasCafeteria({
                               <FormControl>
                                 <Input
                                   type="number"
-                                  min={1}
-                                  step="1"
+                                  min={0.01}
+                                  step="0.01"
                                   {...field}
                                 />
                               </FormControl>
