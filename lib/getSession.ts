@@ -15,7 +15,7 @@ export interface Session {
 
 export function getSession() {
   const headersList = headers();
-  const rol = headersList.get('x-user-rol');
+  const rol = decodeURIComponent(headersList.get('x-user-rol') as string);
   const area_venta = headersList.get('x-user-area-venta');
   const almacen = headersList.get('x-user-almacen');
   const isAdmin = rol === 'ADMIN';
