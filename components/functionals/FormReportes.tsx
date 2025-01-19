@@ -26,13 +26,21 @@ import {
 import { es } from 'date-fns/locale';
 import { Label } from '../ui/label';
 import { Categoria } from '@/app/(with-layout)/categorias/types';
+import { Session } from '@/lib/getSession';
+import { ALMACENES } from '@/app/(with-layout)/users/types';
 
 interface Props {
   areas: AreaVenta[];
   categorias: Categoria[];
 }
 
-export default function FormReportes({ data }: { data: Props }) {
+export default function FormReportes({
+  data,
+  session,
+}: {
+  data: Props;
+  session: Session;
+}) {
   const [type, setType] = useQueryState('type', { shallow: false });
   const [area, setArea] = useQueryState('area', { shallow: false });
   const [from, setFrom] = useQueryState('desde', parseAsIsoDateTime);
@@ -71,21 +79,69 @@ export default function FormReportes({ data }: { data: Props }) {
           </SelectTrigger>
           <SelectContent>
             <>
-              <SelectItem value="cafeteria">Cafetería</SelectItem>
+              <SelectItem
+                disabled={
+                  !session.isAdmin &&
+                  (!session.isAlmacenero ||
+                    session.almacen !== ALMACENES.CAFETERIA) &&
+                  !session.isVendedorCafeteria
+                }
+                value="cafeteria"
+              >
+                Cafetería
+              </SelectItem>
               {type === 'inventario' && (
                 <>
-                  <SelectItem value="almacen-principal">
+                  <SelectItem
+                    disabled={
+                      !session.isAdmin &&
+                      (!session.isAlmacenero ||
+                        session.almacen !== ALMACENES.CAFETERIA) &&
+                      !session.isVendedorCafeteria
+                    }
+                    value="almacen-cafeteria"
+                  >
+                    Almacén Cafetería
+                  </SelectItem>
+                  <SelectItem
+                    disabled={
+                      !session.isAdmin &&
+                      (!session.isAlmacenero ||
+                        session.almacen === ALMACENES.CAFETERIA) &&
+                      !session.isVendedor
+                    }
+                    value="almacen-principal"
+                  >
                     Almacén Principal
                   </SelectItem>
-                  <SelectItem value="almacen-revoltosa">
+                  <SelectItem
+                    disabled={
+                      !session.isAdmin &&
+                      (!session.isAlmacenero ||
+                        session.almacen === ALMACENES.CAFETERIA) &&
+                      !session.isVendedor
+                    }
+                    value="almacen-revoltosa"
+                  >
                     Almacén Revoltosa
                   </SelectItem>
                 </>
               )}
-              <SelectItem value="general">Todas las áreas</SelectItem>
+              <SelectItem disabled={!session.isAdmin} value="general">
+                Todas las áreas
+              </SelectItem>
 
               {data?.areas?.map((area) => (
-                <SelectItem key={area.id} value={area.id.toString()}>
+                <SelectItem
+                  disabled={
+                    type === 'ventas' &&
+                    !session.isAdmin &&
+                    !session.isAlmacenero &&
+                    Number(session.area_venta) !== area.id
+                  }
+                  key={area.id}
+                  value={area.id.toString()}
+                >
                   {area.nombre}
                 </SelectItem>
               ))}

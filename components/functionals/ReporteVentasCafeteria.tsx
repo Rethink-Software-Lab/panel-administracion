@@ -34,6 +34,7 @@ interface Params {
   subtotal: number;
   efectivo: number;
   transferencia: number;
+  merma: number;
   mano_obra: number;
 }
 
@@ -204,6 +205,22 @@ export default async function ReporteVentasCafeteria({
                       style: 'currency',
                       currency: 'CUP',
                     }).format(data.mano_obra)}
+                  </TableCell>
+                </TableRow>
+              )}
+              {data?.merma && data?.merma > 0 && (
+                <TableRow className="border-t border-t-gray-300">
+                  <TableCell
+                    colSpan={3}
+                    className="font-medium px-4 print:px-0"
+                  >
+                    Merma
+                  </TableCell>
+                  <TableCell className="text-right font-medium px-4 print:px-0">
+                    {Intl.NumberFormat('es-CU', {
+                      style: 'currency',
+                      currency: 'CUP',
+                    }).format(data.merma)}
                   </TableCell>
                 </TableRow>
               )}

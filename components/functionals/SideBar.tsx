@@ -22,6 +22,7 @@ import {
   ShoppingCart,
   CoffeeIcon,
   Package2,
+  TicketX,
 } from 'lucide-react';
 
 import { cn } from '@/lib/utils';
@@ -98,6 +99,16 @@ export default function SideBar({ areasVenta, session }: Props) {
                 >
                   <Pizza className="h-4 w-4" />
                   Elaboraciones
+                </Link>
+                <Link
+                  href="/merma"
+                  className={cn(
+                    'flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary',
+                    path === '/merma' && 'bg-muted text-primary'
+                  )}
+                >
+                  <TicketX className="h-4 w-4" />
+                  Merma
                 </Link>
               </>
             ) : null}
