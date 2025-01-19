@@ -3,6 +3,7 @@ import {
   FrecuenciasGastos,
   TiposGastos,
 } from '@/app/(with-layout)/gastos/types';
+import { LOCALACIONES } from '@/app/(with-layout)/merma/type';
 import { Banco, TipoTransferencia } from '@/app/(with-layout)/tarjetas/types';
 import { ALMACENES, ROLES } from '@/app/(with-layout)/users/types';
 import {
@@ -665,6 +666,42 @@ export const VentasCafeteriaSchema = pipe(
 
 export const SalidaAlmacenCafeteriaSchema = pipe(
   object({
+    productos: array(
+      object({
+        producto: pipe(
+          string('El producto es requerido'),
+          nonEmpty('El producto es requerido')
+        ),
+        cantidad: pipe(
+          string('La cantidad es requerida'),
+          nonEmpty('La cantidad es requerida')
+        ),
+        isElaboracion: boolean(),
+      })
+    ),
+  }),
+  forward(
+    partialCheck(
+      ['productos'] as any[],
+      (input) => {
+        const productosIds = input.productos.map(
+          (producto) => producto.producto
+        );
+        const uniqueProductos = new Set(productosIds);
+        if (productosIds.length !== uniqueProductos.size) {
+          return false;
+        }
+        return true;
+      },
+      'No se deben tener productos repetidos.'
+    ),
+    ['productos']
+  )
+);
+
+export const MermaCafeteriaSchema = pipe(
+  object({
+    localizacion: enum_(LOCALACIONES, 'La localización es requerida.'),
     productos: array(
       object({
         producto: pipe(

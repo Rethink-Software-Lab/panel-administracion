@@ -30,6 +30,7 @@ import {
   Settings2,
   Store,
   Tags,
+  TicketX,
   Users,
   Wrench,
 } from 'lucide-react';
@@ -137,6 +138,16 @@ export default function TopBar({ session, areasVenta }: Props) {
                 >
                   <Pizza className="h-4 w-4" />
                   Elaboraciones
+                </Link>
+                <Link
+                  href="/merma"
+                  className={cn(
+                    'flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary',
+                    path === '/merma' && 'bg-muted text-primary'
+                  )}
+                >
+                  <TicketX className="h-4 w-4" />
+                  Merma
                 </Link>
               </>
             ) : null}
