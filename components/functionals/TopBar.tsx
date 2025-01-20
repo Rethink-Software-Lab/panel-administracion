@@ -19,6 +19,7 @@ import {
   CoffeeIcon,
   CreditCard,
   FileText,
+  Heart,
   Home,
   LifeBuoy,
   LogOut,
@@ -148,6 +149,16 @@ export default function TopBar({ session, areasVenta }: Props) {
                 >
                   <TicketX className="h-4 w-4" />
                   Merma
+                </Link>
+                <Link
+                  href="/cuenta-casa"
+                  className={cn(
+                    'flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary',
+                    path === '/cuenta-casa' && 'bg-muted text-primary'
+                  )}
+                >
+                  <Heart className="h-4 w-4" />
+                  Cuenta Casa
                 </Link>
               </>
             ) : null}

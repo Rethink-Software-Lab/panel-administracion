@@ -1,20 +1,20 @@
 'use server';
 
-import { MermaCafeteriaSchema } from '@/lib/schemas';
+import { CuentaCasaSchema } from '@/lib/schemas';
 import { revalidateTag } from 'next/cache';
 import { cookies } from 'next/headers';
 import { InferInput } from 'valibot';
 
-export async function addMerma(
-  merma: InferInput<typeof MermaCafeteriaSchema>
+export async function addCuentaCasa(
+  cuenta_casa: InferInput<typeof CuentaCasaSchema>
 ): Promise<{ data: string | null; error: string | null }> {
   const token = cookies().get('session')?.value || null;
-  const res = await fetch(process.env.BACKEND_URL_V2 + '/merma/', {
+  const res = await fetch(process.env.BACKEND_URL_V2 + '/cuenta-casa/', {
     method: 'POST',
     headers: {
       Authorization: `Bearer ${token}`,
     },
-    body: JSON.stringify(merma),
+    body: JSON.stringify(cuenta_casa),
   });
   if (!res.ok) {
     if (res.status === 401)
@@ -39,25 +39,28 @@ export async function addMerma(
       error: 'Algo salió mal.',
     };
   }
-  revalidateTag('merma');
+  revalidateTag('cuenta-casa');
   return {
-    data: 'Merma agregada con éxito.',
+    data: 'Agregado a cuenta casa con éxito.',
     error: null,
   };
 }
 
-export async function deleteMerma({
+export async function deleteCuentaCasa({
   id,
 }: {
   id: number;
 }): Promise<{ data: string | null; error: string | null }> {
   const token = cookies().get('session')?.value || null;
-  const res = await fetch(process.env.BACKEND_URL_V2 + '/merma/' + id + '/', {
-    method: 'DELETE',
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  });
+  const res = await fetch(
+    process.env.BACKEND_URL_V2 + '/cuenta-casa/' + id + '/',
+    {
+      method: 'DELETE',
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
   if (!res.ok) {
     if (res.status === 401)
       return {
@@ -67,7 +70,7 @@ export async function deleteMerma({
     if (res.status === 404)
       return {
         data: null,
-        error: 'Merma no encontrada.',
+        error: 'Registro no encontrado.',
       };
     if (res.status === 400) {
       const data = await res.json();
@@ -81,9 +84,9 @@ export async function deleteMerma({
       error: 'Algo salió mal.',
     };
   }
-  revalidateTag('merma');
+  revalidateTag('cuenta-casa');
   return {
-    data: 'Merma eliminada con éxito.',
+    data: 'Eliminado de cuenta casa con éxito.',
     error: null,
   };
 }
