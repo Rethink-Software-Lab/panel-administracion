@@ -35,6 +35,7 @@ interface Params {
   efectivo: number;
   transferencia: number;
   merma: number;
+  cuenta_casa: number;
   mano_obra: number;
 }
 
@@ -221,6 +222,22 @@ export default async function ReporteVentasCafeteria({
                       style: 'currency',
                       currency: 'CUP',
                     }).format(data.merma)}
+                  </TableCell>
+                </TableRow>
+              )}
+              {data?.cuenta_casa && data?.cuenta_casa > 0 && (
+                <TableRow className="border-t border-t-gray-300">
+                  <TableCell
+                    colSpan={3}
+                    className="font-medium px-4 print:px-0"
+                  >
+                    Cuenta Casa
+                  </TableCell>
+                  <TableCell className="text-right font-medium px-4 print:px-0">
+                    {Intl.NumberFormat('es-CU', {
+                      style: 'currency',
+                      currency: 'CUP',
+                    }).format(data.cuenta_casa)}
                   </TableCell>
                 </TableRow>
               )}
