@@ -23,13 +23,12 @@ import {
   FormControl,
   FormField,
   FormItem,
-  FormLabel,
   FormMessage,
 } from '@/components/ui/form';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { CheckIcon, X, PlusCircle, ChevronDown } from 'lucide-react';
 
-import { cn, MAX_TRANF_DIA, MAX_TRANF_MES } from '@/lib/utils';
+import { cn } from '@/lib/utils';
 import {
   Command,
   CommandEmpty,
@@ -254,11 +253,6 @@ export default function ModalVentas({
                           <SelectItem
                             key={tarjeta.id}
                             value={tarjeta.id.toString()}
-                            disabled={
-                              tarjeta.total_transferencias_mes >=
-                                MAX_TRANF_MES ||
-                              tarjetas.total_transferencias_dia >= MAX_TRANF_DIA
-                            }
                           >
                             <div className="flex gap-2 items-center ">
                               <div

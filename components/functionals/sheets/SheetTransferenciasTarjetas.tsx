@@ -18,7 +18,7 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Label } from '@/components/ui/label';
-import { useForm, useWatch } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import { valibotResolver } from '@hookform/resolvers/valibot';
 import { TransferenciasTarjetas } from '@/lib/schemas';
 
@@ -63,11 +63,6 @@ export default function SheetTransferenciasTarjetas({
     },
   });
 
-  const tipo = useWatch({
-    control: form.control,
-    name: 'tipo',
-  });
-
   const onSubmit = async (
     dataForm: InferInput<typeof TransferenciasTarjetas>
   ): Promise<void> => {
@@ -82,9 +77,6 @@ export default function SheetTransferenciasTarjetas({
       setOpen(false);
     }
   };
-
-  const MAX_TRANF_MES = 120000;
-  const MAX_TRANF_DIA = 80000;
 
   return (
     <Sheet open={open} onOpenChange={setOpen} modal={true}>
@@ -170,13 +162,6 @@ export default function SheetTransferenciasTarjetas({
                           <SelectItem
                             key={tarjeta.id}
                             value={tarjeta.id.toString()}
-                            disabled={
-                              tipo === TipoTransferencia.EGRESO &&
-                              (tarjeta.total_transferencias_mes >=
-                                MAX_TRANF_MES ||
-                                tarjeta.total_transferencias_dia >=
-                                  MAX_TRANF_DIA)
-                            }
                           >
                             <div className="flex gap-2 items-center ">
                               <div

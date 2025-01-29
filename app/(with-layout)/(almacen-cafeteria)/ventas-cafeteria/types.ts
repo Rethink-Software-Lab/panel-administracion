@@ -27,7 +27,6 @@ export interface TarjetasVentas {
   id: number;
   nombre: string;
   banco: Banco;
-  isAvailable: boolean;
 }
 
 export interface ResponseVentasCafeteria {
