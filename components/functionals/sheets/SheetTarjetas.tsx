@@ -72,7 +72,7 @@ export default function SheetTarjetas({ isError }: { isError: boolean }) {
       <SheetTrigger disabled={isError}>
         <Card
           style={{ flex: '0 0 auto', scrollSnapAlign: 'start' }}
-          className="aspect-video h-full cursor-pointer min-h-40"
+          className="aspect-video h-full cursor-pointer"
         >
           <CardContent className="text-black/40 h-full p-8 flex flex-col gap-2 justify-center items-center">
             <PlusSquare size={24} />

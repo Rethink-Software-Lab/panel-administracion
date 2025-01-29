@@ -9,13 +9,7 @@ import {
   SheetTrigger,
 } from '@/components/ui/sheet';
 import { Button } from '@/components/ui/button';
-import {
-  CirclePlus,
-  CircleX,
-  MinusCircle,
-  Pen,
-  PlusCircle,
-} from 'lucide-react';
+import { CirclePlus, CircleX, MinusCircle, PlusCircle } from 'lucide-react';
 import {
   Form,
   FormControl,
@@ -259,7 +253,6 @@ export default function SheetVentasCafeteria({
                             <SelectItem
                               key={tarjeta.id}
                               value={tarjeta.id.toString()}
-                              disabled={!tarjeta.isAvailable}
                             >
                               <div className="flex gap-2 items-center ">
                                 <div

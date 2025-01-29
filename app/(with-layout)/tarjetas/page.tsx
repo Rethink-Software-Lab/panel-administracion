@@ -1,11 +1,4 @@
-import {
-  Card,
-  CardContent,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card';
-import { Progress } from '@/components/ui/progress';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { GetTarjetas } from './services';
 import { CloudOff, EllipsisVertical } from 'lucide-react';
 import SheetTarjetas from '@/components/functionals/sheets/SheetTarjetas';
@@ -23,8 +16,6 @@ import {
 } from '@/components/ui/dropdown-menu';
 import SheetTransferenciasTarjetas from '@/components/functionals/sheets/SheetTransferenciasTarjetas';
 import Delete from './client';
-
-const MAX_TRANF_MES = 120000;
 
 export default async function Tarjetas() {
   const { data, error } = await GetTarjetas();
@@ -69,29 +60,6 @@ export default async function Tarjetas() {
                 }).format(tarjeta.balance.valor)}
               </p>
             </CardContent>
-            <CardFooter>
-              <div className="w-full">
-                <p className="text-xs text-right">
-                  {Intl.NumberFormat('es-ES', {
-                    style: 'decimal',
-                    maximumFractionDigits: 2,
-                  }).format(tarjeta.total_transferencias_mes)}
-                  /{MAX_TRANF_MES}
-                </p>
-                <Progress
-                  className={cn(
-                    '[&>div]:bg-white mt-2',
-                    (tarjeta.total_transferencias_mes * 100) / MAX_TRANF_MES >=
-                      80 && '[&>div]:bg-red-600',
-                    (tarjeta.total_transferencias_mes * 100) / MAX_TRANF_MES >=
-                      60 && '[&>div]:bg-yellow-400'
-                  )}
-                  value={
-                    (tarjeta.total_transferencias_mes * 100) / MAX_TRANF_MES
-                  }
-                />
-              </div>
-            </CardFooter>
           </Card>
         ))}
         <SheetTarjetas isError={!!error} />
