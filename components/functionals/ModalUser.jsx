@@ -51,7 +51,7 @@ export default function ModalUser({ data = null, trigger, areas }) {
       rol: data?.rol || '',
       password: '',
       area_venta: data?.area_venta?.id?.toString(),
-      almacen: data?.almacen,
+      almacen: data?.almacen || undefined,
     },
   });
 

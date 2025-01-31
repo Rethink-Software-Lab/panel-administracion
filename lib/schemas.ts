@@ -36,7 +36,7 @@ export const UserSchema = pipe(
     ),
     rol: enum_(ROLES, 'Rol invalido'),
     area_venta: optional(pipe(string(), nonEmpty())),
-    almacen: optional(enum_(ALMACENES, 'Almacén invalido')),
+    almacen: optional(pipe(string(), nonEmpty())),
     password: pipe(
       string('La contraseña es requerida'),
       minLength(1, 'La contraseña es requerida')
