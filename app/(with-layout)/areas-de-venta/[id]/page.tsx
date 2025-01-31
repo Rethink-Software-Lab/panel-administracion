@@ -53,7 +53,7 @@ export default async function AreaVenta({ params }: { params: Params }) {
         <TabsContent value="inventario" className="h-full">
           <InventarioAreaVenta area_id={params.id} data={data?.inventario} />
         </TabsContent>
-        {(area_venta === params.id || isStaff) && (
+        {is_authorized && (
           <TabsContent value="ventas" className="h-full">
             <VentasAreaVenta
               ventas={data?.ventas}
