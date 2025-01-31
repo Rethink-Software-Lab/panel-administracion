@@ -21,15 +21,32 @@ export default async function AreaVenta({ params }: { params: Params }) {
   const { isStaff, area_venta } = getSession();
   const { data } = await getArea(params.id);
 
+  let is_authorized = false;
+
+  if (isStaff) {
+    is_authorized = true;
+  } else if (area_venta) {
+    if (params.id === '28') {
+      if (
+        area_venta === '4' ||
+        area_venta === '6' ||
+        area_venta === params.id
+      ) {
+        is_authorized = true;
+      } else {
+        if (area_venta === params.id) {
+          is_authorized = true;
+        }
+      }
+    }
+  }
+
   return (
     <main className="flex flex-1 flex-col gap-4 py-4 lg:gap-6 lg:py-2">
       <Tabs defaultValue="inventario" className="h-full">
         <TabsList className="m-4">
           <TabsTrigger value="inventario">Inventario</TabsTrigger>
-          <TabsTrigger
-            disabled={area_venta !== params.id && !isStaff}
-            value="ventas"
-          >
+          <TabsTrigger disabled={!is_authorized} value="ventas">
             Ventas
           </TabsTrigger>
         </TabsList>
