@@ -23,8 +23,6 @@ export default async function AreaVenta({ params }: { params: Params }) {
 
   let is_authorized = false;
 
-  console.log(area_venta);
-
   if (isStaff) {
     is_authorized = true;
   } else if (area_venta) {
@@ -32,6 +30,7 @@ export default async function AreaVenta({ params }: { params: Params }) {
       if (
         area_venta === '4' ||
         area_venta === '6' ||
+        area_venta === '25' ||
         area_venta === params.id
       ) {
         is_authorized = true;
