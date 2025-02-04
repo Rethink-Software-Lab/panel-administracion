@@ -1,4 +1,10 @@
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
 import { GetTarjetas } from './services';
 import { CloudOff, EllipsisVertical } from 'lucide-react';
 import SheetTarjetas from '@/components/functionals/sheets/SheetTarjetas';
@@ -16,14 +22,28 @@ import {
 } from '@/components/ui/dropdown-menu';
 import SheetTransferenciasTarjetas from '@/components/functionals/sheets/SheetTransferenciasTarjetas';
 import Delete from './client';
+import { Progress } from '@/components/ui/progress';
+
+const MAX_TRANF_MES = 120000;
 
 export default async function Tarjetas() {
   const { data, error } = await GetTarjetas();
 
   return (
     <main className="flex flex-1 flex-col gap-4 py-4 lg:gap-6 lg:py-6 h-full">
-      <div className="flex justify-between items-center pl-6">
+      <div className="flex justify-between items-center px-6">
         <h1 className="text-lg font-semibold md:text-2xl">Tarjetas</h1>
+        {data?.total_balance && (
+          <div className="flex gap-1 items-center">
+            <p className="text-sm">Saldo total:</p>
+            <p className="text-md font-semibold">
+              {Intl.NumberFormat('es-ES', {
+                style: 'currency',
+                currency: 'CUP',
+              }).format(data.total_balance)}
+            </p>
+          </div>
+        )}
       </div>
       <div
         className="w-full h-full max-h-[14rem] flex overflow-x-auto p-4 scroll-p-4 gap-4"
@@ -60,6 +80,29 @@ export default async function Tarjetas() {
                 }).format(tarjeta.balance.valor)}
               </p>
             </CardContent>
+            <CardFooter>
+              <div className="w-full">
+                <p className="text-xs text-right">
+                  {Intl.NumberFormat('es-ES', {
+                    style: 'decimal',
+                    maximumFractionDigits: 2,
+                  }).format(tarjeta.total_transferencias_mes)}
+                  /{MAX_TRANF_MES}
+                </p>
+                <Progress
+                  className={cn(
+                    '[&>div]:bg-white mt-2',
+                    (tarjeta.total_transferencias_mes * 100) / MAX_TRANF_MES >=
+                      80 && '[&>div]:bg-red-600',
+                    (tarjeta.total_transferencias_mes * 100) / MAX_TRANF_MES >=
+                      60 && '[&>div]:bg-yellow-400'
+                  )}
+                  value={
+                    (tarjeta.total_transferencias_mes * 100) / MAX_TRANF_MES
+                  }
+                />
+              </div>
+            </CardFooter>
           </Card>
         ))}
         <SheetTarjetas isError={!!error} />
