@@ -29,7 +29,7 @@ export const columns = [
   {
     accessorKey: 'producto__info__descripcion',
     header: 'Producto',
-    size: 200,
+    size: 300,
   },
   {
     accessorKey: 'cantidad',

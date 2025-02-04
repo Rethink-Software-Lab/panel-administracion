@@ -20,6 +20,8 @@ export interface Tarjetas {
   nombre: string;
   banco: Banco;
   balance: BalanceTarjetas;
+  total_transferencias_dia: number;
+  total_transferencias_mes: number;
 }
 
 export interface Transferenciastarjetas {
@@ -37,4 +39,5 @@ export interface Transferenciastarjetas {
 export interface ResponseTarjetas {
   tarjetas: Tarjetas[];
   transferencias: Transferenciastarjetas[];
+  total_balance: number;
 }
