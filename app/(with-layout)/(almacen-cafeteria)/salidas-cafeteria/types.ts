@@ -1,6 +1,6 @@
+import { Productos_Elaboraciones } from '../../cafeteria/types';
 import { Usuario } from '../../users/types';
 import { Elaboraciones } from '../elaboraciones/types';
-import { Productos_Elaboraciones } from '../ventas-cafeteria/types';
 
 interface Producto {
   id: number;

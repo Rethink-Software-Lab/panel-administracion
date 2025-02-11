@@ -253,6 +253,7 @@ export default function ModalVentas({
                           <SelectItem
                             key={tarjeta.id}
                             value={tarjeta.id.toString()}
+                            disabled={!tarjeta.disponible}
                           >
                             <div className="flex gap-2 items-center ">
                               <div

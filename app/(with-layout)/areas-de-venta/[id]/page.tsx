@@ -31,8 +31,13 @@ export default async function AreaVenta({ params }: { params: Params }) {
         area_venta === '4' ||
         area_venta === '6' ||
         area_venta === '25' ||
+        area_venta === '17' ||
         area_venta === params.id
       ) {
+        is_authorized = true;
+      }
+    } else if (params.id === '27') {
+      if (area_venta === '17' || area_venta === params.id) {
         is_authorized = true;
       }
     } else {

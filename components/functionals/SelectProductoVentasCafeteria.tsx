@@ -17,7 +17,7 @@ import {
 import { InferInput } from 'valibot';
 import { VentasCafeteriaSchema } from '@/lib/schemas';
 import { RefObject, useState } from 'react';
-import { Productos_Elaboraciones } from '@/app/(with-layout)/(almacen-cafeteria)/ventas-cafeteria/types';
+import { Productos_Elaboraciones } from '@/app/(with-layout)/cafeteria/types';
 
 export default function SelectProductoVentaCafeteria({
   form,

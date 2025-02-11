@@ -19,8 +19,8 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-import { VentasCafeteria } from '@/app/(with-layout)/(almacen-cafeteria)/ventas-cafeteria/types';
 import { METODOS_PAGO } from '@/app/(with-layout)/(almacen-cafeteria)/entradas-cafeteria/types';
+import { VentasCafeteria } from '@/app/(with-layout)/cafeteria/types';
 
 export default function SheetInfoVentasCafeteria({
   data,
