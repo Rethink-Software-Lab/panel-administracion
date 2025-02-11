@@ -93,9 +93,9 @@ export default async function Tarjetas() {
                   className={cn(
                     '[&>div]:bg-white mt-2',
                     (tarjeta.total_transferencias_mes * 100) / MAX_TRANF_MES >=
-                      80 && '[&>div]:bg-red-600',
+                      60 && '[&>div]:bg-yellow-400',
                     (tarjeta.total_transferencias_mes * 100) / MAX_TRANF_MES >=
-                      60 && '[&>div]:bg-yellow-400'
+                      80 && '[&>div]:bg-red-600'
                   )}
                   value={
                     (tarjeta.total_transferencias_mes * 100) / MAX_TRANF_MES
