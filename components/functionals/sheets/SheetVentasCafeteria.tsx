@@ -49,11 +49,11 @@ import {
 import { cn } from '@/lib/utils';
 import { Banco } from '@/app/(with-layout)/tarjetas/types';
 import SelectProductoVentaCafeteria from '../SelectProductoVentasCafeteria';
+import { addVentaCafeteria } from '@/app/(with-layout)/cafeteria/actions';
 import {
   Productos_Elaboraciones,
   TarjetasVentas,
-} from '@/app/(with-layout)/(almacen-cafeteria)/ventas-cafeteria/types';
-import { addVentaCafeteria } from '@/app/(with-layout)/(almacen-cafeteria)/ventas-cafeteria/actions';
+} from '@/app/(with-layout)/cafeteria/types';
 
 export default function SheetVentasCafeteria({
   productos,
@@ -253,6 +253,7 @@ export default function SheetVentasCafeteria({
                             <SelectItem
                               key={tarjeta.id}
                               value={tarjeta.id.toString()}
+                              disabled={!tarjeta.disponible}
                             >
                               <div className="flex gap-2 items-center ">
                                 <div

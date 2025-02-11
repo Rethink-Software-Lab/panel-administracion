@@ -2,8 +2,7 @@ import {
   METODOS_PAGO,
   ProductoEntrada,
 } from '../(almacen-cafeteria)/entradas-cafeteria/types';
-import { TarjetasVentas } from '../(almacen-cafeteria)/ventas-cafeteria/types';
-import { Tarjetas } from '../tarjetas/types';
+import { Banco } from '../tarjetas/types';
 import { Usuario } from '../users/types';
 
 interface InventarioCafeteria {
@@ -38,6 +37,12 @@ export interface VentasCafeteria {
   tarjeta: string | null;
 }
 
+export interface TarjetasVentas {
+  id: number;
+  nombre: string;
+  banco: Banco;
+  disponible: boolean;
+}
 export interface ResponseCafeteria {
   inventario: ProductoCafeteria[];
   ventas: VentasCafeteria[];
