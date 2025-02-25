@@ -770,3 +770,14 @@ export const CuentaCasaSchema = pipe(
     ['productos']
   )
 );
+
+export const ReferidoSchema = object({
+  nombre: pipe(
+    string('El nombre es requerido'),
+    nonEmpty('El nombre es requerido')
+  ),
+  telefono: pipe(
+    string('El telefono es requerido'),
+    nonEmpty('El telefono es requerido')
+  ),
+});
