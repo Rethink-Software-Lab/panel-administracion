@@ -3,6 +3,7 @@ import { Inter as FontSans } from 'next/font/google';
 import '@/styles/globals.css';
 import { cn } from '@/lib/utils';
 import { Toaster } from '@/components/ui/sonner';
+import { ReactElement } from 'react';
 
 const fontSans = FontSans({
   subsets: ['latin'],
@@ -15,7 +16,7 @@ export const metadata = {
     'Panel de Administración para facilitar la gestión y supervisión de diversas operaciones dentro de la organización.',
 };
 
-export default function LoginLayout({ children }) {
+export default function LoginLayout({ children }: { children: ReactElement }) {
   return (
     <html lang="es">
       <body

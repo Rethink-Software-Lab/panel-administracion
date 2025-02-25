@@ -6,7 +6,7 @@ import { getReferidos } from './services';
 import SheetReferidos from '@/components/functionals/sheets/SheetReferidos';
 
 export default async function Merma() {
-  const { data } = await getReferidos();
+  const { data, error } = await getReferidos();
 
   return (
     <main className="flex flex-1 flex-col gap-4 p-4 lg:gap-6 lg:p-6">
@@ -16,7 +16,7 @@ export default async function Merma() {
         <SheetReferidos />
       </div>
 
-      {data ? (
+      {!error ? (
         <DataTable columns={columns} data={data} />
       ) : (
         <div className="flex flex-1 items-center justify-center rounded-lg border border-dashed shadow-sm">
