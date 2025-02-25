@@ -27,7 +27,7 @@
     "**/*.tsx",
     ".next/types/**/*.ts",
     "app/(with-layout)/layout.tsx",
-    "app/layout.jsx",
+    "app/layout.tsx",
     "components/functionals/Combobox.jsx",
     "app/(with-layout)/page.tsx",
     "lib/schemas.ts",
