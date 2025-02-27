@@ -18,7 +18,7 @@ interface Params {
 }
 
 export default async function AreaVenta({ params }: { params: Params }) {
-  const { isStaff, area_venta } = getSession();
+  const { isStaff, area_venta, userId } = getSession();
   const { data } = await getArea(params.id);
 
   let is_authorized = false;
@@ -38,6 +38,10 @@ export default async function AreaVenta({ params }: { params: Params }) {
       }
     } else if (params.id === '27') {
       if (area_venta === '17' || area_venta === params.id) {
+        is_authorized = true;
+      }
+    } else if (params.id === '30') {
+      if (userId === '38' || area_venta === params.id) {
         is_authorized = true;
       }
     } else {

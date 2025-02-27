@@ -20,6 +20,7 @@ export const columns: ColumnDef<Referido>[] = [
   {
     accessorKey: '',
     header: 'Enlace',
+    size: 400,
     cell: ({ row }) => (
       <code
         className="text-xs cursor-copy"
