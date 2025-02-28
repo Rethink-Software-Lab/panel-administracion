@@ -18,7 +18,7 @@ export const columns = [
     ),
   },
   {
-    accessorKey: 'producto__info__descripcion',
+    accessorKey: 'descripcion',
     header: 'Producto',
   },
   {
@@ -40,7 +40,7 @@ export const columns = [
     },
   },
   {
-    accessorKey: 'usuario__username',
+    accessorKey: 'username',
     header: 'Usuario',
     cell: ({ row }) => {
       const username = row.original.usuario__username;
