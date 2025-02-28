@@ -1,6 +1,6 @@
 'use server';
 
-import { revalidatePath } from 'next/cache';
+import { revalidateTag } from 'next/cache';
 import { cookies } from 'next/headers';
 
 export async function deleteVenta({ id }: { id: number }) {
@@ -36,7 +36,7 @@ export async function deleteVenta({ id }: { id: number }) {
       },
     };
   }
-  revalidatePath(`/areas-de-venta/${id}`);
+  revalidateTag(`/area-de-venta/${id}`);
   return {
     data: 'Venta eliminada con éxito.',
     error: null,

@@ -77,8 +77,8 @@ export default async function AreaVenta({ params }: { params: Params }) {
           )}
         </Tabs>
       ) : (
-        <div className="flex flex-1 items-center justify-center rounded-lg border border-dashed shadow-sm">
-          <div className="flex flex-col items-center gap-1 text-center">
+        <div className="flex flex-1  items-center justify-center rounded-lg border border-dashed shadow-sm">
+          <div className="flex flex-col items-center gap-1 text-center ">
             <CloudOff size={72} className="inline-flex mb-4" />
             <h3 className="text-2xl font-bold tracking-tight">
               Error de conexión
