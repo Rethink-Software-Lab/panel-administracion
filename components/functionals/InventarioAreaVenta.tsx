@@ -1,5 +1,5 @@
-import { columns } from '@/app/(with-layout)/inventario/columns';
 import { columns as columnsNew } from '@/app/(with-layout)/areas-de-venta/[id]/columns';
+import { columns as columnsZapatos } from '@/app/(with-layout)/areas-de-venta/[id]/columns-zapatos';
 import { DataTable } from '@/components/ui/data-table-inventario-almacen';
 import { DataTable as DataTableNew } from '@/components/ui/data-table-inventario-almacen-2';
 import { CloudOff, FileText } from 'lucide-react';
@@ -8,19 +8,20 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Categoria } from '@/app/(with-layout)/categorias/types';
 import Link from 'next/link';
 import { Button } from '../ui/button';
+import { Zapatos } from '@/app/(with-layout)/areas-de-venta/[id]/types';
 
 export interface Productos {
   id: number;
   codigo: string;
   descripcion: string;
-  precio_venta: number;
+  precio_venta: string;
   cantidad: number;
-  categoria__nombre: string;
+  categoria_nombre: string | null;
 }
 
 interface Data {
   productos: Productos[];
-  zapatos: Productos[];
+  zapatos: Zapatos[];
   categorias: Categoria[];
 }
 
@@ -33,6 +34,7 @@ export default async function InventarioAreaVenta({
 }) {
   const productos = data?.productos;
   const zapatos = data?.zapatos;
+
   return (
     <main className="flex flex-1 flex-col gap-4 pb-4 lg:gap-6 lg:pb-6 h-full">
       <div className="flex justify-between items-center px-4">
@@ -82,7 +84,7 @@ export default async function InventarioAreaVenta({
             value="zapatos"
             className="p-4 m-0 bg-muted/40 h-full border-t-2 border-muted"
           >
-            <DataTable columns={columns} data={zapatos} />
+            <DataTable columns={columnsZapatos} data={zapatos} />
           </TabsContent>
         </Tabs>
       ) : (
