@@ -9,13 +9,11 @@ export const columns = [
   {
     accessorKey: 'created_at',
     header: 'Fecha',
-    cell: ({ row }) => (
-      <span>
-        {DateTime.fromISO(row.getValue('created_at')).toRelative({
-          locale: 'es',
-        })}
-      </span>
-    ),
+    cell: ({ row }) =>
+      DateTime.fromSQL(row.getValue('created_at')).toLocaleString(
+        DateTime.DATETIME_MED,
+        { locale: 'es' }
+      ),
   },
   {
     accessorKey: 'descripcion',
@@ -43,7 +41,7 @@ export const columns = [
     accessorKey: 'username',
     header: 'Usuario',
     cell: ({ row }) => {
-      const username = row.original.usuario__username;
+      const username = row.original.username;
       if (username) {
         return username;
       } else {
