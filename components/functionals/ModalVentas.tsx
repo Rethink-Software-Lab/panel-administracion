@@ -46,36 +46,58 @@ import {
 import { useFieldArray, useForm, useWatch } from 'react-hook-form';
 import { valibotResolver } from '@hookform/resolvers/valibot';
 import { VentasSchema } from '@/lib/schemas';
-import { safeParse, pipe, integer, minValue, string, transform } from 'valibot';
+import {
+  safeParse,
+  pipe,
+  integer,
+  minValue,
+  string,
+  transform,
+  InferInput,
+} from 'valibot';
 
-import { addVenta } from '@/lib/actions';
 import { toast } from 'sonner';
 import { CircleX, LoaderCircle } from 'lucide-react';
-import { useRef, useState } from 'react';
+import { ReactNode, useRef, useState } from 'react';
 
 import { Label } from '../ui/label';
 import { Input } from '../ui/input';
 import { METODOS_PAGO } from '@/app/(with-layout)/(almacen-cafeteria)/entradas-cafeteria/types';
 import { Banco } from '@/app/(with-layout)/tarjetas/types';
+import {
+  AllProductos,
+  Tarjetas,
+} from '@/app/(with-layout)/areas-de-venta/[id]/types';
+import { addVenta } from '@/app/(with-layout)/areas-de-venta/[id]/actions';
 
 export default function ModalVentas({
   trigger,
   idPunto,
   productosInfo,
   tarjetas,
+}: {
+  idPunto: number;
+  productosInfo: AllProductos[];
+  tarjetas: Tarjetas[];
+  trigger: ReactNode;
 }) {
   const [open, setOpen] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
-  const [errors, setErrors] = useState(null);
+  const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
-  const ref = useRef();
-  const formRef = useRef(null);
+  const ref = useRef<HTMLInputElement | null>(null);
+  const formRef = useRef<HTMLFormElement | null>(null);
 
-  const form = useForm({
+  const form = useForm<InferInput<typeof VentasSchema>>({
     resolver: valibotResolver(VentasSchema),
   });
 
   const { fields, append, remove } = useFieldArray({
+    control: form.control,
+    name: 'zapatos_id',
+  });
+
+  const zapatos_id = useWatch({
     control: form.control,
     name: 'zapatos_id',
   });
@@ -98,21 +120,33 @@ export default function ModalVentas({
   );
 
   const handleNewProducts = () => {
+    if (!ref.current) return;
     const { success } = safeParse(IdArraySchema, ref.current.value);
-    success && append(ref.current.value);
-    ref.current.value = '';
+    if (success) {
+      append({
+        id: Math.random().toString(36).substr(2, 9),
+        value: parseInt(ref.current.value),
+      });
+      ref.current.value = '';
+    }
   };
 
-  const onSubmit = async (dataForm) => {
+  const onSubmit = async (
+    dataForm: InferInput<typeof VentasSchema>
+  ): Promise<void> => {
     setIsLoading(true);
-    const { error } = await addVenta({ ...dataForm, areaVenta: idPunto });
+    const { data: dataRes, error } = await addVenta({
+      ...dataForm,
+      zapatos_id: dataForm.zapatos_id?.map((item) => item.value),
+      areaVenta: idPunto,
+    });
     setIsLoading(false);
     if (!error) {
       form.reset();
       setIsOpen(false);
-      toast.success('La venta fué creada con éxito.');
+      toast.success(dataRes);
     }
-    setErrors(error);
+    setError(error);
   };
 
   return (
@@ -123,11 +157,11 @@ export default function ModalVentas({
           <DialogTitle>Agregar Venta</DialogTitle>
         </DialogHeader>
         <DialogDescription>Todos los campos son requeridos</DialogDescription>
-        {errors && (
+        {error && (
           <Alert variant="destructive">
             <CircleX className="h-5 w-5" />
             <AlertTitle>Error!</AlertTitle>
-            <AlertDescription>{errors.message}</AlertDescription>
+            <AlertDescription>{error}</AlertDescription>
           </Alert>
         )}
         <Form {...form}>
@@ -372,20 +406,20 @@ export default function ModalVentas({
                 <div className="space-y-2">
                   <Label>Productos</Label>
 
-                  {form.getValues('zapatos_id')?.length > 0 && (
+                  {zapatos_id && zapatos_id?.length > 0 && (
                     <ul
                       className={cn(
                         'overflow-y-auto flex gap-2 p-2 max-h-[328px] flex-col items-center whitespace-nowrap font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 shadow-sm bg-accent hover:text-accent-foreground rounded-md px-3 text-xs border-dashed ',
-                        form?.formState?.errors?.productos &&
+                        form?.formState?.errors?.zapatos_id &&
                           'border-destructive'
                       )}
                     >
-                      {form.getValues('zapatos_id')?.map((p, index) => (
+                      {fields?.map((p, index) => (
                         <li
-                          key={`${p}-${index}`}
+                          key={p.id}
                           className="flex w-full p-2 px-4 justify-between items-center bg-background rounded-md"
                         >
-                          <span>{p}</span>
+                          <span>{p.value}</span>
                           <X
                             className="ml-2 cursor-pointer"
                             onClick={() => remove(index)}
@@ -406,7 +440,7 @@ export default function ModalVentas({
                     </Button>
                   </div>
                   <p className="text-[0.8rem] font-medium text-destructive">
-                    {form?.formState?.errors?.productos?.message}
+                    {form.formState.errors?.zapatos_id?.message}
                   </p>
                 </div>
               )}

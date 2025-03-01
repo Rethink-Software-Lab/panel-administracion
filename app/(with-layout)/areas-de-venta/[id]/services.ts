@@ -1,6 +1,9 @@
 import { cookies } from 'next/headers';
+import { EndpointOneAreaVenta } from './types';
 
-export async function getAreaVenta(id: number) {
+export async function getAreaVenta(
+  id: number
+): Promise<{ data: EndpointOneAreaVenta | null; error: string | null }> {
   const token = cookies().get('session')?.value;
   try {
     const res = await fetch(process.env.BACKEND_URL_V3 + '/area-venta/' + id, {
