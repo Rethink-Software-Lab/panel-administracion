@@ -23,10 +23,10 @@ export const columns = [
   },
   {
     id: 'categoria',
-    accessorKey: 'categoria__nombre',
+    accessorKey: 'categoria_nombre',
     header: 'Categoría',
     cell: ({ row }) => (
-      <Badge variant="outline">{row?.original?.categoria__nombre}</Badge>
+      <Badge variant="outline">{row?.original?.categoria_nombre}</Badge>
     ),
   },
 ];
