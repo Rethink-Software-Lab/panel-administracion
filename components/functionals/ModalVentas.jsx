@@ -323,7 +323,7 @@ export default function ModalVentas({
                                   const esZapato =
                                     productosInfo?.find(
                                       (e) => e.codigo === currentValue
-                                    )?.categoria.nombre === 'Zapatos';
+                                    )?.categoria === 'Zapatos';
 
                                   if (esZapato) {
                                     form.setValue('cantidad', undefined);
@@ -367,8 +367,8 @@ export default function ModalVentas({
             />
 
             {info_producto &&
-              productosInfo?.find((p) => p.codigo === info_producto)?.categoria
-                ?.nombre === 'Zapatos' && (
+              productosInfo?.find((p) => p.codigo === info_producto)
+                ?.categoria === 'Zapatos' && (
                 <div className="space-y-2">
                   <Label>Productos</Label>
 
@@ -412,8 +412,8 @@ export default function ModalVentas({
               )}
 
             {info_producto &&
-              productosInfo?.find((p) => p.codigo === info_producto)?.categoria
-                ?.nombre !== 'Zapatos' && (
+              productosInfo?.find((p) => p.codigo === info_producto)
+                ?.categoria !== 'Zapatos' && (
                 <div className="space-y-2">
                   <Label>Cantidad</Label>
                   <Input
