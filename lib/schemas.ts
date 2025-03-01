@@ -261,7 +261,10 @@ export const VentasSchema = pipe(
 
     zapatos_id: optional(
       pipe(
-        array(string(), 'Productos no puede estar vacio'),
+        array(
+          object({ id: string(), value: number() }),
+          'Productos no puede estar vacio'
+        ),
         minLength(1, 'Productos no puede estar vacio')
       )
     ),

@@ -5,31 +5,15 @@ import { DataTable as DataTableNew } from '@/components/ui/data-table-inventario
 import { CloudOff, FileText } from 'lucide-react';
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Categoria } from '@/app/(with-layout)/categorias/types';
 import Link from 'next/link';
 import { Button } from '../ui/button';
-import { Zapatos } from '@/app/(with-layout)/areas-de-venta/[id]/types';
-
-export interface Productos {
-  id: number;
-  codigo: string;
-  descripcion: string;
-  precio_venta: string;
-  cantidad: number;
-  categoria_nombre: string | null;
-}
-
-interface Data {
-  productos: Productos[];
-  zapatos: Zapatos[];
-  categorias: Categoria[];
-}
+import { Inventario } from '@/app/(with-layout)/areas-de-venta/[id]/types';
 
 export default async function InventarioAreaVenta({
   data,
   area_id,
 }: {
-  data: Data;
+  data: Inventario;
   area_id: string;
 }) {
   const productos = data?.productos;

@@ -7,34 +7,16 @@ import { DataTable } from '../ui/data-table-ventas';
 import { columns } from '@/app/(with-layout)/areas-de-venta/[id]/columns-ventas';
 
 import Link from 'next/link';
-
-enum Metodo {
-  Transferencia = 'TRANSFERENCIA',
-  Efectivo = 'EFECTIVO',
-  Mixto = 'MIXTO',
-}
-
-interface Ventas {
-  id: number;
-  created_at: string;
-  importe: number;
-  metodo_pago: string;
-  username: string;
-  descripcion: string;
-  cantidad: number;
-}
-
-interface Tarjetas {
-  id: number;
-  nombre: string;
-  banco: string;
-  disponible: boolean;
-}
+import {
+  AllProductos,
+  Tarjetas,
+  Ventas,
+} from '@/app/(with-layout)/areas-de-venta/[id]/types';
 
 interface Props {
   id: string;
   ventas: Ventas[];
-  productos: { codigo: string; categoria: string }[];
+  productos: AllProductos[];
   tarjetas: Tarjetas[];
 }
 
