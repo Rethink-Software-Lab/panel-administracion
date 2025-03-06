@@ -45,8 +45,16 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from '@/components/ui/tooltip';
+import { Categoria } from '@/app/(with-layout)/categorias/types';
+import { ProductInfo } from '@/app/(with-layout)/products/types';
 
-export default function Wrap({ categorias, isEdit, data }) {
+interface Props {
+  categorias: Categoria[];
+  isEdit?: boolean;
+  data?: ProductInfo;
+}
+
+export default function Wrap({ categorias, isEdit, data }: Props) {
   const [open, setOpen] = useState(false);
 
   return (
@@ -89,7 +97,19 @@ export default function Wrap({ categorias, isEdit, data }) {
   );
 }
 
-function ModalProduct({ data = null, categorias, open, setOpen }) {
+interface ModalProductProps {
+  data?: any;
+  categorias: Categoria[];
+  open: boolean;
+  setOpen: (open: boolean) => void;
+}
+
+function ModalProduct({
+  data = null,
+  categorias,
+  open,
+  setOpen,
+}: ModalProductProps) {
   const [imagen, setImage] = useState(data?.imagen?.url);
   const form = useForm({
     resolver: valibotResolver(ProductSchema),

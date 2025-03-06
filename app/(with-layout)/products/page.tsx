@@ -1,11 +1,9 @@
 import { CloudOff } from 'lucide-react';
 
-import { getProductosWithCategorias } from '@/lib/services';
-
-import Wrap from '@/components/functionals/ModalProduct';
-
 import { DataTable } from '@/components/ui/data-table-productos';
 import { columns } from './columns';
+import Wrap from '@/components/functionals/ModalProduct';
+import { getProductosWithCategorias } from './services';
 
 export default async function Products() {
   const { data } = await getProductosWithCategorias();
@@ -14,7 +12,7 @@ export default async function Products() {
     <main className="flex flex-1 flex-col gap-4 p-4 lg:gap-6 lg:p-6">
       <div className="flex justify-between items-center">
         <h1 className="text-lg font-semibold md:text-2xl">Productos</h1>
-        <Wrap categorias={data?.categorias} />
+        <Wrap categorias={data?.categorias || []} />
       </div>
       {data?.productos && data?.categorias ? (
         <DataTable

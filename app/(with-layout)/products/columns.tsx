@@ -1,21 +1,23 @@
 'use client';
 
 import { Badge } from '@/components/ui/badge';
-import { Edit2, FileX } from 'lucide-react';
+import { FileX } from 'lucide-react';
 import Image from 'next/image';
 import EspecialWarningDelete from '@/components/functionals/EspecialWarningDelete';
-import { Button } from '@/components/ui/button';
 
 import { deleteProducto } from './actions';
 
 import Wrap from '@/components/functionals/ModalProduct';
+import { ColumnDef } from '@tanstack/react-table';
+import { ProductInfo } from './types';
+import { CustomTableOptions } from '@/components/ui/data-table-productos';
 
-export const columns = [
+export const columns: ColumnDef<ProductInfo>[] = [
   {
     accessorKey: 'imagen',
     header: 'Imagen',
     cell: ({ row }) => {
-      const url = row.getValue('imagen')?.url;
+      const url = row.original.imagen?.url;
 
       if (!url) {
         return (
@@ -69,13 +71,12 @@ export const columns = [
   {
     header: ' ',
     cell: ({ row, table }) => {
+      const categorias = (table.options as CustomTableOptions<ProductInfo>)
+        .categorias;
+
       return (
         <div className="flex items-center justify-end gap-2">
-          <Wrap
-            data={row.original}
-            categorias={table.options.categorias}
-            isEdit
-          />
+          <Wrap data={row.original} categorias={categorias} isEdit />
           <EspecialWarningDelete
             id={row.original.id}
             text="Al eliminar un producto se eliminarán las entradas, salidas, ventas y productos asociados."

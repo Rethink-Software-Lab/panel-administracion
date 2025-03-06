@@ -2,13 +2,13 @@
 
 import { useState } from 'react';
 import { toast } from 'sonner';
-import { UseFormReturn } from 'react-hook-form';
+import { UseFormReturn, useWatch } from 'react-hook-form';
 import {
   addProducto,
   updateProducto,
 } from '@/app/(with-layout)/products/actions';
 
-interface ProductFormData {
+export interface ProductFormData {
   id?: string;
   imagen?: FileList;
   codigo: string;
@@ -37,6 +37,8 @@ export function useProductSubmit({
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
+  const id = useWatch({ control: form.control, name: 'id' });
+
   const handleSubmit = async (dataForm: ProductFormData): Promise<void> => {
     setIsLoading(true);
     const formData = new FormData();
@@ -56,8 +58,8 @@ export function useProductSubmit({
 
     let result: SubmitResult;
 
-    if (form.getValues('id')) {
-      result = await updateProducto(formData, form.getValues('id'));
+    if (id) {
+      result = await updateProducto(formData, id);
     } else {
       result = await addProducto(formData);
     }
