@@ -34,7 +34,7 @@
     "components/functionals/DownloadButton.jsx",
     "components/functionals/DocPdf.js",
     "components/functionals/EspecialWarningDelete.jsx",
-    "app/(with-layout)/products/page.jsx",
+    "app/(with-layout)/products/page.tsx",
     "components/ui/data-table-areas.jsx"
   ],
   "exclude": ["node_modules"]

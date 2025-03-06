@@ -1,10 +1,11 @@
 'use server';
 
+import { LoginSchema } from '@/lib/schemas';
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
-import { revalidatePath, revalidateTag } from 'next/cache';
+import { InferInput } from 'valibot';
 
-export async function login(data) {
+export async function login(data: InferInput<typeof LoginSchema>) {
   const response = await fetch(process.env.BACKEND_URL_V2 + '/login/', {
     method: 'POST',
     body: JSON.stringify(data),
@@ -26,9 +27,4 @@ export async function login(data) {
   });
 
   redirect('/');
-}
-
-export async function logout() {
-  cookies().delete('session');
-  redirect('/login');
 }

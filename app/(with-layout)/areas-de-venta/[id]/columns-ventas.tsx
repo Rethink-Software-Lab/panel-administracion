@@ -4,8 +4,10 @@ import { Badge } from '@/components/ui/badge';
 import TableDeleteV2 from '@/components/functionals/TableDeleteV2';
 import { DateTime } from 'luxon';
 import { deleteVenta } from './actions';
+import { ColumnDef } from '@tanstack/react-table';
+import { Ventas } from './types';
 
-export const columns = [
+export const columns: ColumnDef<Ventas>[] = [
   {
     accessorKey: 'created_at',
     header: 'Fecha',

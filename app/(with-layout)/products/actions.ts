@@ -3,7 +3,7 @@
 import { revalidatePath } from 'next/cache';
 import { cookies } from 'next/headers';
 
-export async function addProducto(formData) {
+export async function addProducto(formData: FormData) {
   const token = cookies().get('session')?.value || null;
   const res = await fetch(process.env.BACKEND_URL_V2 + '/productos', {
     method: 'POST',
@@ -40,7 +40,7 @@ export async function addProducto(formData) {
   };
 }
 
-export async function updateProducto(formData, id) {
+export async function updateProducto(formData: FormData, id: string) {
   const token = cookies().get('session')?.value || null;
   const res = await fetch(
     process.env.BACKEND_URL_V2 + '/productos/' + id + '/',
@@ -86,7 +86,7 @@ export async function updateProducto(formData, id) {
   };
 }
 
-export async function deleteProducto(id) {
+export async function deleteProducto(id: number) {
   const token = cookies().get('session')?.value || null;
   const res = await fetch(process.env.BACKEND_URL_V2 + '/productos/' + id, {
     method: 'DELETE',

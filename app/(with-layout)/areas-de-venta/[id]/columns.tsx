@@ -1,8 +1,10 @@
 'use client';
 
 import { Badge } from '@/components/ui/badge';
+import { ColumnDef } from '@tanstack/react-table';
+import { Productos } from './types';
 
-export const columns = [
+export const columns: ColumnDef<Productos>[] = [
   {
     id: 'codigo',
     accessorKey: 'codigo',

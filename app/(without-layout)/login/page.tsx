@@ -21,11 +21,12 @@ import { LoginSchema } from '@/lib/schemas';
 import { cn } from '@/lib/utils';
 import DotPattern from '@/components/ui/dotPattern';
 
-import { login } from '@/lib/actions';
 import { Label } from '@/components/ui/label';
+import { InferInput } from 'valibot';
+import { login } from './actions';
 
 export default function Dashboard() {
-  const [errors, setErrors] = useState(null);
+  const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const form = useForm({
     resolver: valibotResolver(LoginSchema),
@@ -35,23 +36,11 @@ export default function Dashboard() {
     },
   });
 
-  const onSubmit = async (data) => {
+  const onSubmit = async (data: InferInput<typeof LoginSchema>) => {
     setIsLoading(true);
     const results = await login(data);
     setIsLoading(false);
-    if (results !== undefined) {
-      setErrors(results.errors);
-    }
-  };
-
-  const errorMessage = (error) => {
-    if (error.message.startsWith('Please enter valid credentials')) {
-      return 'Usuario o contraseña incorrectas';
-    } else if (error.message.startsWith('fetch failed')) {
-      return 'No se pudo conectar con el servidor';
-    } else {
-      return error.message;
-    }
+    results && setError(results);
   };
 
   return (
@@ -79,14 +68,13 @@ export default function Dashboard() {
               Introduce tu usuario y contraseña.
             </p>
           </div>
-          {errors &&
-            errors.map((error, index) => (
-              <Alert variant="destructive" key={index}>
-                <CircleX className="h-5 w-5" />
-                <AlertTitle>Error!</AlertTitle>
-                <AlertDescription>{errorMessage(error)}</AlertDescription>
-              </Alert>
-            ))}
+          {error && (
+            <Alert variant="destructive">
+              <CircleX className="h-5 w-5" />
+              <AlertTitle>Error!</AlertTitle>
+              <AlertDescription>{error}</AlertDescription>
+            </Alert>
+          )}
 
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
