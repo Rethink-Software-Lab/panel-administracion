@@ -2,16 +2,16 @@
 import TableDeleteV2 from '@/components/functionals/TableDeleteV2';
 import { deleteAjuste } from '@/app/(with-layout)/ajuste-inventario/actions';
 import { DateTime } from 'luxon';
-import { Row } from '@tanstack/react-table';
+import { ColumnDef } from '@tanstack/react-table';
 import SheetInfoAjusteInventario from '@/components/functionals/SheetInfoAjusteInventario';
 import { AjusteInventario } from '@/app/(with-layout)/ajuste-inventario/types';
 import { Badge } from '@/components/ui/badge';
 
-export const columns = [
+export const columns: ColumnDef<AjusteInventario>[] = [
   {
     accessorKey: 'created_at',
     header: 'Fecha',
-    cell: ({ row }: { row: Row<AjusteInventario> }) =>
+    cell: ({ row }) =>
       DateTime.fromISO(row.getValue('created_at')).toLocaleString(
         DateTime.DATETIME_MED,
         { locale: 'es' }
@@ -24,7 +24,7 @@ export const columns = [
   {
     accessorKey: 'usuario.username',
     header: 'Usuario',
-    cell: ({ row }: { row: Row<AjusteInventario> }) => {
+    cell: ({ row }) => {
       const username = row.original.usuario?.username;
       if (username) {
         return username;
@@ -36,7 +36,7 @@ export const columns = [
 
   {
     header: ' ',
-    cell: ({ row }: { row: Row<AjusteInventario> }) => (
+    cell: ({ row }) => (
       <span className="flex gap-2 justify-center">
         <SheetInfoAjusteInventario data={row.original} />
         <TableDeleteV2 id={row.original.id} action={deleteAjuste} />

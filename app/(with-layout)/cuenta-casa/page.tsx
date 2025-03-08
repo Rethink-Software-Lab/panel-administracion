@@ -1,9 +1,10 @@
 import { CloudOff } from 'lucide-react';
 
-import { DataTable } from '@/components/ui/data-table-entradas';
+import DataTable from '@/components/functionals/data-tables/data-table-general';
 import { getCuentaCasa } from './services';
 import { columns } from './columns';
 import SheetAddCuentaCasa from '@/components/functionals/sheets/SheetAddCuentaCasa';
+import { type CuentaCasa } from './types';
 
 export default async function CuentaCasa() {
   const { data } = await getCuentaCasa();
@@ -17,7 +18,7 @@ export default async function CuentaCasa() {
       </div>
 
       {data?.cuenta_casa ? (
-        <DataTable columns={columns} data={data.cuenta_casa} />
+        <DataTable<CuentaCasa> columns={columns} data={data.cuenta_casa} />
       ) : (
         <div className="flex flex-1 items-center justify-center rounded-lg border border-dashed shadow-sm">
           <div className="flex flex-col items-center gap-1 text-center">

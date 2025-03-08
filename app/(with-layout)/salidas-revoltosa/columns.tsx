@@ -2,16 +2,16 @@
 import TableDeleteV2 from '@/components/functionals/TableDeleteV2';
 import { deleteSalidaRevoltosa } from './actions';
 import { DateTime } from 'luxon';
-import { Row } from '@tanstack/react-table';
+import { ColumnDef } from '@tanstack/react-table';
 
 import { SalidasRevoltosa } from './types';
 import { Badge } from '@/components/ui/badge';
 
-export const columns = [
+export const columns: ColumnDef<SalidasRevoltosa>[] = [
   {
     accessorKey: 'created_at',
     header: 'Fecha',
-    cell: ({ row }: { row: Row<SalidasRevoltosa> }) =>
+    cell: ({ row }) =>
       DateTime.fromISO(row.getValue('created_at')).toLocaleString(
         DateTime.DATETIME_MED,
         { locale: 'es' }
@@ -29,7 +29,7 @@ export const columns = [
   {
     accessorKey: 'usuario__username',
     header: 'Usuario',
-    cell: ({ row }: { row: Row<SalidasRevoltosa> }) => {
+    cell: ({ row }) => {
       const username = row.original.usuario__username;
       if (username) {
         return username;
@@ -41,7 +41,7 @@ export const columns = [
 
   {
     header: ' ',
-    cell: ({ row }: { row: Row<SalidasRevoltosa> }) => (
+    cell: ({ row }) => (
       <TableDeleteV2 id={row.original.id} action={deleteSalidaRevoltosa} />
     ),
   },

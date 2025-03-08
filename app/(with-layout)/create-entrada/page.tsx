@@ -3,7 +3,7 @@ import FormEntradas from '@/components/functionals/FormEntradas';
 import { getProductos } from '@/lib/services';
 
 export default async function CreateEntrada() {
-  const { data, errors } = await getProductos();
+  const { data, error } = await getProductos();
 
   return (
     <main className="grid flex-1 items-start gap-4 my-6 p-4 sm:px-6 sm:py-0 md:gap-8">

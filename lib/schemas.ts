@@ -5,7 +5,7 @@ import {
 } from '@/app/(with-layout)/gastos/types';
 import { LOCALACIONES } from '@/app/(with-layout)/merma/type';
 import { Banco, TipoTransferencia } from '@/app/(with-layout)/tarjetas/types';
-import { ALMACENES, ROLES } from '@/app/(with-layout)/users/types';
+import { ROLES } from '@/app/(with-layout)/users/types';
 import {
   enum_,
   pipe,

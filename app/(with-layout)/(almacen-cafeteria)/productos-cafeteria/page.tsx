@@ -1,9 +1,10 @@
-import { DataTable } from '@/components/ui/data-table';
+import DataTable from '@/components/functionals/data-tables/data-table-general';
 
 import { CloudOff } from 'lucide-react';
 import { ProductosCafeteria } from './services';
 import { columns } from './columns';
 import SheetProductosCafeteria from '@/components/functionals/sheets/SheetProductosCafeteria';
+import { ProductoCafeteria } from './types';
 
 export default async function Inventario() {
   const { data } = await ProductosCafeteria();
@@ -19,7 +20,7 @@ export default async function Inventario() {
 
       {data ? (
         <div className="p-4 m-0 bg-muted/40 h-full border-t-2 border-muted">
-          <DataTable columns={columns} data={data} />
+          <DataTable<ProductoCafeteria> columns={columns} data={data} />
         </div>
       ) : (
         <div className="flex flex-1 items-center justify-center rounded-lg border border-dashed shadow-sm">

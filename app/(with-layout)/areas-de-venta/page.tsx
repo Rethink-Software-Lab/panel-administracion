@@ -4,8 +4,9 @@ import { Button } from '@/components/ui/button';
 import { getAreasVentas } from '@/lib/services';
 import ModalAreasVenta from '@/components/functionals/ModalAreasVenta';
 
-import { DataTable } from '@/components/ui/data-table-areas';
+import DataTable from '@/components/functionals/data-tables/data-table-general';
 import { columns } from './columns';
+import { AreaVenta } from './types';
 
 export default async function AreasVenta() {
   const { data } = await getAreasVentas();
@@ -28,7 +29,7 @@ export default async function AreasVenta() {
       </div>
 
       {data ? (
-        <DataTable columns={columns} data={data} />
+        <DataTable<AreaVenta> columns={columns} data={data} />
       ) : (
         <div className="flex flex-1 items-center justify-center rounded-lg border border-dashed shadow-sm">
           <div className="flex flex-col items-center gap-1 text-center">

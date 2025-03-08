@@ -4,8 +4,9 @@ import { Button } from '@/components/ui/button';
 import { getCategorias } from '@/lib/services';
 
 import { columns } from './columns';
-import { DataTable } from '@/components/ui/data-table';
+import DataTable from '@/components/functionals/data-tables/data-table-general';
 import ModalCategoria from '@/components/functionals/ModalCategoria';
+import { Categoria } from './types';
 
 export default async function Proyectos() {
   const { data } = await getCategorias();
@@ -26,7 +27,7 @@ export default async function Proyectos() {
       </div>
 
       {data ? (
-        <DataTable columns={columns} data={data} />
+        <DataTable<Categoria> columns={columns} data={data} />
       ) : (
         <div className="flex flex-1 items-center justify-center rounded-lg border border-dashed shadow-sm">
           <div className="flex flex-col items-center gap-1 text-center">

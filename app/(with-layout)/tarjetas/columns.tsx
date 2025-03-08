@@ -2,7 +2,7 @@
 import TableDeleteV2 from '@/components/functionals/TableDeleteV2';
 import { deleteTransferenciaTarjeta } from './actions';
 import { DateTime } from 'luxon';
-import { Row } from '@tanstack/react-table';
+import { ColumnDef } from '@tanstack/react-table';
 
 import { TipoTransferencia, Transferenciastarjetas } from './types';
 import { ArrowDownLeft, ArrowUpRight } from 'lucide-react';
@@ -14,11 +14,11 @@ import {
 } from '@/components/ui/tooltip';
 import { Badge } from '@/components/ui/badge';
 
-export const columns = [
+export const columns: ColumnDef<Transferenciastarjetas>[] = [
   {
     accessorKey: 'created_at',
     header: 'Fecha',
-    cell: ({ row }: { row: Row<Transferenciastarjetas> }) =>
+    cell: ({ row }) =>
       DateTime.fromISO(row.getValue('created_at')).toLocaleString(
         DateTime.DATETIME_MED,
         { locale: 'es' }
@@ -27,7 +27,7 @@ export const columns = [
   {
     accessorKey: 'tipo',
     header: 'Tipo',
-    cell: ({ row }: { row: Row<Transferenciastarjetas> }) => {
+    cell: ({ row }) => {
       const tipo = row.getValue('tipo');
 
       if (tipo === TipoTransferencia.INGRESO) {
@@ -58,7 +58,7 @@ export const columns = [
   {
     accessorKey: 'cantidad',
     header: 'Valor',
-    cell: ({ row }: { row: Row<Transferenciastarjetas> }) =>
+    cell: ({ row }) =>
       Intl.NumberFormat('es-ES', {
         style: 'currency',
         currency: 'CUP',
@@ -77,7 +77,7 @@ export const columns = [
   {
     accessorKey: 'usuario.username',
     header: 'Usuario',
-    cell: ({ row }: { row: Row<Transferenciastarjetas> }) => {
+    cell: ({ row }) => {
       const username = row.original.usuario?.username;
       if (username) {
         return username;
@@ -89,7 +89,7 @@ export const columns = [
 
   {
     header: ' ',
-    cell: ({ row }: { row: Row<Transferenciastarjetas> }) => {
+    cell: ({ row }) => {
       if (!row.original.venta && !row.original.venta_cafeteria) {
         return (
           <TableDeleteV2

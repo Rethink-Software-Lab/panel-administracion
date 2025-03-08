@@ -1,11 +1,12 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 import { inventarioCafeteria } from './services';
-import { DataTable } from '@/components/ui/data-table';
+import DataTable from '@/components/functionals/data-tables/data-table-general';
 import { CloudOff } from 'lucide-react';
 import { columns as columnsInventario } from './columns-inventario';
 import { columns as columnsVentas } from './columns-ventas';
 import SheetVentasCafeteria from '@/components/functionals/sheets/SheetVentasCafeteria';
+import { ProductoCafeteria, VentasCafeteria } from './types';
 
 export default async function Cafeteria() {
   const { data } = await inventarioCafeteria();
@@ -39,13 +40,19 @@ export default async function Cafeteria() {
             value="inventario"
             className="p-4 m-0 bg-muted/40 h-full border-t-2 border-muted"
           >
-            <DataTable columns={columnsInventario} data={data?.inventario} />
+            <DataTable<ProductoCafeteria>
+              columns={columnsInventario}
+              data={data?.inventario}
+            />
           </TabsContent>
           <TabsContent
             value="ventas"
             className="p-4 m-0 bg-muted/40 h-full border-t-2 border-muted"
           >
-            <DataTable columns={columnsVentas} data={data?.ventas} />
+            <DataTable<VentasCafeteria>
+              columns={columnsVentas}
+              data={data?.ventas}
+            />
           </TabsContent>
         </Tabs>
       ) : (

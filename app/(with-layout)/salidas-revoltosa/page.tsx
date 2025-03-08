@@ -5,8 +5,9 @@ import ModalSalidasRevoltosa from '@/components/functionals/ModalSalidasRevoltos
 
 import { getSalidasRevoltosa } from '@/lib/services';
 
-import { DataTable } from '@/components/ui/data-table-salidas';
+import DataTable from '@/components/functionals/data-tables/data-table-general';
 import { columns } from './columns';
+import { SalidasRevoltosa } from './types';
 
 export default async function Salidas() {
   const { data } = await getSalidasRevoltosa();
@@ -31,7 +32,7 @@ export default async function Salidas() {
         />
       </div>
       {data ? (
-        <DataTable columns={columns} data={data?.salidas} />
+        <DataTable<SalidasRevoltosa> columns={columns} data={data?.salidas} />
       ) : (
         <div className="flex flex-1 items-center justify-center rounded-lg border border-dashed shadow-sm">
           <div className="flex flex-col items-center gap-1 text-center">

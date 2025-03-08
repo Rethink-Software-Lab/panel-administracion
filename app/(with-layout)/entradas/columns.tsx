@@ -3,24 +3,14 @@ import EspecialWarningDelete from '@/components/functionals/EspecialWarningDelet
 import { deleteEntrada } from './actions';
 import { Badge } from '@/components/ui/badge';
 import { DateTime } from 'luxon';
-import { Row } from '@tanstack/react-table';
+import { ColumnDef } from '@tanstack/react-table';
+import { Entrada } from './types';
 
-interface Data {
-  id: number;
-  created_at: string;
-  producto__info__descripcion: string;
-  cantidad: number;
-  comprador: string;
-  proveedor: string;
-  metodo_pago: string;
-  usuario__username: string;
-}
-
-export const columns = [
+export const columns: ColumnDef<Entrada>[] = [
   {
     accessorKey: 'created_at',
     header: 'Fecha',
-    cell: ({ row }: { row: Row<Data> }) =>
+    cell: ({ row }) =>
       DateTime.fromISO(row.getValue('created_at')).toLocaleString(
         DateTime.DATETIME_MED,
         { locale: 'es' }
@@ -46,7 +36,7 @@ export const columns = [
   {
     accessorKey: 'metodo_pago',
     header: 'Método de pago',
-    cell: ({ row }: { row: Row<Data> }) => (
+    cell: ({ row }) => (
       <Badge variant="outline">{row.getValue('metodo_pago')}</Badge>
     ),
   },
@@ -54,7 +44,7 @@ export const columns = [
   {
     accessorKey: 'usuario__username',
     header: 'Usuario',
-    cell: ({ row }: { row: Row<Data> }) => {
+    cell: ({ row }) => {
       const username = row.original.usuario__username;
       if (username) {
         return username;
@@ -66,7 +56,7 @@ export const columns = [
 
   {
     header: ' ',
-    cell: ({ row }: { row: Row<Data> }) => (
+    cell: ({ row }) => (
       <EspecialWarningDelete
         id={row.original.id}
         text="Al eliminar la entrada se eliminarán todas las salidas, productos y ventas asociadas a ella."

@@ -5,11 +5,15 @@ export interface ProductosTransfer {
   total_transfers: number;
 }
 
+interface Usuario {
+  id: number;
+  username: string;
+}
 export interface Transferencia {
   id: number;
   created_at: string;
   de: AreaVenta;
   para: AreaVenta;
-  usuario: { id: number; username: string }; // TODO UsuarioType
+  usuario: Usuario;
   productos: ProductosTransfer[];
 }

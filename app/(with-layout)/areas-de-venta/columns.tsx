@@ -1,18 +1,13 @@
 'use client';
 import TableDeleteV2 from '@/components/functionals/TableDeleteV2';
 import { deleteAreaVenta } from './actions';
-import { Row } from '@tanstack/react-table';
+import { ColumnDef } from '@tanstack/react-table';
 import { Edit2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import ModalAreasVenta from '@/components/functionals/ModalAreasVenta';
+import { AreaVenta } from './types';
 
-interface Data {
-  id: number;
-  nombre: string;
-  color: string;
-}
-
-export const columns = [
+export const columns: ColumnDef<AreaVenta>[] = [
   {
     accessorKey: 'nombre',
     header: 'Nombre',
@@ -21,7 +16,7 @@ export const columns = [
   {
     accessorKey: 'color',
     header: 'Color',
-    cell: ({ row }: { row: Row<Data> }) => (
+    cell: ({ row }) => (
       <div
         className="w-8 h-8 rounded-lg"
         style={{ background: row.getValue('color') }}
@@ -31,7 +26,7 @@ export const columns = [
 
   {
     header: ' ',
-    cell: ({ row }: { row: Row<Data> }) => {
+    cell: ({ row }) => {
       if (row.original.nombre !== 'Revoltosa') {
         return (
           <div className="flex items-center justify-end gap-2">

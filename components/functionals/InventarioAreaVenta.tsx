@@ -1,13 +1,16 @@
 import { columns as columnsNew } from '@/app/(with-layout)/areas-de-venta/[id]/columns';
 import { columns as columnsZapatos } from '@/app/(with-layout)/areas-de-venta/[id]/columns-zapatos';
-import { DataTable } from '@/components/ui/data-table-inventario-almacen';
+import DataTable from '@/components/functionals/data-tables/data-table-general';
 import { DataTable as DataTableNew } from '@/components/ui/data-table-inventario-almacen-2';
 import { CloudOff, FileText } from 'lucide-react';
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import Link from 'next/link';
 import { Button } from '../ui/button';
-import { Inventario } from '@/app/(with-layout)/areas-de-venta/[id]/types';
+import {
+  Inventario,
+  Zapatos,
+} from '@/app/(with-layout)/areas-de-venta/[id]/types';
 
 export default async function InventarioAreaVenta({
   data,
@@ -68,7 +71,7 @@ export default async function InventarioAreaVenta({
             value="zapatos"
             className="p-4 m-0 bg-muted/40 h-full border-t-2 border-muted"
           >
-            <DataTable columns={columnsZapatos} data={zapatos} />
+            <DataTable<Zapatos> columns={columnsZapatos} data={zapatos} />
           </TabsContent>
         </Tabs>
       ) : (

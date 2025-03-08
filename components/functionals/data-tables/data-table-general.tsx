@@ -10,7 +10,6 @@ import {
   ColumnDef,
   SortingState,
   ColumnFiltersState,
-  TableOptions,
 } from '@tanstack/react-table';
 
 import {
@@ -24,20 +23,16 @@ import {
 
 import { useState } from 'react';
 import { DataTablePagination } from '@/components/ui/data-table-pagination';
-import { AreaVenta } from '@/app/(with-layout)/areas-de-venta/types';
-import { Transferenciastarjetas } from '@/app/(with-layout)/tarjetas/types';
 
-export interface CustomTableOptions<T> extends TableOptions<T> {
-  areas: AreaVenta[];
+interface DataTableProps<TData> {
+  columns: ColumnDef<TData>[];
+  data: TData[];
 }
 
-export default function DataTableTransferenciaTarjetas({
+export default function DataTableGeneral<TData>({
   columns,
   data,
-}: {
-  columns: ColumnDef<Transferenciastarjetas>[];
-  data: Transferenciastarjetas[];
-}) {
+}: DataTableProps<TData>) {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const table = useReactTable({
@@ -61,7 +56,7 @@ export default function DataTableTransferenciaTarjetas({
     getPaginationRowModel: getPaginationRowModel(),
     onColumnFiltersChange: setColumnFilters,
     getFilteredRowModel: getFilteredRowModel(),
-  } as CustomTableOptions<Transferenciastarjetas>);
+  });
 
   return (
     <div className="p-2 rounded-md border bg-white">

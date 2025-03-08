@@ -1,21 +1,14 @@
 'use client';
 
 import { Badge } from '@/components/ui/badge';
-import { Row } from '@tanstack/react-table';
+import { ColumnDef } from '@tanstack/react-table';
+import { Zapatos } from './types';
 
-interface Data {
-  id: number;
-  info__codigo: string;
-  info__descripcion: string;
-  color: string;
-  numero: number;
-}
-
-export const columns = [
+export const columns: ColumnDef<Zapatos>[] = [
   {
     accessorKey: 'id',
     header: 'ID',
-    filterFn: (row: Row<Data>, _: any, rowValue: string) => {
+    filterFn: (row, _, rowValue) => {
       return row.original.id?.toString().includes(rowValue);
     },
   },
@@ -31,13 +24,13 @@ export const columns = [
   {
     accessorKey: 'color',
     header: 'Color',
-    cell: ({ row }: { row: Row<Data> }) =>
+    cell: ({ row }) =>
       row.getValue('color') || <Badge variant="outline">Vacío</Badge>,
   },
   {
     accessorKey: 'numero',
     header: 'Número',
-    cell: ({ row }: { row: Row<Data> }) =>
+    cell: ({ row }) =>
       row.getValue('numero') || <Badge variant="outline">Vacío</Badge>,
   },
 ];

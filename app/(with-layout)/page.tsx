@@ -1,7 +1,3 @@
-import { Card, CardTitle } from '@/components/ui/card';
-
-import { Hourglass } from 'lucide-react';
-
 import CardsInicio from '@/components/functionals/CardsInicio';
 import CardMasVendidos from '@/components/functionals/CardMasVendidos';
 import ChartVentaPorArea from '@/components/functionals/ChartVentasPorArea';

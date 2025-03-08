@@ -3,15 +3,15 @@ import EspecialWarningDelete from '@/components/functionals/EspecialWarningDelet
 import { deleteEntradaCafeteria } from './actions';
 import { Badge } from '@/components/ui/badge';
 import { DateTime } from 'luxon';
-import { Row } from '@tanstack/react-table';
+import { ColumnDef } from '@tanstack/react-table';
 import { EntradaCafeteria } from './types';
 import SheetInfoEntradasCafeteria from '@/components/functionals/sheets/SheetInfoEntradasCafeteria';
 
-export const columns = [
+export const columns: ColumnDef<EntradaCafeteria>[] = [
   {
     accessorKey: 'created_at',
     header: 'Fecha',
-    cell: ({ row }: { row: Row<EntradaCafeteria> }) =>
+    cell: ({ row }) =>
       DateTime.fromISO(row.getValue('created_at')).toLocaleString(
         DateTime.DATETIME_MED,
         { locale: 'es' }
@@ -28,7 +28,7 @@ export const columns = [
   {
     accessorKey: 'metodo_pago',
     header: 'Método de pago',
-    cell: ({ row }: { row: Row<EntradaCafeteria> }) => (
+    cell: ({ row }) => (
       <Badge variant="outline">{row.getValue('metodo_pago')}</Badge>
     ),
   },
@@ -36,7 +36,7 @@ export const columns = [
   {
     accessorKey: 'usuario.username',
     header: 'Usuario',
-    cell: ({ row }: { row: Row<EntradaCafeteria> }) => {
+    cell: ({ row }) => {
       const username = row.original.usuario?.username;
       if (username) {
         return username;
@@ -48,7 +48,7 @@ export const columns = [
 
   {
     header: ' ',
-    cell: ({ row }: { row: Row<EntradaCafeteria> }) => (
+    cell: ({ row }) => (
       <span className="space-x-2">
         <SheetInfoEntradasCafeteria data={row.original} />
         <EspecialWarningDelete
