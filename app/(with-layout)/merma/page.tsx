@@ -1,9 +1,10 @@
 import { CloudOff } from 'lucide-react';
 
-import { DataTable } from '@/components/ui/data-table-entradas';
+import DataTable from '@/components/functionals/data-tables/data-table-general';
 import { columns } from './columns';
 import { getMerma } from './services';
 import SheetAddMerma from '@/components/functionals/sheets/SheetAddMerma';
+import { type Merma } from './type';
 
 export default async function Merma() {
   const { data } = await getMerma();
@@ -17,7 +18,7 @@ export default async function Merma() {
       </div>
 
       {data?.merma ? (
-        <DataTable columns={columns} data={data.merma} />
+        <DataTable<Merma> columns={columns} data={data.merma} />
       ) : (
         <div className="flex flex-1 items-center justify-center rounded-lg border border-dashed shadow-sm">
           <div className="flex flex-col items-center gap-1 text-center">

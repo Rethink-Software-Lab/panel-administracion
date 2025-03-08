@@ -1,11 +1,12 @@
 import { CloudOff } from 'lucide-react';
 
-import { DataTable } from '@/components/ui/data-table-entradas';
+import DataTable from '@/components/functionals/data-tables/data-table-general';
 import { columns } from './columns';
 import { getReferidos } from './services';
 import SheetReferidos from '@/components/functionals/sheets/SheetReferidos';
+import { Referido } from './types';
 
-export default async function Merma() {
+export default async function Referidos() {
   const { data, error } = await getReferidos();
 
   return (
@@ -16,8 +17,8 @@ export default async function Merma() {
         <SheetReferidos />
       </div>
 
-      {!error ? (
-        <DataTable columns={columns} data={data} />
+      {!error && data ? (
+        <DataTable<Referido> columns={columns} data={data} />
       ) : (
         <div className="flex flex-1 items-center justify-center rounded-lg border border-dashed shadow-sm">
           <div className="flex flex-col items-center gap-1 text-center">

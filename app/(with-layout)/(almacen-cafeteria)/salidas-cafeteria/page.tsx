@@ -1,10 +1,11 @@
 import { CloudOff } from 'lucide-react';
 
-import { DataTable } from '@/components/ui/data-table-entradas';
+import DataTable from '@/components/functionals/data-tables/data-table-general';
 import { columns } from './columns';
 
 import SheetSalidasAlmacenCafeteria from '@/components/functionals/sheets/SheetSalidasAlmacenCafeteria';
 import { getSalidasAlmacenCafeteria } from './services';
+import { SalidasCafeteria } from './types';
 
 export default async function SalidasAlmacenCafeteria() {
   const { data } = await getSalidasAlmacenCafeteria();
@@ -21,7 +22,7 @@ export default async function SalidasAlmacenCafeteria() {
       </div>
 
       {data ? (
-        <DataTable columns={columns} data={data.salidas} />
+        <DataTable<SalidasCafeteria> columns={columns} data={data.salidas} />
       ) : (
         <div className="flex flex-1 items-center justify-center rounded-lg border border-dashed shadow-sm">
           <div className="flex flex-col items-center gap-1 text-center">

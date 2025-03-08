@@ -9,8 +9,8 @@ import { GetTarjetas } from './services';
 import { CloudOff, EllipsisVertical } from 'lucide-react';
 import SheetTarjetas from '@/components/functionals/sheets/SheetTarjetas';
 import { cn } from '@/lib/utils';
-import { Banco } from './types';
-import DataTableTransferenciaTarjetas from '@/components/functionals/data-tables/data-table-transferecia-tarjetas';
+import { Banco, Transferenciastarjetas } from './types';
+import DataTable from '@/components/functionals/data-tables/data-table-general';
 import { columns } from './columns';
 
 import {
@@ -113,7 +113,7 @@ export default async function Tarjetas() {
           <SheetTransferenciasTarjetas tarjetas={data?.tarjetas} />
         </div>
         {data ? (
-          <DataTableTransferenciaTarjetas
+          <DataTable<Transferenciastarjetas>
             columns={columns}
             data={data?.transferencias}
           />

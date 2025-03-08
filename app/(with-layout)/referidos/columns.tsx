@@ -1,12 +1,10 @@
 'use client';
 import TableDeleteV2 from '@/components/functionals/TableDeleteV2';
 import { ColumnDef } from '@tanstack/react-table';
-// import { Badge } from '@/components/ui/badge';
 import { Referido } from './types';
 import { toast } from 'sonner';
 import SheetReferidos from '@/components/functionals/sheets/SheetReferidos';
 import { deleteReferido } from './actions';
-// import SheetInfoMerma from '@/components/functionals/sheets/SheetInfoMerma';
 
 export const columns: ColumnDef<Referido>[] = [
   {

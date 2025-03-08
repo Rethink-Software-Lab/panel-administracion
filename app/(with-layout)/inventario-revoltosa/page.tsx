@@ -1,6 +1,6 @@
 import { columns } from '../inventario/columns';
 import { columns as columnsNew } from '@/app/(with-layout)/areas-de-venta/[id]/columns';
-import { DataTable } from '@/components/ui/data-table-inventario-almacen';
+import DataTable from '@/components/functionals/data-tables/data-table-general';
 import { DataTable as DataTableNew } from '@/components/ui/data-table-inventario-almacen-2';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 

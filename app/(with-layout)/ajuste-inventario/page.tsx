@@ -1,10 +1,10 @@
 import { CloudOff } from 'lucide-react';
 
-import { getAjustesInventario } from '@/lib/services';
-
-import { DataTable } from '@/components/ui/data-table-entradas';
+import DataTable from '@/components/functionals/data-tables/data-table-general';
 import { columns } from '@/app/(with-layout)/ajuste-inventario/columns';
 import SheetAjusteInventario from '@/components/functionals/SheetAjusteInventario';
+import { AjusteInventario as TypeAjuste } from './types';
+import { getAjustesInventario } from './services';
 
 export default async function AjusteInventario() {
   const { data } = await getAjustesInventario();
@@ -15,13 +15,13 @@ export default async function AjusteInventario() {
         <h1 className="text-lg font-semibold md:text-2xl">Ajuste Inventario</h1>
 
         <SheetAjusteInventario
-          areas={data?.areas_ventas}
-          productosInfo={data?.productos_info}
+          areas={data?.areas_ventas || []}
+          productosInfo={data?.productos_info || []}
         />
       </div>
 
-      {data.ajustes ? (
-        <DataTable columns={columns} data={data.ajustes} />
+      {data?.ajustes ? (
+        <DataTable<TypeAjuste> columns={columns} data={data.ajustes} />
       ) : (
         <div className="flex flex-1 items-center justify-center rounded-lg border border-dashed shadow-sm">
           <div className="flex flex-col items-center gap-1 text-center">

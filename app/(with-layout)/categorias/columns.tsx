@@ -4,10 +4,10 @@ import { deleteCategoria } from '@/app/(with-layout)/categorias/actions';
 import ModalCategoria from '@/components/functionals/ModalCategoria';
 import { Button } from '@/components/ui/button';
 import { Edit2 } from 'lucide-react';
-import { Row } from '@tanstack/react-table';
+import { ColumnDef, Row } from '@tanstack/react-table';
 import { Categoria } from './types';
 
-export const columns = [
+export const columns: ColumnDef<Categoria>[] = [
   {
     accessorKey: 'nombre',
     header: 'Nombre',
@@ -15,7 +15,7 @@ export const columns = [
 
   {
     header: ' ',
-    cell: ({ row }: { row: Row<Categoria> }) => {
+    cell: ({ row }) => {
       if (
         row.original.nombre !== 'Zapatos' &&
         row.original.nombre !== 'Cafetería'
