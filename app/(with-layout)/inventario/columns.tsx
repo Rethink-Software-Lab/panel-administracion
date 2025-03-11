@@ -2,7 +2,7 @@
 
 import { Badge } from '@/components/ui/badge';
 import { ColumnDef } from '@tanstack/react-table';
-import { Zapatos } from './types';
+import { Zapatos } from '../areas-de-venta/[id]/types';
 
 export const columns: ColumnDef<Zapatos>[] = [
   {
@@ -13,11 +13,11 @@ export const columns: ColumnDef<Zapatos>[] = [
     },
   },
   {
-    accessorKey: 'info__codigo',
+    accessorKey: 'codigo',
     header: 'Código',
   },
   {
-    accessorKey: 'info__descripcion',
+    accessorKey: 'descripcion',
     header: 'Descripción',
   },
 

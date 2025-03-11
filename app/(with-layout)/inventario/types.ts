@@ -6,7 +6,7 @@ export interface Zapatos {
   info__codigo: string;
   info__descripcion: string;
   color: string;
-  numero: number;
+  numero: string;
 }
 
 interface Inventario {
