@@ -1,16 +1,25 @@
 import { columns } from '../inventario/columns';
 import { columns as columnsNew } from '@/app/(with-layout)/areas-de-venta/[id]/columns';
-import DataTable from '@/components/functionals/data-tables/data-table-general';
+import DataTableZapatos from '@/components/functionals/data-tables/data-table-zapatos';
 import { DataTable as DataTableNew } from '@/components/ui/data-table-inventario-almacen-2';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 import { inventarioAlmacenRevoltosa } from '@/lib/services';
 import { CloudOff } from 'lucide-react';
+import { Zapatos } from '../inventario/types';
 
 export default async function Inventario() {
   const { data } = await inventarioAlmacenRevoltosa();
   const productos = data?.inventario.productos;
-  const zapatos = data?.inventario.zapatos;
+  const zapatos = data?.inventario?.zapatos?.map((z: Zapatos) => {
+    return {
+      id: z.id,
+      codigo: z.info__codigo,
+      descripcion: z.info__descripcion,
+      color: z.color,
+      numero: z.numero,
+    };
+  });
 
   return (
     <main className="flex flex-1 flex-col gap-4 py-4 lg:gap-6 lg:py-6 h-full">
@@ -50,7 +59,7 @@ export default async function Inventario() {
             value="zapatos"
             className="p-4 m-0 bg-muted/40 h-full border-t-2 border-muted"
           >
-            <DataTable columns={columns} data={zapatos} />
+            <DataTableZapatos columns={columns} data={zapatos} />
           </TabsContent>
         </Tabs>
       ) : (

@@ -1,6 +1,6 @@
 import { columns as columnsNew } from '@/app/(with-layout)/areas-de-venta/[id]/columns';
 import { columns as columnsZapatos } from '@/app/(with-layout)/areas-de-venta/[id]/columns-zapatos';
-import DataTable from '@/components/functionals/data-tables/data-table-general';
+import DataTableZapatos from '@/components/functionals/data-tables/data-table-zapatos';
 import { DataTable as DataTableNew } from '@/components/ui/data-table-inventario-almacen-2';
 import { CloudOff, FileText } from 'lucide-react';
 
@@ -71,7 +71,10 @@ export default async function InventarioAreaVenta({
             value="zapatos"
             className="p-4 m-0 bg-muted/40 h-full border-t-2 border-muted"
           >
-            <DataTable<Zapatos> columns={columnsZapatos} data={zapatos} />
+            <DataTableZapatos<Zapatos>
+              columns={columnsZapatos}
+              data={zapatos}
+            />
           </TabsContent>
         </Tabs>
       ) : (
