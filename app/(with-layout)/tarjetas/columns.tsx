@@ -70,7 +70,7 @@ export const columns: ColumnDef<Transferenciastarjetas>[] = [
     size: 200,
   },
   {
-    accessorKey: 'tarjeta.nombre',
+    accessorKey: 'cuenta.nombre',
     header: 'Tarjeta',
   },
 

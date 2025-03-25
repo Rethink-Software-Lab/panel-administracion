@@ -28,7 +28,7 @@ export interface Transferenciastarjetas {
   cantidad: number;
   descripcion: string;
   created_at: string;
-  tarjeta: Tarjetas;
+  cuenta: Tarjetas;
   tipo: TipoTransferencia;
   usuario: Usuario;
   venta: number | null;
