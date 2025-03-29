@@ -59,7 +59,7 @@ export default function SheetTransferenciasTarjetas({
       descripcion: '',
       tipo: undefined,
       cantidad: '0',
-      tarjeta: undefined,
+      cuenta: undefined,
     },
   });
 
@@ -144,7 +144,7 @@ export default function SheetTransferenciasTarjetas({
               />
               <FormField
                 control={form.control}
-                name="tarjeta"
+                name="cuenta"
                 render={({ field }) => (
                   <FormItem className="w-full text-left">
                     <Label>Tarjeta</Label>
