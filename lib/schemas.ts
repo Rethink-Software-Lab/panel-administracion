@@ -551,7 +551,7 @@ export const TarjetasSchema = object({
 });
 
 export const TransferenciasTarjetas = object({
-  tarjeta: pipe(
+  cuenta: pipe(
     string('La tarjeta es requerida.'),
     nonEmpty('La tarjeta es requerida.')
   ),
