@@ -1,10 +1,5 @@
 import { Usuario } from '../users/types';
 
-interface BalanceTarjetas {
-  id: number;
-  valor: number;
-}
-
 export enum Banco {
   BPA = 'BPA',
   BANDEC = 'BANDEC',
@@ -19,7 +14,7 @@ export interface Tarjetas {
   id: number;
   nombre: string;
   banco: Banco;
-  balance: BalanceTarjetas;
+  saldo: number;
   total_transferencias_mes: number;
 }
 
