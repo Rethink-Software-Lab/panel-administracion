@@ -10,9 +10,15 @@ export enum TipoTransferencia {
   EGRESO = 'EGRESO',
 }
 
+export enum TipoTarjeta {
+  EFECTIVO = 'EFECTIVO',
+  BANCARIA = 'BANCARIA',
+}
+
 export interface Tarjetas {
   id: number;
   nombre: string;
+  tipo: TipoTarjeta;
   banco: Banco;
   saldo: number;
   total_transferencias_mes: number;
