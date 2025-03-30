@@ -5,6 +5,7 @@ import { cookies } from 'next/headers';
 
 import { InferInput } from 'valibot';
 import { TarjetasSchema, TransferenciasTarjetas } from '@/lib/schemas';
+import { TipoTarjeta } from './types';
 
 const token = cookies().get('session')?.value;
 
@@ -16,7 +17,7 @@ export async function addTarjeta(
     headers: {
       Authorization: `Bearer ${token}`,
     },
-    body: JSON.stringify(data),
+    body: JSON.stringify({ ...data, tipo: TipoTarjeta.BANCARIA }),
   });
   if (!res.ok) {
     if (res.status === 401)
