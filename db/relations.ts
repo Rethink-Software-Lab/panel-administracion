@@ -1,5 +1,5 @@
 import { relations } from "drizzle-orm/relations";
-import { djangoContentType, authPermission, authGroup, authGroupPermissions, inventarioAreaventa, inventarioVentas, inventarioUser, inventarioUserGroups, inventarioUserUserPermissions, inventarioEntradaalmacen, inventarioSalidaalmacen, inventarioProducto, inventarioProductoinfo, inventarioSalidaalmacenrevoltosa, inventarioCategorias, inventarioImage, djangoAdminLog, inventarioTransferencia, inventarioTransferenciaProductos, inventarioAjusteinventario, inventarioAjusteinventarioProductos, inventarioGastos, inventarioTarjetas, inventarioTransferenciastarjetas, inventarioVentasCafeteria, inventarioBalancetarjetas, inventarioElaboraciones, inventarioElaboracionesIngredientesCantidad, inventarioIngredienteCantidad, inventarioProductosCafeteria, inventarioElaboracionesVentasCafeteria, inventarioProductosEntradasCafeteria, inventarioEntradasCafeteria, inventarioEntradasCafeteriaProductos, inventarioVentasCafeteriaElaboraciones, inventarioVentasCafeteriaProductos, inventarioProductosVentasCafeteria, inventarioInventarioAlmacenCafeteria, inventarioInventarioAreaCafeteria, inventarioProductosSalidasCafeteria, inventarioSalidasCafeteria, inventarioSalidasCafeteriaProductos, inventarioElaboracionesSalidasAlmacenCafeteria, inventarioSalidasCafeteriaElaboraciones, inventarioCuentacasa, inventarioCuentacasaElaboraciones, inventarioElaboracionesCantidadCuentaCasa, inventarioCuentacasaProductos, inventarioProductosCantidadCuentaCasa, inventarioMermacafeteria, inventarioMermacafeteriaElaboraciones, inventarioElaboracionesCantidadMerma, inventarioMermacafeteriaProductos, inventarioProductosCantidadMerma } from "./schema";
+import { djangoContentType, authPermission, authGroup, authGroupPermissions, inventarioAreaventa, inventarioVentas, inventarioUser, inventarioUserGroups, inventarioUserUserPermissions, inventarioEntradaalmacen, inventarioSalidaalmacen, inventarioProducto, inventarioProductoinfo, inventarioSalidaalmacenrevoltosa, inventarioCategorias, inventarioImage, djangoAdminLog, inventarioTransferencia, inventarioTransferenciaProductos, inventarioAjusteinventario, inventarioAjusteinventarioProductos, inventarioGastos, inventarioElaboraciones, inventarioElaboracionesIngredientesCantidad, inventarioIngredienteCantidad, inventarioProductosCafeteria, inventarioTransacciones, inventarioVentasCafeteria, inventarioCuentas, inventarioElaboracionesVentasCafeteria, inventarioProductosEntradasCafeteria, inventarioEntradasCafeteria, inventarioEntradasCafeteriaProductos, inventarioVentasCafeteriaElaboraciones, inventarioVentasCafeteriaProductos, inventarioProductosVentasCafeteria, inventarioInventarioAlmacenCafeteria, inventarioInventarioAreaCafeteria, inventarioProductosSalidasCafeteria, inventarioSalidasCafeteria, inventarioSalidasCafeteriaProductos, inventarioElaboracionesSalidasAlmacenCafeteria, inventarioSalidasCafeteriaElaboraciones, inventarioCuentacasa, inventarioCuentacasaElaboraciones, inventarioElaboracionesCantidadCuentaCasa, inventarioCuentacasaProductos, inventarioProductosCantidadCuentaCasa, inventarioMermacafeteria, inventarioMermacafeteriaElaboraciones, inventarioElaboracionesCantidadMerma, inventarioMermacafeteriaProductos, inventarioProductosCantidadMerma } from "./schema";
 
 export const authPermissionRelations = relations(authPermission, ({one, many}) => ({
 	djangoContentType: one(djangoContentType, {
@@ -41,7 +41,7 @@ export const inventarioVentasRelations = relations(inventarioVentas, ({one, many
 		references: [inventarioUser.id]
 	}),
 	inventarioProductos: many(inventarioProducto),
-	inventarioTransferenciastarjetas: many(inventarioTransferenciastarjetas),
+	inventarioTransacciones: many(inventarioTransacciones),
 }));
 
 export const inventarioAreaventaRelations = relations(inventarioAreaventa, ({many}) => ({
@@ -73,7 +73,7 @@ export const inventarioUserRelations = relations(inventarioUser, ({one, many}) =
 	inventarioTransferencias: many(inventarioTransferencia),
 	inventarioAjusteinventarios: many(inventarioAjusteinventario),
 	inventarioGastos: many(inventarioGastos),
-	inventarioTransferenciastarjetas: many(inventarioTransferenciastarjetas),
+	inventarioTransacciones: many(inventarioTransacciones),
 	inventarioEntradasCafeterias: many(inventarioEntradasCafeteria),
 	inventarioVentasCafeterias: many(inventarioVentasCafeteria),
 	inventarioSalidasCafeterias: many(inventarioSalidasCafeteria),
@@ -250,47 +250,6 @@ export const inventarioGastosRelations = relations(inventarioGastos, ({one}) => 
 	}),
 }));
 
-export const inventarioTransferenciastarjetasRelations = relations(inventarioTransferenciastarjetas, ({one}) => ({
-	inventarioTarjeta: one(inventarioTarjetas, {
-		fields: [inventarioTransferenciastarjetas.tarjetaId],
-		references: [inventarioTarjetas.id]
-	}),
-	inventarioUser: one(inventarioUser, {
-		fields: [inventarioTransferenciastarjetas.usuarioId],
-		references: [inventarioUser.id]
-	}),
-	inventarioVenta: one(inventarioVentas, {
-		fields: [inventarioTransferenciastarjetas.ventaId],
-		references: [inventarioVentas.id]
-	}),
-	inventarioVentasCafeteria: one(inventarioVentasCafeteria, {
-		fields: [inventarioTransferenciastarjetas.ventaCafeteriaId],
-		references: [inventarioVentasCafeteria.id]
-	}),
-}));
-
-export const inventarioTarjetasRelations = relations(inventarioTarjetas, ({many}) => ({
-	inventarioTransferenciastarjetas: many(inventarioTransferenciastarjetas),
-	inventarioBalancetarjetas: many(inventarioBalancetarjetas),
-}));
-
-export const inventarioVentasCafeteriaRelations = relations(inventarioVentasCafeteria, ({one, many}) => ({
-	inventarioTransferenciastarjetas: many(inventarioTransferenciastarjetas),
-	inventarioVentasCafeteriaElaboraciones: many(inventarioVentasCafeteriaElaboraciones),
-	inventarioVentasCafeteriaProductos: many(inventarioVentasCafeteriaProductos),
-	inventarioUser: one(inventarioUser, {
-		fields: [inventarioVentasCafeteria.usuarioId],
-		references: [inventarioUser.id]
-	}),
-}));
-
-export const inventarioBalancetarjetasRelations = relations(inventarioBalancetarjetas, ({one}) => ({
-	inventarioTarjeta: one(inventarioTarjetas, {
-		fields: [inventarioBalancetarjetas.tarjetaId],
-		references: [inventarioTarjetas.id]
-	}),
-}));
-
 export const inventarioElaboracionesIngredientesCantidadRelations = relations(inventarioElaboracionesIngredientesCantidad, ({one}) => ({
 	inventarioElaboracione: one(inventarioElaboraciones, {
 		fields: [inventarioElaboracionesIngredientesCantidad.elaboracionesId],
@@ -327,6 +286,39 @@ export const inventarioProductosCafeteriaRelations = relations(inventarioProduct
 	inventarioProductosSalidasCafeterias: many(inventarioProductosSalidasCafeteria),
 	inventarioProductosCantidadCuentaCasas: many(inventarioProductosCantidadCuentaCasa),
 	inventarioProductosCantidadMermas: many(inventarioProductosCantidadMerma),
+}));
+
+export const inventarioTransaccionesRelations = relations(inventarioTransacciones, ({one}) => ({
+	inventarioUser: one(inventarioUser, {
+		fields: [inventarioTransacciones.usuarioId],
+		references: [inventarioUser.id]
+	}),
+	inventarioVenta: one(inventarioVentas, {
+		fields: [inventarioTransacciones.ventaId],
+		references: [inventarioVentas.id]
+	}),
+	inventarioVentasCafeteria: one(inventarioVentasCafeteria, {
+		fields: [inventarioTransacciones.ventaCafeteriaId],
+		references: [inventarioVentasCafeteria.id]
+	}),
+	inventarioCuenta: one(inventarioCuentas, {
+		fields: [inventarioTransacciones.cuentaId],
+		references: [inventarioCuentas.id]
+	}),
+}));
+
+export const inventarioVentasCafeteriaRelations = relations(inventarioVentasCafeteria, ({one, many}) => ({
+	inventarioTransacciones: many(inventarioTransacciones),
+	inventarioVentasCafeteriaElaboraciones: many(inventarioVentasCafeteriaElaboraciones),
+	inventarioVentasCafeteriaProductos: many(inventarioVentasCafeteriaProductos),
+	inventarioUser: one(inventarioUser, {
+		fields: [inventarioVentasCafeteria.usuarioId],
+		references: [inventarioUser.id]
+	}),
+}));
+
+export const inventarioCuentasRelations = relations(inventarioCuentas, ({many}) => ({
+	inventarioTransacciones: many(inventarioTransacciones),
 }));
 
 export const inventarioElaboracionesVentasCafeteriaRelations = relations(inventarioElaboracionesVentasCafeteria, ({one, many}) => ({
