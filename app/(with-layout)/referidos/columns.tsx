@@ -24,12 +24,12 @@ export const columns: ColumnDef<Referido>[] = [
         className="text-xs cursor-copy"
         onClick={async () => {
           await navigator.clipboard.writeText(
-            `https://salon-madame.vercel.app?ref=${row.original.codigoReferido}`
+            `https://salon-madame.netlify.app?ref=${row.original.codigoReferido}`
           );
           await toast.success('Copiado al portapapeles');
         }}
       >
-        https://salon-madame.vercel.app?ref={row.original.codigoReferido}
+        https://salon-madame.netlify.app?ref={row.original.codigoReferido}
       </code>
     ),
   },
