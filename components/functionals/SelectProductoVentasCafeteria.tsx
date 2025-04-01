@@ -70,7 +70,7 @@ export default function SelectProductoVentaCafeteria({
                     {productos?.map((producto: Productos_Elaboraciones) => (
                       <CommandItem
                         key={producto.id}
-                        value={producto.id.toString()}
+                        value={`${producto.id}-${producto.nombre}-${producto.isElaboracion}`}
                         keywords={[producto.nombre]}
                         onSelect={(currentValue: string) => {
                           const splits = currentValue.split('-');
