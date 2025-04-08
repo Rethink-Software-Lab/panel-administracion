@@ -69,9 +69,9 @@ import {
 } from '../ui/command';
 import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover';
 import { cn } from '@/lib/utils';
-import { Separator } from '../ui/separator';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import { Banco } from '@/app/(with-layout)/tarjetas/types';
 
 function NestedArray({ nestedIndex, register, control, errors }) {
   const { fields, append, remove } = useFieldArray({
@@ -154,7 +154,7 @@ function NestedArray({ nestedIndex, register, control, errors }) {
   );
 }
 
-export default function FormEntradas({ productosInfo }) {
+export default function FormEntradas({ productosInfo, cuentas }) {
   const router = useRouter();
   const [open, setOpen] = useState(false);
   const [openDialog, setOpenDialog] = useState(false);
@@ -301,6 +301,52 @@ export default function FormEntradas({ productosInfo }) {
                         <SelectItem value="TRANSFERENCIA">
                           Transferencia
                         </SelectItem>
+                      </SelectContent>
+                    </Select>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="cuenta"
+                render={({ field }) => (
+                  <FormItem className="flex flex-col mt-2">
+                    <FormLabel className="flex justify-start">Cuenta</FormLabel>
+                    <Select
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                    >
+                      <FormControl>
+                        <SelectTrigger
+                          className={cn(
+                            form.formState.errors?.tarjeta &&
+                              'border-destructive'
+                          )}
+                        >
+                          <SelectValue placeholder="Selecciona una tarjeta" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        {cuentas?.map((cuenta) => (
+                          <SelectItem
+                            key={cuenta.id}
+                            value={cuenta.id.toString()}
+                          >
+                            <div className="flex gap-2 items-center ">
+                              <div
+                                className={cn(
+                                  'w-6 aspect-square rounded-full bg-gradient-to-br',
+                                  cuenta.banco === Banco.BANDEC &&
+                                    'from-[#6c0207] to-[#bc1f26]',
+                                  cuenta.banco === Banco.BPA &&
+                                    'from-[#1d6156] to-[#1d6156]'
+                                )}
+                              ></div>
+                              <p>{cuenta.nombre}</p>
+                            </div>
+                          </SelectItem>
+                        ))}
                       </SelectContent>
                     </Select>
                     <FormMessage />

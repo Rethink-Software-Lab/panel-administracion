@@ -117,6 +117,10 @@ export const EntradaSchema = object({
     string('El producto es requerido.'),
     nonEmpty('El producto es requerido.')
   ),
+  cuenta: pipe(
+    string('El producto es requerido.'),
+    nonEmpty('El producto es requerido.')
+  ),
   cantidad: optional(
     pipe(
       number(),
