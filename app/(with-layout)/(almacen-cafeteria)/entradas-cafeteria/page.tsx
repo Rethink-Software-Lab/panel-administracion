@@ -18,7 +18,10 @@ export default async function EntradasCafeteria() {
           Entradas Cafetería
         </h1>
 
-        <SheetEntradasCafeteria productos={data?.productos} />
+        <SheetEntradasCafeteria
+          productos={data?.productos || []}
+          cuentas={data?.cuentas || []}
+        />
       </div>
 
       {data ? (

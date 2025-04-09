@@ -1,6 +1,10 @@
 import { cookies } from 'next/headers';
+import { EndpointEntradasCafeteria } from './types';
 
-export async function getEntradasCafeteria() {
+export async function getEntradasCafeteria(): Promise<{
+  data: EndpointEntradasCafeteria | null;
+  error: string | null;
+}> {
   const token = cookies().get('session')?.value;
   try {
     const res = await fetch(

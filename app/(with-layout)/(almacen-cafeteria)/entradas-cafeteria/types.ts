@@ -1,5 +1,6 @@
 import { ProductoCafeteria } from '../inventario-cafeteria/types';
 import { Usuario } from '../../users/types';
+import { Tarjetas } from '../../tarjetas/types';
 
 export enum METODOS_PAGO {
   EFECTIVO = 'EFECTIVO',
@@ -25,4 +26,10 @@ export interface EntradaCafeteria {
   proveedor: string;
   comprador: string;
   productos: ProductosInEntrada[];
+}
+
+export interface EndpointEntradasCafeteria {
+  productos: ProductoEntrada[];
+  entradas: EntradaCafeteria[];
+  cuentas: Tarjetas[];
 }
