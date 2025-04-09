@@ -51,11 +51,15 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import SelectProductoEntradaCafeteria from '../SelectProductoEntradaCafeteria';
+import { Banco, Tarjetas } from '@/app/(with-layout)/tarjetas/types';
+import { cn } from '@/lib/utils';
 
 export default function SheetEntradasCafeteria({
   productos,
+  cuentas,
 }: {
   productos: ProductoEntrada[];
+  cuentas: Tarjetas[];
 }) {
   const [open, setOpen] = useState(false);
   const [error, setError] = useState('');
@@ -178,6 +182,53 @@ export default function SheetEntradasCafeteria({
                         <SelectItem value={METODOS_PAGO.TRANSFERENCIA}>
                           Transferecia
                         </SelectItem>
+                      </SelectContent>
+                    </Select>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="cuenta"
+                render={({ field }) => (
+                  <FormItem>
+                    <Label className="flex justify-start">Cuentas</Label>
+                    <Select
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                    >
+                      <FormControl>
+                        <SelectTrigger
+                          className={cn(
+                            form.formState.errors?.cuenta &&
+                              'border-destructive'
+                          )}
+                        >
+                          <SelectValue placeholder="Selecciona una tarjeta" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        {cuentas?.map((cuenta) => (
+                          <SelectItem
+                            key={cuenta.id}
+                            value={cuenta.id.toString()}
+                            disabled={!cuenta}
+                          >
+                            <div className="flex gap-2 items-center ">
+                              <div
+                                className={cn(
+                                  'w-6 aspect-square rounded-full bg-gradient-to-br',
+                                  cuenta.banco === Banco.BANDEC &&
+                                    'from-[#6c0207] to-[#bc1f26]',
+                                  cuenta.banco === Banco.BPA &&
+                                    'from-[#1d6156] to-[#1d6156]'
+                                )}
+                              ></div>
+                              <p>{cuenta.nombre}</p>
+                            </div>
+                          </SelectItem>
+                        ))}
                       </SelectContent>
                     </Select>
                     <FormMessage />
