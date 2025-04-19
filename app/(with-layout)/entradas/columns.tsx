@@ -5,6 +5,9 @@ import { Badge } from '@/components/ui/badge';
 import { DateTime } from 'luxon';
 import { ColumnDef } from '@tanstack/react-table';
 import { Entrada } from './types';
+import Link from 'next/link';
+import { Button } from '@/components/ui/button';
+import { ReceiptText } from 'lucide-react';
 
 export const columns: ColumnDef<Entrada>[] = [
   {
@@ -57,11 +60,19 @@ export const columns: ColumnDef<Entrada>[] = [
   {
     header: ' ',
     cell: ({ row }) => (
-      <EspecialWarningDelete
-        id={row.original.id}
-        text="Al eliminar la entrada se eliminarán todas las salidas, productos y ventas asociadas a ella."
-        action={deleteEntrada}
-      />
+      <div className="flex justify-center gap-2">
+        <Link href={`/factura/${row.original.id}`}>
+          <Button variant="outline" size="icon">
+            <ReceiptText className="w-4 h-4" />
+            <span className="sr-only">Ver factura</span>
+          </Button>
+        </Link>
+        <EspecialWarningDelete
+          id={row.original.id}
+          text="Al eliminar la entrada se eliminarán todas las salidas, productos y ventas asociadas a ella."
+          action={deleteEntrada}
+        />
+      </div>
     ),
   },
 ];
