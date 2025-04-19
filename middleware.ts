@@ -8,7 +8,7 @@ export async function middleware(request: NextRequest) {
   const verifyToken =
     token &&
     (await verifyAuth(token).catch((e) => {
-      console.log(e);
+      console.error(e);
     }));
 
   if (!verifyToken) {
