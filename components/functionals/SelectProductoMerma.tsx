@@ -51,7 +51,10 @@ export default function SelectProductoMerma({
                 >
                   {field.value
                     ? productos?.find(
-                        (producto) => producto?.id.toString() === field.value
+                        (producto) =>
+                          producto?.id.toString() === field.value &&
+                          producto.isElaboracion ===
+                            form.getValues(`productos.${index}.isElaboracion`)
                       )?.nombre
                     : 'Seleccione un producto'}
                   <ChevronDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
@@ -67,17 +70,17 @@ export default function SelectProductoMerma({
                     {productos?.map((producto: Productos_Elaboraciones) => (
                       <CommandItem
                         key={producto.id}
-                        value={producto.id.toString()}
+                        value={`${producto.id}-${producto.nombre}-${producto.isElaboracion}`}
                         keywords={[producto.nombre]}
-                        onSelect={(currentValue) => {
-                          field.onChange(
-                            currentValue === field.value ? '' : currentValue
-                          );
+                        onSelect={(currentValue: string) => {
+                          const splits = currentValue.split('-');
+                          const id = splits[0];
+                          const isElaboracion = splits[2] === 'true';
+
+                          form.setValue(`productos.${index}.producto`, id);
                           form.setValue(
                             `productos.${index}.isElaboracion`,
-                            productos.find(
-                              (e) => e.id.toLocaleString() === currentValue
-                            )?.isElaboracion || false
+                            isElaboracion
                           );
                           setOpenPopover(false);
                         }}
