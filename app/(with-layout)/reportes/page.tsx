@@ -39,6 +39,8 @@ export default async function Reportes({
         }
       >
         {type === 'ventas' &&
+          searchParams.desde &&
+          searchParams.hasta &&
           (area === 'cafeteria' ? (
             <ReporteVentasCafeteria
               data={reportes}
