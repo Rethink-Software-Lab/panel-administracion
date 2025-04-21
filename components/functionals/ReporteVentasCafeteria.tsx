@@ -35,11 +35,16 @@ interface TotalReporteCafeteria {
   transferencia: number;
 }
 
+interface GastosVariablesReporteCafeteria {
+  descripcion: string;
+  cantidad: number;
+}
+
 interface Params {
   productos: Producto[];
   elaboraciones: ElaboracionesType[];
   total: TotalReporteCafeteria;
-  gastos_variables: number;
+  gastos_variables: GastosVariablesReporteCafeteria[];
   gastos_fijos: number;
   subtotal: SubtotalReporteCafeteria;
   merma: number;
@@ -81,7 +86,7 @@ export default async function ReporteVentasCafeteria({
       >
         <div className="hidden print:flex justify-between items-center mb-8">
           <div>
-            <h2 className="text-2xl font-medium">Reporte de contable</h2>
+            <h2 className="text-2xl font-medium">Reporte contable</h2>
             <p>
               {DateTime.fromISO(new Date().toISOString()).toLocaleString(
                 DateTime.DATE_FULL,
@@ -134,17 +139,19 @@ export default async function ReporteVentasCafeteria({
             ))}
             {data.productos.map((p: Producto) => (
               <TableRow key={p.id}>
-                <TableCell className="font-medium  px-4 print:px-0">
+                <TableCell className="font-medium border-b border-gray-300 px-4 print:px-0">
                   {p.cantidad}
                 </TableCell>
-                <TableCell className="px-4 print:px-0">{p.nombre}</TableCell>
-                <TableCell className=" px-4 print:px-0">
+                <TableCell className="border-b border-gray-300 px-4 print:px-0">
+                  {p.nombre}
+                </TableCell>
+                <TableCell className="border-b border-gray-300 px-4 print:px-0">
                   {Intl.NumberFormat('es-CU', {
                     style: 'currency',
                     currency: 'CUP',
                   }).format(p.precio_venta)}
                 </TableCell>
-                <TableCell className="text-right px-4 print:px-0">
+                <TableCell className="text-right border-b border-gray-300 px-4 print:px-0">
                   {Intl.NumberFormat('es-CU', {
                     style: 'currency',
                     currency: 'CUP',
@@ -198,7 +205,12 @@ export default async function ReporteVentasCafeteria({
                 {Intl.NumberFormat('es-CU', {
                   style: 'currency',
                   currency: 'CUP',
-                }).format(data.gastos_variables)}
+                }).format(
+                  data.gastos_variables.reduce(
+                    (acc, curr) => acc + curr.cantidad,
+                    0
+                  )
+                )}
               </TableCell>
             </TableRow>
             <TableRow>
@@ -252,6 +264,53 @@ export default async function ReporteVentasCafeteria({
             </TableRow>
           </TableBody>
         </Table>
+
+        {(data.gastos_variables.length > 0 || data.mano_obra > 0) && (
+          <>
+            <h3 className="text-lg font-semibold pl-2 print:pl-0 pb-2 pt-4">
+              Desglose gastos variables
+            </h3>
+            <Table className="whitespace-nowrap bg-background border-separate border-spacing-0 border print:border-none border-gray-300 rounded-lg overflow-hidden">
+              <TableHeader>
+                <TableRow>
+                  <TableHead className=" px-4 print:px-0">
+                    Descripcion
+                  </TableHead>
+                  <TableHead className="text-right px-4 print:px-0">
+                    Monto
+                  </TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                <TableRow>
+                  <TableCell className="px-4 border-t border-gray-300 print:px-0">
+                    Mano de obra
+                  </TableCell>
+                  <TableCell className="text-right px-4 border-t border-gray-300 print:px-0">
+                    {Intl.NumberFormat('es-CU', {
+                      style: 'currency',
+                      currency: 'CUP',
+                    }).format(data.mano_obra)}
+                  </TableCell>
+                </TableRow>
+
+                {data.gastos_variables.map((gasto_variable, index) => (
+                  <TableRow key={index}>
+                    <TableCell className="px-4 border-t border-gray-300 print:px-0">
+                      {gasto_variable.descripcion}
+                    </TableCell>
+                    <TableCell className="text-right px-4 border-t border-gray-300 print:px-0">
+                      {Intl.NumberFormat('es-CU', {
+                        style: 'currency',
+                        currency: 'CUP',
+                      }).format(gasto_variable.cantidad)}
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </>
+        )}
 
         <h3 className="text-lg font-semibold pl-2 print:pl-0  pb-2 pt-4">
           Desglose del total por medio de pago
