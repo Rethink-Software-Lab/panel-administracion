@@ -205,7 +205,12 @@ export default async function ReporteVentasCafeteria({
                 {Intl.NumberFormat('es-CU', {
                   style: 'currency',
                   currency: 'CUP',
-                }).format(data.gastos_variables)}
+                }).format(
+                  data.gastos_variables.reduce(
+                    (acc, curr) => acc + curr.cantidad,
+                    0
+                  )
+                )}
               </TableCell>
             </TableRow>
             <TableRow>
@@ -260,9 +265,7 @@ export default async function ReporteVentasCafeteria({
           </TableBody>
         </Table>
 
-        {(data.gastos_variables.length > 0 ||
-          data.merma > 0 ||
-          data.mano_obra > 0) && (
+        {(data.gastos_variables.length > 0 || data.mano_obra > 0) && (
           <>
             <h3 className="text-lg font-semibold pl-2 print:pl-0 pb-2 pt-4">
               Desglose gastos variables
@@ -290,17 +293,7 @@ export default async function ReporteVentasCafeteria({
                     }).format(data.mano_obra)}
                   </TableCell>
                 </TableRow>
-                <TableRow>
-                  <TableCell className="px-4 border-t border-gray-300 print:px-0">
-                    Merma
-                  </TableCell>
-                  <TableCell className="text-right px-4 border-t border-gray-300 print:px-0">
-                    {Intl.NumberFormat('es-CU', {
-                      style: 'currency',
-                      currency: 'CUP',
-                    }).format(data.merma)}
-                  </TableCell>
-                </TableRow>
+
                 {data.gastos_variables.map((gasto_variable, index) => (
                   <TableRow key={index}>
                     <TableCell className="px-4 border-t border-gray-300 print:px-0">
