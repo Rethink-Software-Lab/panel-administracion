@@ -40,12 +40,17 @@ interface GastosVariablesReporteCafeteria {
   cantidad: number;
 }
 
+interface GastosFijosReporteCafeteria {
+  descripcion: string;
+  cantidad: number;
+}
+
 interface Params {
   productos: Producto[];
   elaboraciones: ElaboracionesType[];
   total: TotalReporteCafeteria;
   gastos_variables: GastosVariablesReporteCafeteria[];
-  gastos_fijos: number;
+  gastos_fijos: GastosFijosReporteCafeteria[];
   subtotal: SubtotalReporteCafeteria;
   merma: number;
   cuenta_casa: number;
@@ -55,9 +60,13 @@ interface Params {
 export default async function ReporteVentasCafeteria({
   data,
   error,
+  desde,
+  hasta,
 }: {
   data: Params;
   error: string | null;
+  desde: string;
+  hasta: string;
 }) {
   if (!data && !error) {
     return (
@@ -88,10 +97,24 @@ export default async function ReporteVentasCafeteria({
           <div>
             <h2 className="text-2xl font-medium">Reporte contable</h2>
             <p>
-              {DateTime.fromISO(new Date().toISOString()).toLocaleString(
-                DateTime.DATE_FULL,
-                { locale: 'es' }
-              )}
+              {desde && hasta
+                ? desde === hasta
+                  ? DateTime.fromISO(desde).toLocaleString(DateTime.DATE_FULL, {
+                      locale: 'es',
+                    })
+                  : `${DateTime.fromISO(desde).toLocaleString(
+                      DateTime.DATE_FULL,
+                      {
+                        locale: 'es',
+                      }
+                    )} - ${DateTime.fromISO(hasta).toLocaleString(
+                      DateTime.DATE_FULL,
+                      { locale: 'es' }
+                    )}`
+                : DateTime.fromISO(new Date().toISOString()).toLocaleString(
+                    DateTime.DATE_FULL,
+                    { locale: 'es' }
+                  )}
             </p>
           </div>
           <p className="font-bold">Cafetería</p>
@@ -194,7 +217,12 @@ export default async function ReporteVentasCafeteria({
                 {Intl.NumberFormat('es-CU', {
                   style: 'currency',
                   currency: 'CUP',
-                }).format(data.gastos_fijos)}
+                }).format(
+                  data.gastos_fijos.reduce(
+                    (acc, curr) => acc + curr.cantidad,
+                    0
+                  )
+                )}
               </TableCell>
             </TableRow>
             <TableRow>
@@ -264,6 +292,41 @@ export default async function ReporteVentasCafeteria({
             </TableRow>
           </TableBody>
         </Table>
+
+        {data.gastos_fijos.length > 0 && (
+          <>
+            <h3 className="text-lg font-semibold pl-2 print:pl-0 pb-2 pt-4">
+              Desglose gastos fijos
+            </h3>
+            <Table className="whitespace-nowrap bg-background border-separate border-spacing-0 border print:border-none border-gray-300 rounded-lg overflow-hidden">
+              <TableHeader>
+                <TableRow>
+                  <TableHead className=" px-4 print:px-0">
+                    Descripcion
+                  </TableHead>
+                  <TableHead className="text-right px-4 print:px-0">
+                    Monto
+                  </TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {data.gastos_fijos.map((gasto_fijo, index) => (
+                  <TableRow key={index}>
+                    <TableCell className="px-4 border-t border-gray-300 print:px-0">
+                      {gasto_fijo.descripcion}
+                    </TableCell>
+                    <TableCell className="text-right px-4 border-t border-gray-300 print:px-0">
+                      {Intl.NumberFormat('es-CU', {
+                        style: 'currency',
+                        currency: 'CUP',
+                      }).format(gasto_fijo.cantidad)}
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </>
+        )}
 
         {(data.gastos_variables.length > 0 || data.mano_obra > 0) && (
           <>

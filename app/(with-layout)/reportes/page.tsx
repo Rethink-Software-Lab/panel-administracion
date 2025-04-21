@@ -40,7 +40,12 @@ export default async function Reportes({
       >
         {type === 'ventas' &&
           (area === 'cafeteria' ? (
-            <ReporteVentasCafeteria data={reportes} error={error} />
+            <ReporteVentasCafeteria
+              data={reportes}
+              desde={searchParams.desde}
+              hasta={searchParams.hasta}
+              error={error}
+            />
           ) : (
             <ReporteVentas data={reportes} error={error} />
           ))}
