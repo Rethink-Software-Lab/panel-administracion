@@ -24,16 +24,24 @@ interface ElaboracionesType extends Elaboraciones {
   importe: number;
 }
 
+interface SubtotalReporteCafeteria {
+  general: number;
+  efectivo: number;
+  transferencia: number;
+}
+interface TotalReporteCafeteria {
+  general: number;
+  efectivo: number;
+  transferencia: number;
+}
+
 interface Params {
   productos: Producto[];
   elaboraciones: ElaboracionesType[];
-  total: number;
+  total: TotalReporteCafeteria;
   gastos_variables: number;
   gastos_fijos: number;
-  costo_producto: number;
-  subtotal: number;
-  efectivo: number;
-  transferencia: number;
+  subtotal: SubtotalReporteCafeteria;
   merma: number;
   cuenta_casa: number;
   mano_obra: number;
@@ -73,7 +81,7 @@ export default async function ReporteVentasCafeteria({
       >
         <div className="hidden print:flex justify-between items-center mb-8">
           <div>
-            <h2 className="text-2xl font-medium">Reporte de venta</h2>
+            <h2 className="text-2xl font-medium">Reporte de contable</h2>
             <p>
               {DateTime.fromISO(new Date().toISOString()).toLocaleString(
                 DateTime.DATE_FULL,
@@ -83,6 +91,10 @@ export default async function ReporteVentasCafeteria({
           </div>
           <p className="font-bold">Cafetería</p>
         </div>
+
+        <h3 className="text-lg font-semibold pl-2 print:pl-0  pb-2">
+          Detalle de ventas
+        </h3>
         <Table className="whitespace-nowrap bg-background border-separate border-spacing-0 border print:border-none border-gray-300 rounded-lg overflow-hidden">
           <TableHeader>
             <TableRow>
@@ -122,19 +134,17 @@ export default async function ReporteVentasCafeteria({
             ))}
             {data.productos.map((p: Producto) => (
               <TableRow key={p.id}>
-                <TableCell className="font-medium border-b border-gray-300 px-4 print:px-0">
+                <TableCell className="font-medium  px-4 print:px-0">
                   {p.cantidad}
                 </TableCell>
-                <TableCell className="border-b border-gray-300 px-4 print:px-0">
-                  {p.nombre}
-                </TableCell>
-                <TableCell className="border-b border-gray-300 px-4 print:px-0">
+                <TableCell className="px-4 print:px-0">{p.nombre}</TableCell>
+                <TableCell className=" px-4 print:px-0">
                   {Intl.NumberFormat('es-CU', {
                     style: 'currency',
                     currency: 'CUP',
                   }).format(p.precio_venta)}
                 </TableCell>
-                <TableCell className="text-right border-b border-gray-300 px-4 print:px-0">
+                <TableCell className="text-right px-4 print:px-0">
                   {Intl.NumberFormat('es-CU', {
                     style: 'currency',
                     currency: 'CUP',
@@ -143,148 +153,142 @@ export default async function ReporteVentasCafeteria({
               </TableRow>
             ))}
           </TableBody>
-          <TableFooter>
-            <>
-              <TableRow>
-                <TableCell colSpan={3} className="font-medium px-4 print:px-0">
-                  Subtotal:
-                </TableCell>
-                <TableCell className="text-right px-4 print:px-0">
-                  {Intl.NumberFormat('es-CU', {
-                    style: 'currency',
-                    currency: 'CUP',
-                  }).format(data.subtotal)}
-                </TableCell>
-              </TableRow>
+        </Table>
 
-              <TableRow>
-                <TableCell colSpan={3} className="px-4 print:px-0">
-                  Total efectivo
-                </TableCell>
-                <TableCell className="text-right px-4 print:px-0">
-                  {Intl.NumberFormat('es-CU', {
-                    style: 'currency',
-                    currency: 'CUP',
-                  }).format(data.efectivo)}
-                </TableCell>
-              </TableRow>
-              <TableRow>
-                <TableCell
-                  colSpan={3}
-                  className="border-b border-gray-300 px-4 print:px-0"
-                >
-                  Total transferencia
-                </TableCell>
-                <TableCell className="text-right border-b border-gray-300 px-4 print:px-0">
-                  {Intl.NumberFormat('es-CU', {
-                    style: 'currency',
-                    currency: 'CUP',
-                  }).format(data.transferencia)}
-                </TableCell>
-              </TableRow>
-              <TableRow className="border-t border-t-gray-300">
-                <TableCell colSpan={3} className="font-medium px-4 print:px-0">
-                  Costos de producto
-                </TableCell>
-                <TableCell className="text-right font-medium px-4 print:px-0">
-                  {Intl.NumberFormat('es-CU', {
-                    style: 'currency',
-                    currency: 'CUP',
-                  }).format(data.costo_producto)}
-                </TableCell>
-              </TableRow>
-              {data.mano_obra && data.mano_obra > 0 && (
-                <TableRow className="border-t border-t-gray-300">
-                  <TableCell
-                    colSpan={3}
-                    className="font-medium px-4 print:px-0"
-                  >
-                    Mano de obra
-                  </TableCell>
-                  <TableCell className="text-right font-medium px-4 print:px-0">
-                    {Intl.NumberFormat('es-CU', {
-                      style: 'currency',
-                      currency: 'CUP',
-                    }).format(data.mano_obra)}
-                  </TableCell>
-                </TableRow>
-              )}
-              {data?.merma && data?.merma > 0 && (
-                <TableRow className="border-t border-t-gray-300">
-                  <TableCell
-                    colSpan={3}
-                    className="font-medium px-4 print:px-0"
-                  >
-                    Merma
-                  </TableCell>
-                  <TableCell className="text-right font-medium px-4 print:px-0">
-                    {Intl.NumberFormat('es-CU', {
-                      style: 'currency',
-                      currency: 'CUP',
-                    }).format(data.merma)}
-                  </TableCell>
-                </TableRow>
-              )}
-              {data?.cuenta_casa && data?.cuenta_casa > 0 && (
-                <TableRow className="border-t border-t-gray-300">
-                  <TableCell
-                    colSpan={3}
-                    className="font-medium px-4 print:px-0"
-                  >
-                    Cuenta Casa
-                  </TableCell>
-                  <TableCell className="text-right font-medium px-4 print:px-0">
-                    {Intl.NumberFormat('es-CU', {
-                      style: 'currency',
-                      currency: 'CUP',
-                    }).format(data.cuenta_casa)}
-                  </TableCell>
-                </TableRow>
-              )}
-
-              {data.gastos_variables > 0 && (
-                <TableRow>
-                  <TableCell colSpan={3} className="px-4 print:px-0">
-                    Gastos Variables
-                  </TableCell>
-                  <TableCell className="text-right px-4 print:px-0">
-                    {Intl.NumberFormat('es-CU', {
-                      style: 'currency',
-                      currency: 'CUP',
-                    }).format(data.gastos_variables)}
-                  </TableCell>
-                </TableRow>
-              )}
-
-              {data.gastos_fijos > 0 && (
-                <TableRow>
-                  <TableCell colSpan={3} className="px-4 print:px-0">
-                    Gastos Fijos
-                  </TableCell>
-                  <TableCell className="text-right px-4 print:px-0">
-                    {Intl.NumberFormat('es-CU', {
-                      style: 'currency',
-                      currency: 'CUP',
-                    }).format(data.gastos_fijos)}
-                  </TableCell>
-                </TableRow>
-              )}
-            </>
+        <h3 className="text-lg font-semibold pl-2 print:pl-0  pb-2 pt-4">
+          Resumen Financiero
+        </h3>
+        <Table className="whitespace-nowrap bg-background border-separate border-spacing-0 border print:border-none border-gray-300 rounded-lg overflow-hidden">
+          <TableHeader>
             <TableRow>
-              <TableCell
-                colSpan={3}
-                className="font-bold px-4 border-t border-gray-300 print:px-0"
-              >
+              <TableHead className=" px-4 print:px-0">Concepto</TableHead>
+              <TableHead className="text-right px-4 print:px-0">
+                Monto
+              </TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            <TableRow>
+              <TableCell className="px-4 border-t border-gray-300 print:px-0">
+                Subtotal
+              </TableCell>
+              <TableCell className="text-right px-4 border-t border-gray-300 print:px-0">
+                {Intl.NumberFormat('es-CU', {
+                  style: 'currency',
+                  currency: 'CUP',
+                }).format(data.subtotal.general)}
+              </TableCell>
+            </TableRow>
+            <TableRow>
+              <TableCell className="px-4 border-t border-gray-300 print:px-0">
+                Gastos Fijos
+              </TableCell>
+              <TableCell className="text-right px-4 border-t border-gray-300 print:px-0">
+                {Intl.NumberFormat('es-CU', {
+                  style: 'currency',
+                  currency: 'CUP',
+                }).format(data.gastos_fijos)}
+              </TableCell>
+            </TableRow>
+            <TableRow>
+              <TableCell className="px-4 border-t border-gray-300 print:px-0">
+                Gastos Variables
+              </TableCell>
+              <TableCell className="text-right px-4 border-t border-gray-300 print:px-0">
+                {Intl.NumberFormat('es-CU', {
+                  style: 'currency',
+                  currency: 'CUP',
+                }).format(data.gastos_variables)}
+              </TableCell>
+            </TableRow>
+            <TableRow>
+              <TableCell className="font-bold px-4 border-t border-gray-300 print:px-0">
                 Total
               </TableCell>
               <TableCell className="text-right font-bold px-4 border-t border-gray-300 print:px-0">
                 {Intl.NumberFormat('es-CU', {
                   style: 'currency',
                   currency: 'CUP',
-                }).format(data.total)}
+                }).format(data.total.general)}
               </TableCell>
             </TableRow>
-          </TableFooter>
+          </TableBody>
+        </Table>
+
+        <h3 className="text-lg font-semibold pl-2 print:pl-0 pb-2 pt-4">
+          Desglose del subtotal por medio de pago
+        </h3>
+        <Table className="whitespace-nowrap bg-background border-separate border-spacing-0 border print:border-none border-gray-300 rounded-lg overflow-hidden">
+          <TableHeader>
+            <TableRow>
+              <TableHead className=" px-4 print:px-0">Medio de pago</TableHead>
+              <TableHead className="text-right px-4 print:px-0">
+                Monto
+              </TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            <TableRow>
+              <TableCell className="px-4 border-t border-gray-300 print:px-0">
+                Efectivo
+              </TableCell>
+              <TableCell className="text-right px-4 border-t border-gray-300 print:px-0">
+                {Intl.NumberFormat('es-CU', {
+                  style: 'currency',
+                  currency: 'CUP',
+                }).format(data.subtotal.efectivo)}
+              </TableCell>
+            </TableRow>
+            <TableRow>
+              <TableCell className="px-4 border-t border-gray-300 print:px-0">
+                Transferencia
+              </TableCell>
+              <TableCell className="text-right px-4 border-t border-gray-300 print:px-0">
+                {Intl.NumberFormat('es-CU', {
+                  style: 'currency',
+                  currency: 'CUP',
+                }).format(data.subtotal.transferencia)}
+              </TableCell>
+            </TableRow>
+          </TableBody>
+        </Table>
+
+        <h3 className="text-lg font-semibold pl-2 print:pl-0  pb-2 pt-4">
+          Desglose del total por medio de pago
+        </h3>
+        <Table className="whitespace-nowrap bg-background border-separate border-spacing-0 border print:border-none border-gray-300 rounded-lg overflow-hidden">
+          <TableHeader>
+            <TableRow>
+              <TableHead className=" px-4 print:px-0">Medio de pago</TableHead>
+              <TableHead className="text-right px-4 print:px-0">
+                Monto
+              </TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            <TableRow>
+              <TableCell className="px-4 border-t border-gray-300 print:px-0">
+                Efectivo
+              </TableCell>
+              <TableCell className="text-right px-4 border-t border-gray-300 print:px-0">
+                {Intl.NumberFormat('es-CU', {
+                  style: 'currency',
+                  currency: 'CUP',
+                }).format(data.total.efectivo)}
+              </TableCell>
+            </TableRow>
+            <TableRow>
+              <TableCell className="px-4 border-t border-gray-300 print:px-0">
+                Transferencia
+              </TableCell>
+              <TableCell className="text-right px-4 border-t border-gray-300 print:px-0">
+                {Intl.NumberFormat('es-CU', {
+                  style: 'currency',
+                  currency: 'CUP',
+                }).format(data.total.transferencia)}
+              </TableCell>
+            </TableRow>
+          </TableBody>
         </Table>
       </div>
     );
