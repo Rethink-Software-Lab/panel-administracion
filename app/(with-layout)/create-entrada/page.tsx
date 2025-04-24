@@ -5,6 +5,8 @@ import { getProductos } from './services';
 export default async function CreateEntrada() {
   const { data, error } = await getProductos();
 
+  if (error) return <p>Error al conectar con el servidor</p>;
+
   return (
     <main className="grid flex-1 items-start gap-4 my-6 p-4 sm:px-6 sm:py-0 md:gap-8">
       <div className="grid flex-1 auto-rows-max gap-4">
@@ -13,8 +15,9 @@ export default async function CreateEntrada() {
         </h1>
         <div className="flex flex-col gap-6">
           <FormEntradas
-            productosInfo={data?.productos}
+            productos={data?.productos}
             cuentas={data?.cuentas}
+            proveedores={data?.proveedores}
           />
         </div>
       </div>

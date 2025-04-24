@@ -14,12 +14,12 @@ export default function ButtonPrint({
   return (
     <Button
       variant="outline"
-      className={cn('max-sm:space-x-2', className)}
+      className={cn('sm:space-x-2', className)}
       disabled={disabled}
       onClick={() => window.print()}
     >
       <Printer size={18} />
-      <span className="sm:sr-only">Imprimir</span>
+      <span className="max-sm:sr-only">Imprimir</span>
     </Button>
   );
 }

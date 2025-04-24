@@ -11,16 +11,16 @@ import { ReceiptText } from 'lucide-react';
 
 export const columns: ColumnDef<Entrada>[] = [
   {
-    accessorKey: 'created_at',
+    accessorKey: 'fecha',
     header: 'Fecha',
     cell: ({ row }) =>
-      DateTime.fromISO(row.getValue('created_at')).toLocaleString(
+      DateTime.fromISO(row.getValue('fecha')).toLocaleString(
         DateTime.DATETIME_MED,
         { locale: 'es' }
       ),
   },
   {
-    accessorKey: 'producto__info__descripcion',
+    accessorKey: 'descripcion_producto',
     header: 'Producto',
     size: 300,
   },
@@ -33,7 +33,7 @@ export const columns: ColumnDef<Entrada>[] = [
     header: 'Comprador',
   },
   {
-    accessorKey: 'proveedor',
+    accessorKey: 'nombre_proveedor',
     header: 'Proveedor',
   },
   {
@@ -45,10 +45,10 @@ export const columns: ColumnDef<Entrada>[] = [
   },
 
   {
-    accessorKey: 'usuario__username',
+    accessorKey: 'username',
     header: 'Usuario',
     cell: ({ row }) => {
-      const username = row.original.usuario__username;
+      const username = row.original.username;
       if (username) {
         return username;
       } else {

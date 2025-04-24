@@ -33,6 +33,7 @@ import {
   Store,
   Tags,
   TicketX,
+  Truck,
   Users,
   Wrench,
 } from 'lucide-react';
@@ -181,6 +182,16 @@ export default function TopBar({ session, areasVenta }: Props) {
 
             {session.isAdmin && (
               <>
+                <Link
+                  href="/proveedores"
+                  className={cn(
+                    'flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary',
+                    path === '/proveedores' && 'bg-muted text-primary'
+                  )}
+                >
+                  <Truck className="h-4 w-4" />
+                  Proveedores
+                </Link>
                 <Link
                   href="/categorias"
                   className={cn(

@@ -154,7 +154,7 @@ function NestedArray({ nestedIndex, register, control, errors }) {
   );
 }
 
-export default function FormEntradas({ productosInfo, cuentas }) {
+export default function FormEntradas({ productos, cuentas, proveedores }) {
   const router = useRouter();
   const [open, setOpen] = useState(false);
   const [openDialog, setOpenDialog] = useState(false);
@@ -261,9 +261,26 @@ export default function FormEntradas({ productosInfo, cuentas }) {
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Proveedor</FormLabel>
-                    <FormControl>
-                      <Input {...field} />
-                    </FormControl>
+                    <Select
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                    >
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Selecciona un proveedor" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        {proveedores?.map((proveedor) => (
+                          <SelectItem
+                            key={proveedor.id}
+                            value={proveedor.id.toString()}
+                          >
+                            {proveedor.nombre}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
                     <FormMessage />
                   </FormItem>
                 )}
@@ -371,7 +388,7 @@ export default function FormEntradas({ productosInfo, cuentas }) {
                             )}
                           >
                             {field.value
-                              ? productosInfo?.find(
+                              ? productos?.find(
                                   (producto) => producto?.codigo === field.value
                                 )?.codigo
                               : 'Selecciona un producto'}
@@ -387,12 +404,12 @@ export default function FormEntradas({ productosInfo, cuentas }) {
                               Ningún resultado encontrado.
                             </CommandEmpty>
                             <CommandGroup heading="Sugerencias">
-                              {productosInfo?.map((producto) => (
+                              {productos?.map((producto) => (
                                 <CommandItem
                                   key={producto.id}
                                   value={producto.codigo}
                                   onSelect={(currentValue) => {
-                                    productosInfo?.find(
+                                    productos?.find(
                                       (e) => e.codigo === currentValue
                                     )?.categoria?.nombre !== 'Zapatos'
                                       ? (() => {
@@ -441,7 +458,7 @@ export default function FormEntradas({ productosInfo, cuentas }) {
                   </FormItem>
                 )}
               />
-              {productosInfo?.find((e) => e.codigo === producto)?.categoria
+              {productos?.find((e) => e.codigo === producto)?.categoria
                 ?.nombre !== 'Zapatos' && (
                 <div className="space-y-2">
                   <Label>Cantidad</Label>
@@ -456,8 +473,8 @@ export default function FormEntradas({ productosInfo, cuentas }) {
               )}
             </CardContent>
           </Card>
-          {productosInfo?.find((p) => p.codigo === producto)?.categoria
-            ?.nombre === 'Zapatos' && (
+          {productos?.find((p) => p.codigo === producto)?.categoria?.nombre ===
+            'Zapatos' && (
             <Card>
               <CardHeader>
                 <CardTitle>Mercancía</CardTitle>

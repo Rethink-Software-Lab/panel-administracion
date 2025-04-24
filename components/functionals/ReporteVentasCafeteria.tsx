@@ -237,7 +237,7 @@ export default async function ReporteVentasCafeteria({
                   data.gastos_variables.reduce(
                     (acc, curr) => acc + curr.cantidad,
                     0
-                  )
+                  ) + data.mano_obra
                 )}
               </TableCell>
             </TableRow>
