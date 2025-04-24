@@ -1,3 +1,5 @@
+import { Proveedor } from '../../proveedores/types';
+
 export interface ProductoFactura {
   codigo: string;
   cantidad: number;
@@ -10,7 +12,7 @@ export interface Factura {
   createdAt: string;
   updatedAt: string;
   usuarioId: number;
-  proveedor: string;
+  proveedor: Proveedor;
   comprador: string;
   productos: ProductoFactura[];
 }

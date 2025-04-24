@@ -1,24 +1,49 @@
-import { cookies } from 'next/headers';
 import { EndpointFormEntrada } from './types';
+import { db } from '@/db/initial';
+import {
+  inventarioCategorias,
+  inventarioCuentas,
+  inventarioProductoinfo,
+  inventarioProveedor,
+} from '@/db/schema';
+import { desc, eq } from 'drizzle-orm';
 
 export async function getProductos(): Promise<{
   data: EndpointFormEntrada | null;
   error: string | null;
 }> {
-  const token = cookies().get('session')?.value;
-
   try {
-    const res = await fetch(process.env.BACKEND_URL_V2 + '/productos', {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
+    const data = await db.transaction(async (tx) => {
+      const productos = await db
+        .select({
+          id: inventarioProductoinfo.id,
+          codigo: inventarioProductoinfo.codigo,
+          categoria: inventarioCategorias.nombre,
+        })
+        .from(inventarioProductoinfo)
+        .leftJoin(
+          inventarioCategorias,
+          eq(inventarioProductoinfo.categoriaId, inventarioCategorias.id)
+        )
+        .orderBy(desc(inventarioProductoinfo.id));
+      const cuentas = await db
+        .select()
+        .from(inventarioCuentas)
+        .orderBy(desc(inventarioCuentas.id));
+      const proveedores = await db
+        .select({
+          id: inventarioProveedor.id,
+          nombre: inventarioProveedor.nombre,
+        })
+        .from(inventarioProveedor)
+        .orderBy(desc(inventarioProveedor.id));
+
+      return {
+        productos,
+        cuentas,
+        proveedores,
+      };
     });
-    if (!res.ok) {
-      if (res.status === 401)
-        return { data: null, error: 'Credenciales inválidas' };
-      return { data: null, error: 'Algo salió mal.' };
-    }
-    const data = await res.json();
     return {
       error: null,
       data,

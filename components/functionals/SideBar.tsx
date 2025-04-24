@@ -19,12 +19,12 @@ import {
   CircleDollarSign,
   CreditCard,
   Pizza,
-  ShoppingCart,
   CoffeeIcon,
   Package2,
   TicketX,
   Heart,
   Handshake,
+  Truck,
 } from 'lucide-react';
 
 import { cn } from '@/lib/utils';
@@ -142,6 +142,16 @@ export default function SideBar({ areasVenta, session }: Props) {
 
             {session.isAdmin && (
               <>
+                <Link
+                  href="/proveedores"
+                  className={cn(
+                    'flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary',
+                    path === '/proveedores' && 'bg-muted text-primary'
+                  )}
+                >
+                  <Truck className="h-4 w-4" />
+                  Proveedores
+                </Link>
                 <Link
                   href="/categorias"
                   className={cn(
