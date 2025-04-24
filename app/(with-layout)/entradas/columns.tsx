@@ -35,6 +35,10 @@ export const columns: ColumnDef<Entrada>[] = [
   {
     accessorKey: 'nombre_proveedor',
     header: 'Proveedor',
+    cell: ({ row }) => {
+      const proveedor = row.getValue('nombre_proveedor');
+      return proveedor ? proveedor : <Badge variant="outline">Vacío</Badge>;
+    },
   },
   {
     accessorKey: 'metodo_pago',
