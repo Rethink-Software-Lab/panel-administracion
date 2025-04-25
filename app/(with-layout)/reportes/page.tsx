@@ -49,7 +49,12 @@ export default async function Reportes({
               error={error}
             />
           ) : (
-            <ReporteVentas data={reportes} error={error} />
+            <ReporteVentas
+              data={reportes}
+              desde={searchParams.desde}
+              hasta={searchParams.hasta}
+              error={error}
+            />
           ))}
         {type === 'inventario' && (
           <ReporteInventario data={reportes} error={error} />
