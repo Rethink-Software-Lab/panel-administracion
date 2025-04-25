@@ -2,7 +2,6 @@ import {
   Table,
   TableBody,
   TableCell,
-  TableFooter,
   TableHead,
   TableHeader,
   TableRow,
@@ -19,25 +18,37 @@ interface Producto {
   importe: number;
 }
 
-interface Params {
-  productos: Producto[];
-  total: number;
-  pago_trabajador: number;
-  gastos_variables: number;
-  gastos_fijos: number;
-  costo_producto: number;
-  subtotal: number;
+interface SubtotalYTotalReporteVenta {
+  general: number;
   efectivo: number;
   transferencia: number;
+}
+
+interface GastosReporteVenta {
+  descripcion: string;
+  cantidad: number;
+}
+
+interface Params {
+  productos: Producto[];
+  total: SubtotalYTotalReporteVenta;
+  pago_trabajador: number;
+  gastos_variables: GastosReporteVenta[];
+  gastos_fijos: GastosReporteVenta[];
+  subtotal: SubtotalYTotalReporteVenta;
   area: string;
 }
 
 export default async function ReporteVentas({
   data,
   error,
+  desde,
+  hasta,
 }: {
   data: Params;
   error: string | null;
+  desde: string;
+  hasta: string;
 }) {
   if (!data && !error) {
     return (
@@ -63,16 +74,34 @@ export default async function ReporteVentas({
       >
         <div className="hidden print:flex justify-between items-center mb-8">
           <div>
-            <h2 className="text-2xl font-medium">Reporte de venta</h2>
+            <h2 className="text-2xl font-medium">Reporte contable</h2>
             <p>
-              {DateTime.fromISO(new Date().toISOString()).toLocaleString(
-                DateTime.DATE_FULL,
-                { locale: 'es' }
-              )}
+              {desde && hasta
+                ? desde === hasta
+                  ? DateTime.fromISO(desde).toLocaleString(DateTime.DATE_FULL, {
+                      locale: 'es',
+                    })
+                  : `${DateTime.fromISO(desde).toLocaleString(
+                      DateTime.DATE_FULL,
+                      {
+                        locale: 'es',
+                      }
+                    )} - ${DateTime.fromISO(hasta).toLocaleString(
+                      DateTime.DATE_FULL,
+                      { locale: 'es' }
+                    )}`
+                : DateTime.fromISO(new Date().toISOString()).toLocaleString(
+                    DateTime.DATE_FULL,
+                    { locale: 'es' }
+                  )}
             </p>
           </div>
           <p className="font-bold">{data.area || 'General'}</p>
         </div>
+
+        <h3 className="text-lg font-semibold pl-2 print:pl-0  pb-2">
+          Detalle de ventas
+        </h3>
         <Table className="whitespace-nowrap bg-background border-separate border-spacing-0 border print:border-none border-gray-300 rounded-lg overflow-hidden">
           <TableHeader>
             <TableRow>
@@ -108,88 +137,234 @@ export default async function ReporteVentas({
               </TableRow>
             ))}
           </TableBody>
-          <TableFooter>
-            <>
-              <TableRow>
-                <TableCell colSpan={3} className="font-medium px-4 print:px-0">
-                  Subtotal:
-                </TableCell>
-                <TableCell className="text-right px-4 print:px-0">
-                  ${data.subtotal}
-                </TableCell>
-              </TableRow>
+        </Table>
 
-              <TableRow>
-                <TableCell colSpan={3} className="px-4 print:px-0">
-                  Total efectivo
-                </TableCell>
-                <TableCell className="text-right px-4 print:px-0">
-                  ${data.efectivo}
-                </TableCell>
-              </TableRow>
-              <TableRow>
-                <TableCell
-                  colSpan={3}
-                  className="border-b border-gray-300 px-4 print:px-0"
-                >
-                  Total transferencia
-                </TableCell>
-                <TableCell className="text-right border-b border-gray-300 px-4 print:px-0">
-                  ${data.transferencia}
-                </TableCell>
-              </TableRow>
-              <TableRow className="border-t border-t-gray-300">
-                <TableCell colSpan={3} className="font-medium px-4 print:px-0">
-                  Costos de producto
-                </TableCell>
-                <TableCell className="text-right font-medium px-4 print:px-0">
-                  - ${data.costo_producto}
-                </TableCell>
-              </TableRow>
-              {data.pago_trabajador > 0 && (
-                <TableRow>
-                  <TableCell colSpan={3} className="px-4 print:px-0">
-                    Pago al trabajador
-                  </TableCell>
-                  <TableCell className="text-right px-4 print:px-0">
-                    - ${data.pago_trabajador}
-                  </TableCell>
-                </TableRow>
-              )}
-              {data.gastos_variables > 0 && (
-                <TableRow>
-                  <TableCell colSpan={3} className="px-4 print:px-0">
-                    Gastos Variables
-                  </TableCell>
-                  <TableCell className="text-right px-4 print:px-0">
-                    - ${data.gastos_variables}
-                  </TableCell>
-                </TableRow>
-              )}
-
-              {data.gastos_fijos > 0 && (
-                <TableRow>
-                  <TableCell colSpan={3} className="px-4 print:px-0">
-                    Gastos Fijos
-                  </TableCell>
-                  <TableCell className="text-right px-4 print:px-0">
-                    - ${data.gastos_fijos}
-                  </TableCell>
-                </TableRow>
-              )}
-            </>
+        <h3 className="text-lg font-semibold pl-2 print:pl-0  pb-2 pt-4">
+          Resumen Financiero
+        </h3>
+        <Table className="whitespace-nowrap bg-background border-separate border-spacing-0 border print:border-none border-gray-300 rounded-lg overflow-hidden">
+          <TableHeader>
             <TableRow>
-              <TableCell
-                colSpan={3}
-                className="font-bold px-4 border-t border-gray-300 print:px-0"
-              >
+              <TableHead className=" px-4 print:px-0">Concepto</TableHead>
+              <TableHead className="text-right px-4 print:px-0">
+                Monto
+              </TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            <TableRow>
+              <TableCell className="px-4 border-t border-gray-300 print:px-0">
+                Subtotal
+              </TableCell>
+              <TableCell className="text-right px-4 border-t border-gray-300 print:px-0">
+                {Intl.NumberFormat('es-CU', {
+                  style: 'currency',
+                  currency: 'CUP',
+                }).format(data.subtotal.general)}
+              </TableCell>
+            </TableRow>
+            <TableRow>
+              <TableCell className="px-4 border-t border-gray-300 print:px-0">
+                Gastos Fijos
+              </TableCell>
+              <TableCell className="text-right px-4 border-t border-gray-300 print:px-0">
+                {Intl.NumberFormat('es-CU', {
+                  style: 'currency',
+                  currency: 'CUP',
+                }).format(
+                  data.gastos_fijos.reduce(
+                    (acc, curr) => acc + curr.cantidad,
+                    0
+                  )
+                )}
+              </TableCell>
+            </TableRow>
+            <TableRow>
+              <TableCell className="px-4 border-t border-gray-300 print:px-0">
+                Gastos Variables
+              </TableCell>
+              <TableCell className="text-right px-4 border-t border-gray-300 print:px-0">
+                {Intl.NumberFormat('es-CU', {
+                  style: 'currency',
+                  currency: 'CUP',
+                }).format(
+                  data.gastos_variables.reduce(
+                    (acc, curr) => acc + curr.cantidad,
+                    0
+                  ) + data.pago_trabajador
+                )}
+              </TableCell>
+            </TableRow>
+            <TableRow>
+              <TableCell className="font-bold px-4 border-t border-gray-300 print:px-0">
                 Total
               </TableCell>
               <TableCell className="text-right font-bold px-4 border-t border-gray-300 print:px-0">
-                ${data.total}
+                {Intl.NumberFormat('es-CU', {
+                  style: 'currency',
+                  currency: 'CUP',
+                }).format(data.total.general)}
               </TableCell>
             </TableRow>
-          </TableFooter>
+          </TableBody>
+        </Table>
+
+        <h3 className="text-lg font-semibold pl-2 print:pl-0 pb-2 pt-4">
+          Desglose del subtotal por medio de pago
+        </h3>
+        <Table className="whitespace-nowrap bg-background border-separate border-spacing-0 border print:border-none border-gray-300 rounded-lg overflow-hidden">
+          <TableHeader>
+            <TableRow>
+              <TableHead className=" px-4 print:px-0">Medio de pago</TableHead>
+              <TableHead className="text-right px-4 print:px-0">
+                Monto
+              </TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            <TableRow>
+              <TableCell className="px-4 border-t border-gray-300 print:px-0">
+                Efectivo
+              </TableCell>
+              <TableCell className="text-right px-4 border-t border-gray-300 print:px-0">
+                {Intl.NumberFormat('es-CU', {
+                  style: 'currency',
+                  currency: 'CUP',
+                }).format(data.subtotal.efectivo)}
+              </TableCell>
+            </TableRow>
+            <TableRow>
+              <TableCell className="px-4 border-t border-gray-300 print:px-0">
+                Transferencia
+              </TableCell>
+              <TableCell className="text-right px-4 border-t border-gray-300 print:px-0">
+                {Intl.NumberFormat('es-CU', {
+                  style: 'currency',
+                  currency: 'CUP',
+                }).format(data.subtotal.transferencia)}
+              </TableCell>
+            </TableRow>
+          </TableBody>
+        </Table>
+
+        {data.gastos_fijos.length > 0 && (
+          <>
+            <h3 className="text-lg font-semibold pl-2 print:pl-0 pb-2 pt-4">
+              Desglose gastos fijos
+            </h3>
+            <Table className="whitespace-nowrap bg-background border-separate border-spacing-0 border print:border-none border-gray-300 rounded-lg overflow-hidden">
+              <TableHeader>
+                <TableRow>
+                  <TableHead className=" px-4 print:px-0">
+                    Descripcion
+                  </TableHead>
+                  <TableHead className="text-right px-4 print:px-0">
+                    Monto
+                  </TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {data.gastos_fijos.map((gasto_fijo, index) => (
+                  <TableRow key={index}>
+                    <TableCell className="px-4 border-t border-gray-300 print:px-0">
+                      {gasto_fijo.descripcion}
+                    </TableCell>
+                    <TableCell className="text-right px-4 border-t border-gray-300 print:px-0">
+                      {Intl.NumberFormat('es-CU', {
+                        style: 'currency',
+                        currency: 'CUP',
+                      }).format(gasto_fijo.cantidad)}
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </>
+        )}
+
+        {(data.gastos_variables.length > 0 || data.pago_trabajador > 0) && (
+          <>
+            <h3 className="text-lg font-semibold pl-2 print:pl-0 pb-2 pt-4">
+              Desglose gastos variables
+            </h3>
+            <Table className="whitespace-nowrap bg-background border-separate border-spacing-0 border print:border-none border-gray-300 rounded-lg overflow-hidden">
+              <TableHeader>
+                <TableRow>
+                  <TableHead className=" px-4 print:px-0">
+                    Descripcion
+                  </TableHead>
+                  <TableHead className="text-right px-4 print:px-0">
+                    Monto
+                  </TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                <TableRow>
+                  <TableCell className="px-4 border-t border-gray-300 print:px-0">
+                    Pago trabajador
+                  </TableCell>
+                  <TableCell className="text-right px-4 border-t border-gray-300 print:px-0">
+                    {Intl.NumberFormat('es-CU', {
+                      style: 'currency',
+                      currency: 'CUP',
+                    }).format(data.pago_trabajador)}
+                  </TableCell>
+                </TableRow>
+
+                {data.gastos_variables.map((gasto_variable, index) => (
+                  <TableRow key={index}>
+                    <TableCell className="px-4 border-t border-gray-300 print:px-0">
+                      {gasto_variable.descripcion}
+                    </TableCell>
+                    <TableCell className="text-right px-4 border-t border-gray-300 print:px-0">
+                      {Intl.NumberFormat('es-CU', {
+                        style: 'currency',
+                        currency: 'CUP',
+                      }).format(gasto_variable.cantidad)}
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </>
+        )}
+
+        <h3 className="text-lg font-semibold pl-2 print:pl-0  pb-2 pt-4">
+          Desglose del total por medio de pago
+        </h3>
+        <Table className="whitespace-nowrap bg-background border-separate border-spacing-0 border print:border-none border-gray-300 rounded-lg overflow-hidden">
+          <TableHeader>
+            <TableRow>
+              <TableHead className=" px-4 print:px-0">Medio de pago</TableHead>
+              <TableHead className="text-right px-4 print:px-0">
+                Monto
+              </TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            <TableRow>
+              <TableCell className="px-4 border-t border-gray-300 print:px-0">
+                Efectivo
+              </TableCell>
+              <TableCell className="text-right px-4 border-t border-gray-300 print:px-0">
+                {Intl.NumberFormat('es-CU', {
+                  style: 'currency',
+                  currency: 'CUP',
+                }).format(data.total.efectivo)}
+              </TableCell>
+            </TableRow>
+            <TableRow>
+              <TableCell className="px-4 border-t border-gray-300 print:px-0">
+                Transferencia
+              </TableCell>
+              <TableCell className="text-right px-4 border-t border-gray-300 print:px-0">
+                {Intl.NumberFormat('es-CU', {
+                  style: 'currency',
+                  currency: 'CUP',
+                }).format(data.total.transferencia)}
+              </TableCell>
+            </TableRow>
+          </TableBody>
         </Table>
       </div>
     );
