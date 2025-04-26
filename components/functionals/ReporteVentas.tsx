@@ -191,7 +191,7 @@ export default async function ReporteVentas({
                   data.gastos_variables.reduce(
                     (acc, curr) => acc + curr.cantidad,
                     0
-                  )
+                  ) + data.pago_trabajador
                 )}
               </TableCell>
             </TableRow>
