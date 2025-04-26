@@ -49,6 +49,7 @@ export async function getProductos(): Promise<{
       data,
     };
   } catch (e) {
+    console.error(e);
     return {
       data: null,
       error: 'Error al conectar con el servidor.',
