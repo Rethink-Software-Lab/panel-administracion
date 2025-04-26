@@ -13,40 +13,37 @@ export async function getProductos(): Promise<{
   error: string | null;
 }> {
   try {
-    const data = await db.transaction(async (tx) => {
-      const productos = await db
-        .select({
-          id: inventarioProductoinfo.id,
-          codigo: inventarioProductoinfo.codigo,
-          categoria: inventarioCategorias.nombre,
-        })
-        .from(inventarioProductoinfo)
-        .leftJoin(
-          inventarioCategorias,
-          eq(inventarioProductoinfo.categoriaId, inventarioCategorias.id)
-        )
-        .orderBy(desc(inventarioProductoinfo.id));
-      const cuentas = await db
-        .select()
-        .from(inventarioCuentas)
-        .orderBy(desc(inventarioCuentas.id));
-      const proveedores = await db
-        .select({
-          id: inventarioProveedor.id,
-          nombre: inventarioProveedor.nombre,
-        })
-        .from(inventarioProveedor)
-        .orderBy(desc(inventarioProveedor.id));
+    const productos = await db
+      .select({
+        id: inventarioProductoinfo.id,
+        codigo: inventarioProductoinfo.codigo,
+        categoria: inventarioCategorias.nombre,
+      })
+      .from(inventarioProductoinfo)
+      .leftJoin(
+        inventarioCategorias,
+        eq(inventarioProductoinfo.categoriaId, inventarioCategorias.id)
+      )
+      .orderBy(desc(inventarioProductoinfo.id));
+    const cuentas = await db
+      .select()
+      .from(inventarioCuentas)
+      .orderBy(desc(inventarioCuentas.id));
+    const proveedores = await db
+      .select({
+        id: inventarioProveedor.id,
+        nombre: inventarioProveedor.nombre,
+      })
+      .from(inventarioProveedor)
+      .orderBy(desc(inventarioProveedor.id));
 
-      return {
+    return {
+      error: null,
+      data: {
         productos,
         cuentas,
         proveedores,
-      };
-    });
-    return {
-      error: null,
-      data,
+      },
     };
   } catch (e) {
     console.error(e);
