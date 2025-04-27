@@ -411,7 +411,7 @@ export default function FormEntradas({ productos, cuentas, proveedores }) {
                                   onSelect={(currentValue) => {
                                     productos?.find(
                                       (e) => e.codigo === currentValue
-                                    )?.categoria?.nombre !== 'Zapatos'
+                                    )?.categoria !== 'Zapatos'
                                       ? (() => {
                                           form.setValue('variantes', undefined);
                                           form.setValue('cantidad', 0);
@@ -458,8 +458,8 @@ export default function FormEntradas({ productos, cuentas, proveedores }) {
                   </FormItem>
                 )}
               />
-              {productos?.find((e) => e.codigo === producto)?.categoria
-                ?.nombre !== 'Zapatos' && (
+              {productos?.find((e) => e.codigo === producto)?.categoria !==
+                'Zapatos' && (
                 <div className="space-y-2">
                   <Label>Cantidad</Label>
                   <Input
@@ -473,7 +473,7 @@ export default function FormEntradas({ productos, cuentas, proveedores }) {
               )}
             </CardContent>
           </Card>
-          {productos?.find((p) => p.codigo === producto)?.categoria?.nombre ===
+          {productos?.find((p) => p.codigo === producto)?.categoria ===
             'Zapatos' && (
             <Card>
               <CardHeader>
