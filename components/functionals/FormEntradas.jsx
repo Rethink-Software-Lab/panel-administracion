@@ -197,9 +197,6 @@ export default function FormEntradas({ productos, cuentas, proveedores }) {
     }
   };
 
-  console.log(productos);
-  console.log(form.formState.errors);
-
   return (
     <>
       <AlertDialog open={openDialog} setOpen={setOpenDialog}>
