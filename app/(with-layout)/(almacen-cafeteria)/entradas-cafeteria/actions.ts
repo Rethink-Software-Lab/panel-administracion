@@ -1,9 +1,9 @@
 'use server';
 
-import { EntradaCafeteriaSchema } from '@/lib/schemas';
 import { revalidateTag } from 'next/cache';
 import { cookies } from 'next/headers';
 import { InferInput } from 'valibot';
+import { EntradaCafeteriaSchema } from './schema';
 
 export async function addEntradaCafeteria(
   entrada: InferInput<typeof EntradaCafeteriaSchema>

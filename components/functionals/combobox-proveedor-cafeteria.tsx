@@ -5,7 +5,7 @@ import { FormControl, FormField, FormItem, FormMessage } from '../ui/form';
 import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover';
 import { Button } from '../ui/button';
 import { cn } from '@/lib/utils';
-import { CheckIcon, ChevronDown } from 'lucide-react';
+import { CheckIcon, ChevronDown, Keyboard } from 'lucide-react';
 import {
   Command,
   CommandEmpty,
@@ -15,30 +15,59 @@ import {
   CommandList,
 } from '../ui/command';
 import { InferInput } from 'valibot';
-import { RefObject, useState } from 'react';
-import { ProductoEntrada } from '@/app/(with-layout)/(almacen-cafeteria)/entradas-cafeteria/types';
+import { Dispatch, RefObject, SetStateAction, useState } from 'react';
+import { Label } from '../ui/label';
+import { Proveedor } from '@/app/(with-layout)/proveedores/types';
 import { EntradaCafeteriaSchema } from '@/app/(with-layout)/(almacen-cafeteria)/entradas-cafeteria/schema';
 
-export default function SelectProductoEntradaCafeteria({
+export default function ComboboxProveedorCafeteria({
   form,
-  index,
-  productos,
+  proveedores,
   formRef,
+  isManual,
+  setIsManual,
 }: {
   form: UseFormReturn<InferInput<typeof EntradaCafeteriaSchema>>;
-  index: number;
-  productos: ProductoEntrada[];
+  proveedores: Pick<Proveedor, 'id' | 'nombre'>[];
   formRef: RefObject<HTMLElement>;
+  isManual: boolean;
+  setIsManual: Dispatch<SetStateAction<boolean>>;
 }) {
   const [openPopover, setOpenPopover] = useState(false);
+
+  const manualFields: Array<keyof InferInput<typeof EntradaCafeteriaSchema>> = [
+    'proveedor_nombre',
+    'proveedor_nit',
+    'proveedor_telefono',
+    'proveedor_direccion',
+    'proveedor_no_cuenta_cup',
+    'proveedor_no_cuenta_mayorista',
+  ];
+
+  const setMultipleValuesUndefined = (
+    values: Array<keyof InferInput<typeof EntradaCafeteriaSchema>>
+  ) => {
+    values.forEach((value) => {
+      form.setValue(value, undefined);
+    });
+  };
+
+  const setMultipleValuesEmptyString = (
+    values: Array<keyof InferInput<typeof EntradaCafeteriaSchema>>
+  ) => {
+    values.forEach((value) => {
+      form.setValue(value, '');
+    });
+  };
 
   return (
     <FormField
       control={form.control}
-      name={`productos.${index}.producto`}
+      name="proveedor"
       render={({ field }) => (
         <FormItem className="flex flex-col">
           <Popover open={openPopover} onOpenChange={setOpenPopover}>
+            <Label>Proveedor</Label>
             <PopoverTrigger asChild>
               <FormControl>
                 <Button
@@ -49,11 +78,18 @@ export default function SelectProductoEntradaCafeteria({
                     !field.value && 'text-muted-foreground'
                   )}
                 >
-                  {field.value
-                    ? productos?.find(
-                        (producto) => producto?.id.toString() === field.value
-                      )?.nombre
-                    : 'Seleccione un producto'}
+                  {isManual ? (
+                    <div className="flex gap-2">
+                      <Keyboard className="w-5 h-5" />
+                      Ingresar manualmente
+                    </div>
+                  ) : field.value ? (
+                    proveedores?.find(
+                      (proveedor) => proveedor?.id.toString() === field.value
+                    )?.nombre
+                  ) : (
+                    'Seleccione un proveedor'
+                  )}
                   <ChevronDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                 </Button>
               </FormControl>
@@ -64,23 +100,25 @@ export default function SelectProductoEntradaCafeteria({
                 <CommandList>
                   <CommandEmpty>Ningún resultado encontrado.</CommandEmpty>
                   <CommandGroup heading="Sugerencias">
-                    {productos?.map((producto: ProductoEntrada) => (
+                    {proveedores?.map((proveedor) => (
                       <CommandItem
-                        key={producto.id}
-                        value={producto.id.toString()}
-                        keywords={[producto.nombre]}
+                        key={proveedor.id}
+                        value={proveedor.id.toString()}
+                        keywords={[proveedor.nombre]}
                         onSelect={(currentValue) => {
+                          setMultipleValuesUndefined(manualFields);
                           field.onChange(
                             currentValue === field.value ? '' : currentValue
                           );
+                          setIsManual(false);
                           setOpenPopover(false);
                         }}
                       >
-                        {producto.nombre}
+                        {proveedor.nombre}
                         <CheckIcon
                           className={cn(
                             'ml-auto h-4 w-4',
-                            producto.id.toString() === field.value
+                            proveedor.id.toString() === field.value
                               ? 'opacity-100'
                               : 'opacity-0'
                           )}
@@ -89,6 +127,20 @@ export default function SelectProductoEntradaCafeteria({
                     ))}
                   </CommandGroup>
                 </CommandList>
+                <Button
+                  onClick={() => {
+                    form.setValue('proveedor', undefined);
+                    setMultipleValuesEmptyString(manualFields);
+                    setIsManual(true);
+                    setOpenPopover(false);
+                  }}
+                  className="m-2 gap-2"
+                  variant="outline"
+                  type="button"
+                >
+                  <Keyboard className="w-5 h-5" />
+                  Agregar manualmente
+                </Button>
               </Command>
             </PopoverContent>
           </Popover>

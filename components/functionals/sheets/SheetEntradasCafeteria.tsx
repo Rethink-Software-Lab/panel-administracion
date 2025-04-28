@@ -27,7 +27,6 @@ import {
 } from '@/components/ui/select';
 import { useFieldArray, useForm } from 'react-hook-form';
 import { valibotResolver } from '@hookform/resolvers/valibot';
-import { EntradaCafeteriaSchema } from '@/lib/schemas';
 
 import { Input } from '@/components/ui/input';
 import { InferInput } from 'valibot';
@@ -53,16 +52,22 @@ import {
 import SelectProductoEntradaCafeteria from '../SelectProductoEntradaCafeteria';
 import { Banco, Tarjetas } from '@/app/(with-layout)/tarjetas/types';
 import { cn } from '@/lib/utils';
+import ComboboxProveedorCafeteria from '../combobox-proveedor-cafeteria';
+import { Proveedor } from '@/app/(with-layout)/proveedores/types';
+import { EntradaCafeteriaSchema } from '@/app/(with-layout)/(almacen-cafeteria)/entradas-cafeteria/schema';
 
 export default function SheetEntradasCafeteria({
   productos,
   cuentas,
+  proveedores,
 }: {
   productos: ProductoEntrada[];
   cuentas: Tarjetas[];
+  proveedores: Pick<Proveedor, 'id' | 'nombre'>[];
 }) {
   const [open, setOpen] = useState(false);
   const [error, setError] = useState('');
+  const [isManual, setIsManual] = useState(false);
   const formRef = useRef<HTMLFormElement>(null);
 
   const form = useForm<InferInput<typeof EntradaCafeteriaSchema>>({
@@ -134,19 +139,95 @@ export default function SheetEntradasCafeteria({
               onSubmit={form.handleSubmit(onSubmit)}
               className="space-y-4"
             >
-              <FormField
-                control={form.control}
-                name="proveedor"
-                render={({ field }) => (
-                  <FormItem className="w-full text-left">
-                    <Label>Proveedor</Label>
-                    <FormControl>
-                      <Input {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
+              <ComboboxProveedorCafeteria
+                form={form}
+                formRef={formRef}
+                proveedores={proveedores}
+                isManual={isManual}
+                setIsManual={setIsManual}
               />
+              {isManual && (
+                <>
+                  <FormField
+                    control={form.control}
+                    name="proveedor_nombre"
+                    render={({ field }) => (
+                      <FormItem className="w-full text-left">
+                        <FormControl>
+                          <Input
+                            {...field}
+                            placeholder="Nombre del proveedor"
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="proveedor_nit"
+                    render={({ field }) => (
+                      <FormItem className="w-full text-left">
+                        <FormControl>
+                          <Input {...field} placeholder="NIT del proveedor" />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="proveedor_telefono"
+                    render={({ field }) => (
+                      <FormItem className="w-full text-left">
+                        <FormControl>
+                          <Input
+                            {...field}
+                            placeholder="Teléfono del proveedor"
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="proveedor_direccion"
+                    render={({ field }) => (
+                      <FormItem className="w-full text-left">
+                        <FormControl>
+                          <Input {...field} placeholder="Domicilio soial" />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="proveedor_no_cuenta_cup"
+                    render={({ field }) => (
+                      <FormItem className="w-full text-left">
+                        <FormControl>
+                          <Input {...field} placeholder="Cuenta en CUP" />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="proveedor_no_cuenta_mayorista"
+                    render={({ field }) => (
+                      <FormItem className="w-full text-left">
+                        <FormControl>
+                          <Input {...field} placeholder="Cuenta Mayorista" />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </>
+              )}
               <FormField
                 control={form.control}
                 name="comprador"

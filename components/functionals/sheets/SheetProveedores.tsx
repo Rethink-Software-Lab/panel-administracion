@@ -52,8 +52,6 @@ export default function SheetGastos({ data }: { data?: Proveedor }) {
     },
   });
 
-  console.log(form.formState.errors);
-
   const onSubmit = async (
     dataForm: InferInput<typeof ProveedorSchema>
   ): Promise<void> => {
