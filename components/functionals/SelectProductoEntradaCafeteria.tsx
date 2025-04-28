@@ -15,9 +15,9 @@ import {
   CommandList,
 } from '../ui/command';
 import { InferInput } from 'valibot';
-import { EntradaCafeteriaSchema } from '@/lib/schemas';
 import { RefObject, useState } from 'react';
 import { ProductoEntrada } from '@/app/(with-layout)/(almacen-cafeteria)/entradas-cafeteria/types';
+import { EntradaCafeteriaSchema } from '@/app/(with-layout)/(almacen-cafeteria)/entradas-cafeteria/schema';
 
 export default function SelectProductoEntradaCafeteria({
   form,
