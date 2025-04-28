@@ -2,11 +2,8 @@ import { CloudOff } from 'lucide-react';
 
 import { getEntradasCafeteria } from '@/app/(with-layout)/(almacen-cafeteria)/entradas-cafeteria/services';
 
-import DataTable from '@/components/functionals/data-tables/data-table-general';
-import { columns } from '@/app/(with-layout)/(almacen-cafeteria)/entradas-cafeteria/columns';
-
 import SheetEntradasCafeteria from '@/components/functionals/sheets/SheetEntradasCafeteria';
-import { EntradaCafeteria } from './types';
+import WrapperEntradasCafeteria from '@/components/functionals/wrapper-entradas-cafeteria';
 
 export default async function EntradasCafeteria() {
   const { data } = await getEntradasCafeteria();
@@ -21,11 +18,12 @@ export default async function EntradasCafeteria() {
         <SheetEntradasCafeteria
           productos={data?.productos || []}
           cuentas={data?.cuentas || []}
+          proveedores={data?.proveedores || []}
         />
       </div>
 
       {data ? (
-        <DataTable<EntradaCafeteria> columns={columns} data={data?.entradas} />
+        <WrapperEntradasCafeteria entradas={data?.entradas} />
       ) : (
         <div className="flex flex-1 items-center justify-center rounded-lg border border-dashed shadow-sm">
           <div className="flex flex-col items-center gap-1 text-center">

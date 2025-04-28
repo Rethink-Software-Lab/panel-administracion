@@ -10,6 +10,7 @@ import {
   ColumnDef,
   SortingState,
   ColumnFiltersState,
+  TableOptions,
 } from '@tanstack/react-table';
 
 import {
@@ -21,23 +22,30 @@ import {
   TableRow,
 } from '@/components/ui/table';
 
-import { useState } from 'react';
+import { Dispatch, SetStateAction, useState } from 'react';
 import { DataTablePagination } from '@/components/ui/data-table-pagination';
 
 interface DataTableProps<TData> {
   columns: ColumnDef<TData>[];
   data: TData[];
+  setDataToPrint?: Dispatch<SetStateAction<TData | undefined>>;
+}
+
+export interface ExtendedTableOptions<TData> extends TableOptions<TData> {
+  setDataToPrint?: Dispatch<SetStateAction<TData | undefined>>;
 }
 
 export default function DataTableGeneral<TData>({
   columns,
   data,
+  setDataToPrint,
 }: DataTableProps<TData>) {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const table = useReactTable({
     data,
     columns,
+    setDataToPrint,
     getCoreRowModel: getCoreRowModel(),
     initialState: {
       pagination: {
@@ -56,7 +64,7 @@ export default function DataTableGeneral<TData>({
     getPaginationRowModel: getPaginationRowModel(),
     onColumnFiltersChange: setColumnFilters,
     getFilteredRowModel: getFilteredRowModel(),
-  });
+  } as ExtendedTableOptions<TData>);
 
   return (
     <div className="p-2 rounded-md border bg-white">

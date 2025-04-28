@@ -6,6 +6,9 @@ import { DateTime } from 'luxon';
 import { ColumnDef } from '@tanstack/react-table';
 import { EntradaCafeteria } from './types';
 import SheetInfoEntradasCafeteria from '@/components/functionals/sheets/SheetInfoEntradasCafeteria';
+import { Button } from '@/components/ui/button';
+import { ReceiptText } from 'lucide-react';
+import { ExtendedTableOptions } from '@/components/functionals/data-tables/data-table-general';
 
 export const columns: ColumnDef<EntradaCafeteria>[] = [
   {
@@ -24,6 +27,17 @@ export const columns: ColumnDef<EntradaCafeteria>[] = [
   {
     accessorKey: 'proveedor',
     header: 'Proveedor',
+    cell: ({ row }) => {
+      const proveedor = row.original.proveedor?.nombre;
+      const proveedorNombre = row.original.proveedor_nombre;
+      if (proveedor) {
+        return proveedor;
+      } else if (proveedorNombre) {
+        return proveedorNombre;
+      } else {
+        return <Badge variant="outline">Proveedor eliminado</Badge>;
+      }
+    },
   },
   {
     accessorKey: 'metodo_pago',
@@ -48,9 +62,24 @@ export const columns: ColumnDef<EntradaCafeteria>[] = [
 
   {
     header: ' ',
-    cell: ({ row }) => (
+    cell: ({ row, table }) => (
       <span className="space-x-2">
         <SheetInfoEntradasCafeteria data={row.original} />
+        <Button
+          onClick={() => {
+            (
+              table.options as ExtendedTableOptions<EntradaCafeteria>
+            ).setDataToPrint?.(row.original);
+            setTimeout(() => {
+              window.print();
+            }, 500);
+          }}
+          variant="outline"
+          size="icon"
+        >
+          <ReceiptText className="w-4 h-4" />
+          <span className="sr-only">Ver factura</span>
+        </Button>
         <EspecialWarningDelete
           id={row.original.id}
           text="Al eliminar la entrada se eliminarán todas las salidas, productos y ventas asociadas a ella."

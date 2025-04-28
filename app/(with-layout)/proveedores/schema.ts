@@ -1,28 +1,24 @@
-import { object, string, minLength, pipe } from 'valibot';
+import { object, string, pipe, nonEmpty } from 'valibot';
 
 export const ProveedorSchema = object({
   nombre: pipe(
     string('El nombre es requerido'),
-    minLength(1, 'El nombre no puede estar vacío')
+    nonEmpty('El nombre no puede estar vacío')
   ),
   direccion: pipe(
     string('La dirección es requerida'),
-    minLength(1, 'La dirección no puede estar vacía')
+    nonEmpty('La dirección no puede estar vacía')
   ),
   nit: pipe(
     string('El NIT es requerido'),
-    minLength(1, 'El NIT no puede estar vacío')
+    nonEmpty('El NIT no puede estar vacío')
   ),
-  noCuentaCup: pipe(
-    string('El número de cuenta CUP es requerido'),
-    minLength(1, 'El número de cuenta CUP no puede estar vacío')
-  ),
-  noCuentaMayorista: pipe(
-    string('El número de cuenta mayorista es requerido'),
-    minLength(1, 'El número de cuenta mayorista no puede estar vacío')
+  noCuentaCup: string('El número de cuenta CUP debe ser una cadena de texto'),
+  noCuentaMayorista: string(
+    'El número de cuenta mayorista debe ser una cadena de texto'
   ),
   telefono: pipe(
     string('El teléfono es requerido'),
-    minLength(1, 'El teléfono no puede estar vacío')
+    nonEmpty('El teléfono no puede estar vacío')
   ),
 });

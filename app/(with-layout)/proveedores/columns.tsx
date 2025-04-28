@@ -21,10 +21,26 @@ export const columns: ColumnDef<Proveedor>[] = [
   {
     accessorKey: 'noCuentaCup',
     header: 'No. Cuenta CUP',
+    cell: ({ row }) => {
+      const noCuentaCup = row.original.noCuentaCup;
+      if (noCuentaCup) {
+        return noCuentaCup;
+      } else {
+        return <span className="text-muted-foreground">vacío</span>;
+      }
+    },
   },
   {
     accessorKey: 'noCuentaMayorista',
     header: 'No. Cuenta Mayorista',
+    cell: ({ row }) => {
+      const noCuentaMayorista = row.original.noCuentaMayorista;
+      if (noCuentaMayorista) {
+        return noCuentaMayorista;
+      } else {
+        return <span className="text-muted-foreground">vacío</span>;
+      }
+    },
   },
   {
     accessorKey: 'telefono',
