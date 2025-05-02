@@ -19,15 +19,7 @@ export const columns: ColumnDef<Entrada>[] = [
         { locale: 'es' }
       ),
   },
-  {
-    accessorKey: 'descripcion_producto',
-    header: 'Producto',
-    size: 300,
-  },
-  {
-    accessorKey: 'cantidad',
-    header: 'Cantidad',
-  },
+
   {
     accessorKey: 'comprador',
     header: 'Comprador',
