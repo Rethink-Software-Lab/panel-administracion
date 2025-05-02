@@ -10,7 +10,6 @@ import {
 import { getFactura } from './services';
 import { DateTime } from 'luxon';
 import ButtonPrint from '@/components/functionals/ButtonPrint';
-import { Key, Truck } from 'lucide-react';
 
 export default async function Factura({
   params,
@@ -62,10 +61,10 @@ export default async function Factura({
           <b>NIT:</b> {data?.proveedor.nit}
         </h2>
         <h2 className="text-sm ">
-          <b>No. Cuenta CUP:</b> {data?.proveedor.noCuentaCup}
+          <b>No. Cuenta CUP:</b> {data?.proveedor?.noCuentaCup}
         </h2>
         <h2 className="text-sm ">
-          <b>No. Cuenta Mayorista:</b> {data?.proveedor.noCuentaMayorista}
+          <b>No. Cuenta Mayorista:</b> {data?.proveedor?.noCuentaMayorista}
         </h2>
         <h2 className="text-sm ">
           <b>Teléfono:</b> {data?.proveedor.telefono}

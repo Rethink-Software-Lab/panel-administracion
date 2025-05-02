@@ -6,7 +6,5 @@ export interface Entrada {
   nombre_proveedor: string;
   comprador: string;
   username: string;
-  descripcion_producto: string;
   fecha: string;
-  cantidad: number;
 }

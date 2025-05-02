@@ -57,7 +57,7 @@ import {
 import { EntradaSchema } from '@/lib/schemas';
 import { valibotResolver } from '@hookform/resolvers/valibot';
 import { createEntrada } from '@/app/(with-layout)/create-entrada/actions';
-import { useState } from 'react';
+import { Fragment, useRef, useState } from 'react';
 import { toast } from 'sonner';
 import {
   Command,
@@ -72,83 +72,199 @@ import { cn } from '@/lib/utils';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { Banco } from '@/app/(with-layout)/tarjetas/types';
+import { Alert, AlertTitle, AlertDescription } from '../ui/alert';
 
-function NestedArray({ nestedIndex, register, control, errors }) {
+function NestedArray({
+  nestedIndex,
+  nestedIndexRow,
+  productosIndex,
+  appendVariant,
+  removeVariant,
+  removeProducto,
+  register,
+  control,
+  errors,
+}) {
   const { fields, append, remove } = useFieldArray({
     control,
-    name: `variantes.${nestedIndex}.numeros`,
+    name: `productos.${productosIndex}.variantes.${nestedIndex}.numeros`,
   });
 
   return (
     <>
       {fields.map((numero, index, row) => (
-        <div key={numero.id} className="grid grid-cols-5">
-          <div className="col-span-2 p-2 align-middle">
+        <>
+          {index > 0 && (
+            <>
+              <div />
+              <div />
+            </>
+          )}
+          <div>
             <Input
               className="mb-1"
-              {...register(`variantes.${nestedIndex}.numeros.${index}.numero`, {
-                valueAsNumber: true,
-              })}
+              {...register(
+                `productos.${productosIndex}.variantes.${nestedIndex}.numeros.${index}.numero`,
+                {
+                  valueAsNumber: true,
+                }
+              )}
               type="number"
               min={0}
             />
             <Label className="text-[0.8rem] font-medium text-destructive">
               {
-                errors.variantes?.[nestedIndex]?.numeros?.[index]?.numero
-                  ?.message
+                errors.productos?.[productosIndex]?.variantes?.[nestedIndex]
+                  ?.numeros?.[index]?.numero?.message
               }
             </Label>
           </div>
-          <div className="col-span-2 p-2 align-middle">
+          <div>
+            <div className="flex gap-2">
+              <div className="w-full">
+                <Input
+                  className="mb-1"
+                  {...register(
+                    `productos.${productosIndex}.variantes.${nestedIndex}.numeros.${index}.cantidad`,
+                    {
+                      valueAsNumber: true,
+                    }
+                  )}
+                  type="number"
+                />
+                <Label className="text-[0.8rem] font-medium text-destructive">
+                  {
+                    errors.productos?.[productosIndex]?.variantes?.[nestedIndex]
+                      ?.numeros?.[index]?.cantidad?.message
+                  }
+                </Label>
+              </div>
+              {index > 0 && (
+                <Button
+                  onClick={() => remove(index)}
+                  size="icon"
+                  variant="ghost"
+                  className="gap-1"
+                >
+                  <X className="h-3.5 w-3.5" />
+                </Button>
+              )}
+            </div>
+          </div>
+          {index + 1 === row.length && (
+            <>
+              <div className="col-span-1 text-center">
+                {productosIndex > 0 && (
+                  <Button
+                    onClick={() => removeProducto(productosIndex)}
+                    size="sm"
+                    variant="ghost"
+                    className="gap-1"
+                  >
+                    <MinusCircle className="h-3.5 w-3.5" />
+                    <span className="hidden md:inline">Eliminar </span>
+                    <span>producto</span>
+                  </Button>
+                )}
+              </div>
+              <div className="col-span-1 text-center">
+                {nestedIndex === nestedIndexRow.length - 1 && (
+                  <Button
+                    onClick={() =>
+                      appendVariant({
+                        color: '',
+                        numeros: [{ numero: 0, cantidad: 0 }],
+                      })
+                    }
+                    size="sm"
+                    variant="ghost"
+                    className="gap-1"
+                  >
+                    <PlusCircle className="h-3.5 w-3.5" />
+                    <span className="hidden md:inline">Añadir </span>
+                    <span>variante</span>
+                  </Button>
+                )}
+                {nestedIndexRow.length > 1 && (
+                  <Button
+                    onClick={() => removeVariant(nestedIndex)}
+                    size="sm"
+                    variant="ghost"
+                    className="gap-1"
+                  >
+                    <MinusCircle className="h-3.5 w-3.5" />
+                    <span className="hidden md:inline">Eliminar </span>
+                    <span>variante</span>
+                  </Button>
+                )}
+              </div>
+              <div className="col-span-2 text-center">
+                <Button
+                  onClick={() =>
+                    append({
+                      numero: 0,
+                      cantidad: 0,
+                    })
+                  }
+                  size="sm"
+                  variant="ghost"
+                  className="gap-1"
+                >
+                  <PlusCircle className="h-3.5 w-3.5" />
+                  <span className="hidden md:inline">Añadir </span>
+                  <span>número</span>
+                </Button>
+              </div>
+            </>
+          )}
+        </>
+      ))}
+    </>
+  );
+}
+
+function VariantesFieldArray({ productosIndex, form, removeProducto }) {
+  const {
+    fields: fieldsVariant,
+    append: appendVariant,
+    remove,
+  } = useFieldArray({
+    control: form.control,
+    name: `productos.${productosIndex}.variantes`,
+  });
+
+  return (
+    <>
+      {fieldsVariant.map((variant, index, row) => (
+        <Fragment key={variant.id}>
+          {index > 0 && <div />}
+          <div className="font-semibold align-top">
             <Input
               className="mb-1"
-              {...register(
-                `variantes.${nestedIndex}.numeros.${index}.cantidad`,
-                {
-                  valueAsNumber: true,
-                }
+              {...form.register(
+                `productos.${productosIndex}.variantes.${index}.color`
               )}
-              min={1}
-              type="number"
             />
             <Label className="text-[0.8rem] font-medium text-destructive">
               {
-                errors.variantes?.[nestedIndex]?.numeros?.[index]?.cantidad
-                  ?.message
+                form.formState.errors.productos?.[productosIndex]?.variantes?.[
+                  index
+                ]?.color?.message
               }
             </Label>
           </div>
-          <div className="p-2 align-middle">
-            {index > 0 && (
-              <Button
-                onClick={() => remove(index)}
-                size="icon"
-                variant="ghost"
-                className="gap-1"
-              >
-                <X className="h-3.5 w-3.5" />
-              </Button>
-            )}
-          </div>
-          {index + 1 === row.length && (
-            <div className="p-2 align-middle col-span-4 text-center">
-              <Button
-                onClick={() =>
-                  append({
-                    numero: 0,
-                    cantidad: 0,
-                  })
-                }
-                size="sm"
-                variant="ghost"
-                className="gap-1"
-              >
-                <PlusCircle className="h-3.5 w-3.5" />
-                Añadir número
-              </Button>
-            </div>
-          )}
-        </div>
+          <NestedArray
+            nestedIndex={index}
+            nestedIndexRow={row}
+            productosIndex={productosIndex}
+            appendVariant={appendVariant}
+            removeVariant={remove}
+            removeProducto={removeProducto}
+            register={form.register}
+            control={form.control}
+            errors={form.formState.errors}
+          />
+        </Fragment>
       ))}
     </>
   );
@@ -156,10 +272,10 @@ function NestedArray({ nestedIndex, register, control, errors }) {
 
 export default function FormEntradas({ productos, cuentas, proveedores }) {
   const router = useRouter();
-  const [open, setOpen] = useState(false);
   const [openDialog, setOpenDialog] = useState(false);
   const [dataModal, setData] = useState(null);
   const [loading, setLoading] = useState(false);
+  const cardRef = useRef(null);
 
   const form = useForm({
     resolver: valibotResolver(EntradaSchema),
@@ -167,20 +283,22 @@ export default function FormEntradas({ productos, cuentas, proveedores }) {
       proveedor: '',
       comprador: '',
       metodoPago: '',
-      productInfo: '',
-      cantidad: 0,
+      productos: [
+        { producto: '', isZapato: false, cantidad: 0, variantes: undefined },
+      ],
     },
   });
+
   const {
-    fields: fieldsVariant,
-    append: appendVariant,
-    remove,
+    fields: fieldsProducto,
+    append: appendProducto,
+    remove: removeProducto,
   } = useFieldArray({
     control: form.control,
-    name: 'variantes',
+    name: 'productos',
   });
 
-  const producto = useWatch({ control: form.control, name: 'productInfo' });
+  const productosWatch = useWatch({ control: form.control, name: 'productos' });
 
   const onSubmit = async (dataForm) => {
     setLoading(true);
@@ -207,32 +325,42 @@ export default function FormEntradas({ productos, cuentas, proveedores }) {
               Estos datos se quedan almacenados en la tabla de Entradas.
             </AlertDialogDescription>
 
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Color</TableHead>
-                  <TableHead className="grid grid-cols-2 items-center">
-                    <p>Número</p>
-                    <p>IDs</p>
-                  </TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {dataModal?.map((res, index) => (
-                  <TableRow key={`${res?.color}-${index}`}>
-                    <TableCell className="align-top">{res?.color}</TableCell>
-                    <TableCell>
-                      {res?.numeros?.map((n, index) => (
-                        <div key={`${n}-${index}`} className="grid grid-cols-2">
-                          <p>{n?.numero}</p>
-                          <p>{n?.ids}</p>
-                        </div>
-                      ))}
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
+            {dataModal?.map((z) => (
+              <Fragment key={z.zapato}>
+                <h2 className="font-semibold pt-2 mb-0">{z.zapato}</h2>
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead>Color</TableHead>
+                      <TableHead className="grid grid-cols-2 items-center">
+                        <p>Número</p>
+                        <p>IDs</p>
+                      </TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {z.variantes?.map((res, index) => (
+                      <TableRow key={`${res?.color}-${index}`}>
+                        <TableCell className="align-top">
+                          {res?.color}
+                        </TableCell>
+                        <TableCell>
+                          {res?.numeros?.map((n, index) => (
+                            <div
+                              key={`${n}-${index}`}
+                              className="grid grid-cols-2"
+                            >
+                              <p>{n?.numero}</p>
+                              <p>{n?.ids}</p>
+                            </div>
+                          ))}
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </Fragment>
+            ))}
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel
@@ -370,195 +498,240 @@ export default function FormEntradas({ productos, cuentas, proveedores }) {
                   </FormItem>
                 )}
               />
-              <FormField
-                control={form.control}
-                name="productInfo"
-                render={({ field }) => (
-                  <FormItem className="flex flex-col mt-2">
-                    <Label>Producto</Label>
-                    <Popover open={open} onOpenChange={setOpen}>
-                      <PopoverTrigger asChild>
-                        <FormControl>
-                          <Button
-                            variant="outline"
-                            role="combobox"
-                            className={cn(
-                              'justify-between',
-                              !field.value && 'text-muted-foreground'
-                            )}
-                          >
-                            {field.value
-                              ? productos?.find(
-                                  (producto) => producto?.codigo === field.value
-                                )?.codigo
-                              : 'Selecciona un producto'}
-                            <ChevronDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-                          </Button>
-                        </FormControl>
-                      </PopoverTrigger>
-                      <PopoverContent className="w-[320px] p-0">
-                        <Command className="rounded-lg border shadow-md">
-                          <CommandInput placeholder="Escribe un código..." />
-                          <CommandList>
-                            <CommandEmpty>
-                              Ningún resultado encontrado.
-                            </CommandEmpty>
-                            <CommandGroup heading="Sugerencias">
-                              {productos?.map((producto) => (
-                                <CommandItem
-                                  key={producto.id}
-                                  value={producto.codigo}
-                                  onSelect={(currentValue) => {
-                                    productos?.find(
-                                      (e) => e.codigo === currentValue
-                                    )?.categoria !== 'Zapatos'
-                                      ? (() => {
-                                          form.setValue('variantes', undefined);
-                                          form.setValue('cantidad', 0);
-                                        })()
-                                      : (() => {
-                                          form.setValue('cantidad', undefined);
-                                          form.setValue('variantes', [
-                                            {
-                                              color: '',
-                                              numeros: [
-                                                {
-                                                  numero: 0,
-                                                  cantidad: 0,
-                                                },
-                                              ],
-                                            },
-                                          ]);
-                                        })();
-                                    field.onChange(
-                                      currentValue === field.value
-                                        ? ''
-                                        : currentValue
-                                    );
-                                    setOpen(false);
-                                  }}
-                                >
-                                  {producto.codigo}
-                                  <CheckIcon
-                                    className={cn(
-                                      'ml-auto h-4 w-4',
-                                      producto.codigo === field.value
-                                        ? 'opacity-100'
-                                        : 'opacity-0'
-                                    )}
-                                  />
-                                </CommandItem>
-                              ))}
-                            </CommandGroup>
-                          </CommandList>
-                        </Command>
-                      </PopoverContent>
-                    </Popover>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              {productos?.find((e) => e.codigo === producto)?.categoria !==
-                'Zapatos' && (
-                <div className="space-y-2">
-                  <Label>Cantidad</Label>
-                  <Input
-                    {...form.register('cantidad', { valueAsNumber: true })}
-                    type="number"
-                  />
-                  <p className="text-[0.8rem] font-medium text-destructive">
-                    {form.formState.errors?.cantidad?.message}
-                  </p>
-                </div>
-              )}
             </CardContent>
           </Card>
-          {productos?.find((p) => p.codigo === producto)?.categoria ===
-            'Zapatos' && (
-            <Card>
-              <CardHeader>
-                <CardTitle>Mercancía</CardTitle>
-                <CardDescription>
-                  Detalla la mercancía entrante por color, número y cantidad.
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <Table>
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead>Color</TableHead>
-                      <TableHead className="grid grid-cols-5 items-center">
-                        <p className="col-span-2">Numero</p>
-                        <p className="col-span-2"> Cantidad</p>
-                      </TableHead>
-                      <TableHead></TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {fieldsVariant.map((variant, index) => (
-                      <TableRow key={variant.id}>
-                        <TableCell className="font-semibold align-top">
-                          <Input
-                            className="mb-1"
-                            {...form.register(`variantes.${index}.color`)}
-                          />
-                          <Label className="text-[0.8rem] font-medium text-destructive">
-                            {
-                              form.formState.errors.variantes?.[index]?.color
-                                ?.message
-                            }
-                          </Label>
-                        </TableCell>
-                        <TableCell className="p-0">
-                          <NestedArray
-                            nestedIndex={index}
-                            register={form.register}
-                            control={form.control}
-                            errors={form.formState.errors}
-                          />
-                        </TableCell>
-                        <TableCell className="align-top text-center">
-                          {index > 0 && (
-                            <Button
-                              onClick={() => remove(index)}
-                              size="sm"
-                              variant="outline"
-                              className="flex items-center gap-2"
-                            >
-                              <MinusCircle className="h-3.5 w-3.5" />
-                              <span className="sr-only md:not-sr-only md:whitespace-nowrap">
-                                Eliminar Variante
-                              </span>
-                            </Button>
-                          )}
-                        </TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-              </CardContent>
 
-              <CardFooter className="justify-center border-t p-4">
-                <Button
-                  onClick={() =>
-                    appendVariant({
-                      color: '',
-                      numeros: [{ numero: 0, cantidad: 0 }],
-                    })
-                  }
-                  size="sm"
-                  variant="ghost"
-                  className="gap-1"
+          <Card ref={cardRef}>
+            <CardHeader>
+              <CardTitle>Mercancía</CardTitle>
+              <CardDescription>
+                Detalla la mercancía entrante por color, número y cantidad.
+              </CardDescription>
+              {form.formState.errors.productos?.root && (
+                <Alert variant="destructive">
+                  <AlertTitle>Error!</AlertTitle>
+                  <AlertDescription>
+                    No pueden haber productos repetidos.
+                  </AlertDescription>
+                </Alert>
+              )}
+            </CardHeader>
+            <CardContent>
+              <div>
+                <div
+                  className={cn(
+                    'grid [&>span]:pl-2 [&>span]:text-muted-foreground border-b border-muted',
+                    productosWatch?.some((p) => p.isZapato)
+                      ? 'grid-cols-4'
+                      : 'grid-cols-2'
+                  )}
                 >
-                  <PlusCircle className="h-3.5 w-3.5" />
-                  Añadir variante
-                </Button>
-              </CardFooter>
-            </Card>
-          )}
+                  <span>Producto</span>
+                  {productosWatch?.find((p) => p.isZapato) && (
+                    <>
+                      <span>Color</span>
+                      <span>Número</span>
+                    </>
+                  )}
+                  <span>Cantidad</span>
+                </div>
+                {fieldsProducto.map((producto, index) => (
+                  <div
+                    className={cn(
+                      'grid [&>*]:p-2',
+                      productosWatch?.some((p) => p.isZapato)
+                        ? 'grid-cols-4'
+                        : 'grid-cols-2'
+                    )}
+                    key={producto.id}
+                  >
+                    <FormField
+                      control={form.control}
+                      name={`productos.${index}.producto`}
+                      render={({ field }) => (
+                        <FormItem className="flex flex-col">
+                          <Popover>
+                            <PopoverTrigger asChild>
+                              <FormControl>
+                                <Button
+                                  variant="outline"
+                                  role="combobox"
+                                  className={cn(
+                                    'justify-between',
+                                    !field.value && 'text-muted-foreground'
+                                  )}
+                                >
+                                  {field.value
+                                    ? productos?.find(
+                                        (producto) =>
+                                          producto?.codigo === field.value
+                                      )?.codigo
+                                    : 'Selecciona un producto'}
+                                  <ChevronDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                                </Button>
+                              </FormControl>
+                            </PopoverTrigger>
+                            <PopoverContent className="w-[320px] p-0">
+                              <Command className="rounded-lg border shadow-md">
+                                <CommandInput placeholder="Escribe un código..." />
+                                <CommandList>
+                                  <CommandEmpty>
+                                    Ningún resultado encontrado.
+                                  </CommandEmpty>
+                                  <CommandGroup heading="Sugerencias">
+                                    {productos?.map((producto) => (
+                                      <CommandItem
+                                        key={producto.id}
+                                        value={producto.codigo}
+                                        onSelect={(currentValue) => {
+                                          productos?.find(
+                                            (e) => e.codigo === currentValue
+                                          )?.categoria !== 'Zapatos'
+                                            ? (() => {
+                                                form.setValue(
+                                                  `productos.${index}.isZapato`,
+                                                  false
+                                                );
+                                                form.setValue(
+                                                  `productos.${index}.variantes`,
+                                                  undefined
+                                                );
+                                                form.setValue(
+                                                  `productos.${index}.cantidad`,
+                                                  0
+                                                );
+                                              })()
+                                            : (() => {
+                                                form.setValue(
+                                                  `productos.${index}.isZapato`,
+                                                  true
+                                                );
+                                                form.setValue(
+                                                  `productos.${index}.cantidad`,
+                                                  undefined
+                                                );
+                                                form.setValue(
+                                                  `productos.${index}.variantes`,
+                                                  [
+                                                    {
+                                                      color: '',
+                                                      numeros: [
+                                                        {
+                                                          numero: 0,
+                                                          cantidad: 0,
+                                                        },
+                                                      ],
+                                                    },
+                                                  ]
+                                                );
+                                              })();
+                                          field.onChange(
+                                            currentValue === field.value
+                                              ? ''
+                                              : currentValue
+                                          );
+                                        }}
+                                      >
+                                        {producto.codigo}
+                                        <CheckIcon
+                                          className={cn(
+                                            'ml-auto h-4 w-4',
+                                            producto.codigo === field.value
+                                              ? 'opacity-100'
+                                              : 'opacity-0'
+                                          )}
+                                        />
+                                      </CommandItem>
+                                    ))}
+                                  </CommandGroup>
+                                </CommandList>
+                              </Command>
+                            </PopoverContent>
+                          </Popover>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    {productosWatch?.[index]?.isZapato && (
+                      <VariantesFieldArray
+                        productosIndex={index}
+                        form={form}
+                        removeProducto={removeProducto}
+                      />
+                    )}
+
+                    {!productosWatch?.[index]?.isZapato && (
+                      <>
+                        {productosWatch?.some((p) => p.isZapato) && (
+                          <div className="col-span-2" />
+                        )}
+                        <FormField
+                          control={form.control}
+                          name={`productos.${index}.cantidad`}
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormControl>
+                                <Input
+                                  {...field}
+                                  type="number"
+                                  onChange={(e) => {
+                                    const value = parseFloat(e.target.value);
+                                    field.onChange(isNaN(value) ? 0 : value);
+                                  }}
+                                />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                      </>
+                    )}
+
+                    {!productosWatch?.[index]?.isZapato && (
+                      <div className="text-center">
+                        <Button
+                          onClick={() => removeProducto(index)}
+                          size="sm"
+                          variant="ghost"
+                          className="gap-1"
+                        >
+                          <MinusCircle className="h-3.5 w-3.5" />
+                          <span className="hidden md:inline">Eliminar </span>
+                          <span>producto</span>
+                        </Button>
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
+            </CardContent>
+
+            <CardFooter className="justify-center border-t p-4">
+              <Button
+                onClick={() =>
+                  appendProducto({
+                    producto: '',
+                    cantidad: 0,
+                    isZapato: false,
+                    variantes: undefined,
+                  })
+                }
+                size="sm"
+                variant="ghost"
+                className="gap-1"
+              >
+                <PlusCircle className="h-3.5 w-3.5" />
+                Añadir producto
+              </Button>
+            </CardFooter>
+          </Card>
+          {/* )} */}
           <div className="grid grid-cols-1 gap-2 md:flex md:items-center md:justify-end">
             <Link href="/entradas">
-              <Button className="order-2 md:order-none" variant="outline">
+              <Button
+                className="order-2 md:order-none w-full"
+                variant="outline"
+              >
                 Cancelar
               </Button>
             </Link>
