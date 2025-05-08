@@ -6,6 +6,7 @@ import { DateTime } from 'luxon';
 import { deleteVenta } from './actions';
 import { ColumnDef } from '@tanstack/react-table';
 import { Ventas } from './types';
+import { canDeleteVenta } from '@/lib/utils';
 
 export const columns: ColumnDef<Ventas>[] = [
   {
@@ -43,7 +44,7 @@ export const columns: ColumnDef<Ventas>[] = [
     accessorKey: 'username',
     header: 'Usuario',
     cell: ({ row }) => {
-      const username = row.original.username;
+      const username = row.original.usuario.username;
       if (username) {
         return username;
       } else {
@@ -53,8 +54,20 @@ export const columns: ColumnDef<Ventas>[] = [
   },
   {
     header: ' ',
-    cell: ({ row }) => (
-      <TableDeleteV2 id={row.original.id} action={deleteVenta} />
+    cell: ({ row, table }) => (
+      <TableDeleteV2
+        id={row.original.id}
+        action={deleteVenta}
+        disabled={
+          !canDeleteVenta(
+            // @ts-ignore
+            table.options.userId,
+            row.original.usuario.id,
+            // @ts-ignore
+            table.options.isStaff
+          )
+        }
+      />
     ),
   },
 ];

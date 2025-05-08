@@ -23,13 +23,15 @@ import { DataTablePagination } from '@/components/ui/data-table-pagination';
 
 // TODO: Agregar filtro de fecha
 
-export function DataTable({ columns, data, id }) {
+export function DataTable({ columns, data, id, userId, isStaff }) {
   const [sorting, setSorting] = useState([]);
   const [columnFilters, setColumnFilters] = useState([]);
   const table = useReactTable({
     data,
     columns,
     id,
+    userId,
+    isStaff,
     getCoreRowModel: getCoreRowModel(),
     initialState: {
       pagination: {

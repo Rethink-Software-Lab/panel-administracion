@@ -12,6 +12,7 @@ import {
   Tarjetas,
   Ventas,
 } from '@/app/(with-layout)/areas-de-venta/[id]/types';
+import { getSession } from '@/lib/getSession';
 
 interface Props {
   id: string;
@@ -26,6 +27,8 @@ export default async function VentasAreaVenta({
   productos,
   tarjetas,
 }: Props) {
+  const { isStaff, userId } = getSession();
+
   return (
     <main className="flex flex-1 flex-col gap-4 pb-4 lg:gap-6 lg:pb-6 px-4 h-full">
       <div className="flex justify-between items-center">
@@ -61,7 +64,13 @@ export default async function VentasAreaVenta({
       </div>
 
       {ventas ? (
-        <DataTable columns={columns} data={ventas} id={id} />
+        <DataTable
+          columns={columns}
+          data={ventas}
+          id={id}
+          userId={parseInt(userId!)}
+          isStaff={isStaff}
+        />
       ) : (
         <div className="flex flex-1 items-center justify-center rounded-lg border border-dashed shadow-sm mb-16">
           <div className="flex flex-col items-center gap-1 text-center">
