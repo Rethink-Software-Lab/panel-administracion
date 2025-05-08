@@ -16,7 +16,12 @@ import { Trash } from 'lucide-react';
 
 import { toast } from 'sonner';
 
-export default function TableActions({ id, action, ...otherProps }) {
+export default function TableActions({
+  id,
+  action,
+  disabled = false,
+  ...otherProps
+}) {
   const deleteAction = (id) => {
     const promise = new Promise((resolve, reject) => {
       action(id).then((res) => {
@@ -37,7 +42,7 @@ export default function TableActions({ id, action, ...otherProps }) {
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>
-        <Button variant="outline" size="icon">
+        <Button variant="outline" disabled={disabled} size="icon">
           <Trash className="h-4 w-4" />
         </Button>
       </AlertDialogTrigger>

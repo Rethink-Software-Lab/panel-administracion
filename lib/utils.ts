@@ -18,3 +18,11 @@ export function formatBytes(bytes: number) {
 
 export const MAX_TRANF_MES = 120000;
 export const MAX_TRANF_DIA = 80000;
+
+export function canDeleteVenta(
+  userId: number,
+  userInVentaId: number,
+  isStaff: boolean
+) {
+  return userId === userInVentaId || isStaff;
+}

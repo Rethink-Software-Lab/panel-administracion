@@ -23,12 +23,16 @@ export interface Inventario {
   categorias: Categoria[];
 }
 
+interface UsuarioVentas {
+  id: number;
+  username: string;
+}
 export interface Ventas {
   id: number;
   created_at: string;
   importe: number;
   metodo_pago: string;
-  username: string;
+  usuario: UsuarioVentas;
   descripcion: string;
   cantidad: number;
 }
