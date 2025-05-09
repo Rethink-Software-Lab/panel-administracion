@@ -397,7 +397,7 @@ export default function ModalVentas({
             />
 
             {info_producto &&
-              productosInfo?.find((p) => p.codigo === info_producto)
+              productosInfo?.find((p) => p.id.toString() === info_producto)
                 ?.categoria === 'Zapatos' && (
                 <div className="space-y-2">
                   <Label>Productos</Label>
@@ -442,7 +442,7 @@ export default function ModalVentas({
               )}
 
             {info_producto &&
-              productosInfo?.find((p) => p.codigo === info_producto)
+              productosInfo?.find((p) => p.id.toString() === info_producto)
                 ?.categoria !== 'Zapatos' && (
                 <div className="space-y-2">
                   <Label>Cantidad</Label>
