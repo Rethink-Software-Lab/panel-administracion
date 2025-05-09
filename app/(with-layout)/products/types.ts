@@ -5,7 +5,6 @@ interface Imagen {
 }
 export interface ProductInfo {
   id: number;
-  codigo: string;
   imagen: Imagen | null;
   descripcion: string;
   categoria: Omit<Categoria, 'color'>;

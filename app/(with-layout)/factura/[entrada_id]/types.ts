@@ -1,7 +1,7 @@
 import { Proveedor } from '../../proveedores/types';
 
 export interface ProductoFactura {
-  codigo: string;
+  descripcion: string;
   cantidad: number;
   precio_unitario: number;
   importe: number;

@@ -564,8 +564,9 @@ export default function FormEntradas({ productos, cuentas, proveedores }) {
                                   {field.value
                                     ? productos?.find(
                                         (producto) =>
-                                          producto?.codigo === field.value
-                                      )?.codigo
+                                          producto?.id.toString() ===
+                                          field.value
+                                      )?.descripcion
                                     : 'Selecciona un producto'}
                                   <ChevronDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                                 </Button>
@@ -582,10 +583,12 @@ export default function FormEntradas({ productos, cuentas, proveedores }) {
                                     {productos?.map((producto) => (
                                       <CommandItem
                                         key={producto.id}
-                                        value={producto.codigo}
+                                        value={producto.id.toString()}
+                                        keywords={[producto.descripcion]}
                                         onSelect={(currentValue) => {
                                           productos?.find(
-                                            (e) => e.codigo === currentValue
+                                            (e) =>
+                                              e.id.toString() === currentValue
                                           )?.categoria !== 'Zapatos'
                                             ? (() => {
                                                 form.setValue(
@@ -632,11 +635,12 @@ export default function FormEntradas({ productos, cuentas, proveedores }) {
                                           );
                                         }}
                                       >
-                                        {producto.codigo}
+                                        {producto.descripcion}
                                         <CheckIcon
                                           className={cn(
                                             'ml-auto h-4 w-4',
-                                            producto.codigo === field.value
+                                            producto.id.toString() ===
+                                              field.value
                                               ? 'opacity-100'
                                               : 'opacity-0'
                                           )}

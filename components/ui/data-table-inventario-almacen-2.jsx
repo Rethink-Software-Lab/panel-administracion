@@ -64,25 +64,27 @@ export function DataTable({ columns, data, categorias }) {
         <div className="flex gap-2">
           <Input
             className="max-w-60"
-            value={columnFilters?.find((el) => el.id === 'codigo')?.value || ''}
+            value={
+              columnFilters?.find((el) => el.id === 'descripcion')?.value || ''
+            }
             onChange={(e) =>
               setColumnFilters((prevState) => {
-                const has = prevState?.find((el) => el.id === 'codigo');
+                const has = prevState?.find((el) => el.id === 'descripcion');
                 if (!has) {
                   return prevState.concat({
-                    id: 'codigo',
+                    id: 'descripcion',
                     value: e.target.value,
                   });
                 }
                 return prevState
-                  .filter((f) => f.id !== 'codigo')
+                  .filter((f) => f.id !== 'descripcion')
                   .concat({
-                    id: 'codigo',
+                    id: 'descripcion',
                     value: e.target.value,
                   });
               })
             }
-            placeholder="Filtrar por Código"
+            placeholder="Filtrar por descripción"
           />
         </div>
         <div className="flex items-center gap-2">

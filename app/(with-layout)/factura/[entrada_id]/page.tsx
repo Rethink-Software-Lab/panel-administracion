@@ -53,12 +53,12 @@ export default async function Factura({
       <div className="pb-8 hidden print:block">
         <p className="text-sm mb-2">Productor</p>
         <div className="border-t bg-muted/50 w-full mb-2" />
-        <h1 className="font-bold">{data?.proveedor.nombre}</h1>
+        <h1 className="font-bold">{data?.proveedor?.nombre}</h1>
         <h2 className="text-sm">
-          <b>Domicilio social:</b> {data?.proveedor.direccion}
+          <b>Domicilio social:</b> {data?.proveedor?.direccion}
         </h2>
         <h2 className="text-sm ">
-          <b>NIT:</b> {data?.proveedor.nit}
+          <b>NIT:</b> {data?.proveedor?.nit}
         </h2>
         <h2 className="text-sm ">
           <b>No. Cuenta CUP:</b> {data?.proveedor?.noCuentaCup}
@@ -67,14 +67,14 @@ export default async function Factura({
           <b>No. Cuenta Mayorista:</b> {data?.proveedor?.noCuentaMayorista}
         </h2>
         <h2 className="text-sm ">
-          <b>Teléfono:</b> {data?.proveedor.telefono}
+          <b>Teléfono:</b> {data?.proveedor?.telefono}
         </h2>
       </div>
 
       <div className="print:hidden border-t bg-muted/50 w-full my-8 print:m-0" />
       <div className="flex items-center  justify-between my-8 print:m-0">
         <p className="print:hidden text-xl font-light">
-          Proveedor: {data?.proveedor.nombre}
+          Proveedor: {data?.proveedor?.nombre}
         </p>
         <p className="text-xl font-ligth print:hidden">
           No. Factura:{' '}
@@ -95,9 +95,11 @@ export default async function Factura({
           </TableRow>
         </TableHeader>
         <TableBody>
-          {data?.productos.map((producto) => (
-            <TableRow key={producto.codigo}>
-              <TableCell className="font-medium">{producto.codigo}</TableCell>
+          {data?.productos?.map((producto) => (
+            <TableRow key={producto.descripcion}>
+              <TableCell className="font-medium">
+                {producto.descripcion}
+              </TableCell>
               <TableCell>{producto.cantidad}</TableCell>
               <TableCell>
                 {Intl.NumberFormat('es-CU', {
@@ -120,7 +122,7 @@ export default async function Factura({
             <TableCell className="text-right">
               $
               {data?.productos
-                .reduce(
+                ?.reduce(
                   (total, producto) => total + Number(producto.importe),
                   0
                 )

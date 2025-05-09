@@ -10,6 +10,7 @@ import { columns } from './columns';
 import { SalidasRevoltosa } from './types';
 
 export default async function Salidas() {
+  // TODO: Endpoint por tipar
   const { data } = await getSalidasRevoltosa();
 
   return (

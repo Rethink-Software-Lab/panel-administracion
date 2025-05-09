@@ -6,11 +6,6 @@ import { Productos } from './types';
 
 export const columns: ColumnDef<Productos>[] = [
   {
-    id: 'codigo',
-    accessorKey: 'codigo',
-    header: 'Código',
-  },
-  {
     accessorKey: 'descripcion',
     header: 'Descripcion',
   },

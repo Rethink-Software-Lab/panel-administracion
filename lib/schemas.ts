@@ -82,10 +82,6 @@ export const LoginSchema = object({
 });
 
 export const ProductSchema = object({
-  codigo: pipe(
-    string('El código del producto debe ser una cadena de texto'),
-    minLength(1, 'El usuario debe tener un nombre')
-  ),
   descripcion: pipe(
     string('La descripción debe ser una cadena de texto'),
     minLength(1, 'La descripción es requerida')

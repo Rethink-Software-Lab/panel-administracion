@@ -96,27 +96,27 @@ export default function DataTableGeneral<TData>({
           <Input
             className="max-w-60"
             value={
-              (columnFilters?.find((el) => el.id === 'codigo')
+              (columnFilters?.find((el) => el.id === 'descripcion')
                 ?.value as string) || ''
             }
             onChange={(e) =>
               setColumnFilters((prevState) => {
-                const has = prevState?.find((el) => el.id === 'codigo');
+                const has = prevState?.find((el) => el.id === 'descripcion');
                 if (!has) {
                   return prevState.concat({
-                    id: 'codigo',
+                    id: 'descripcion',
                     value: e.target.value,
                   });
                 }
                 return prevState
-                  .filter((f) => f.id !== 'codigo')
+                  .filter((f) => f.id !== 'descripcion')
                   .concat({
-                    id: 'codigo',
+                    id: 'descripcion',
                     value: e.target.value,
                   });
               })
             }
-            placeholder="Filtrar por Código"
+            placeholder="Filtrar por descripción"
           />
         </div>
       </div>

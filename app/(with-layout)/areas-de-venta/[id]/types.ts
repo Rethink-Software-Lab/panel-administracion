@@ -2,7 +2,6 @@ import { Categoria } from '../../categorias/types';
 
 export interface Zapatos {
   id: number;
-  codigo: string;
   descripcion: string;
   color: string | null;
   numero: string | null;
@@ -10,7 +9,6 @@ export interface Zapatos {
 
 export interface Productos {
   id: number;
-  codigo: string;
   descripcion: string;
   precio_venta: string;
   cantidad: number;
@@ -46,7 +44,6 @@ export interface Tarjetas {
 
 export interface AllProductos {
   id: number;
-  codigo: string;
   descripcion: string;
   categoria: string;
 }

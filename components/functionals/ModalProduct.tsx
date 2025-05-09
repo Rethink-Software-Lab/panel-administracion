@@ -165,19 +165,6 @@ function ModalProduct({
             <div className="space-y-2 col-span-2 md:col-span-1">
               <FormField
                 control={form.control}
-                name="codigo"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Código</FormLabel>
-                    <FormControl>
-                      <Input placeholder="Código..." {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
                 name="descripcion"
                 render={({ field }) => (
                   <FormItem>

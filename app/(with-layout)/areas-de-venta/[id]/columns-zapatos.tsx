@@ -13,10 +13,6 @@ export const columns: ColumnDef<Zapatos>[] = [
     },
   },
   {
-    accessorKey: 'codigo',
-    header: 'Código',
-  },
-  {
     accessorKey: 'descripcion',
     header: 'Descripción',
   },

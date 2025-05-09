@@ -14,7 +14,6 @@ import { ArchiveX } from 'lucide-react';
 interface Producto {
   id: number;
   descripcion: string;
-  codigo: string;
   cantidad: string;
 }
 
@@ -54,12 +53,6 @@ export default async function ReporteInventario({
               <TableHead className="border-b border-gray-300 px-4 print:px-0">
                 Descripción
               </TableHead>
-              {data.area !== 'Cafetería' &&
-                data.area !== 'Almacén Cafetería' && (
-                  <TableHead className="border-b border-gray-300 px-4 print:px-0">
-                    Código
-                  </TableHead>
-                )}
               <TableHead className="text-right border-b border-gray-300 px-4 print:px-0">
                 Cantidad
               </TableHead>
@@ -71,12 +64,6 @@ export default async function ReporteInventario({
                 <TableCell className="border-b border-gray-300 px-4 print:px-0">
                   {p.descripcion}
                 </TableCell>
-                {data.area !== 'Cafetería' &&
-                  data.area !== 'Almacén Cafetería' && (
-                    <TableCell className="border-b border-gray-300 px-4 print:px-0">
-                      {p.codigo}
-                    </TableCell>
-                  )}
                 <TableCell className="text-right font-medium border-b border-gray-300 px-4 print:px-0">
                   {p.cantidad}
                 </TableCell>
