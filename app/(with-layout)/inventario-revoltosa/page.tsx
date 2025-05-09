@@ -14,7 +14,6 @@ export default async function Inventario() {
   const zapatos = data?.inventario?.zapatos?.map((z: Zapatos) => {
     return {
       id: z.id,
-      codigo: z.info__codigo,
       descripcion: z.info__descripcion,
       color: z.color,
       numero: z.numero,
