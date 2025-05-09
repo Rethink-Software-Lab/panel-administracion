@@ -52,7 +52,7 @@ export default function SelectProductoAjuste({
                   {field.value
                     ? productosInfo?.find(
                         (producto) => producto?.id.toString() === field.value
-                      )?.codigo
+                      )?.descripcion
                     : 'Seleccione un producto'}
                   <ChevronDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                 </Button>
@@ -99,10 +99,7 @@ export default function SelectProductoAjuste({
                           setOpenPopover(false);
                         }}
                       >
-                        <div>
-                          <p className="font-semibold">{producto.codigo}</p>
-                          <span>{producto.descripcion}</span>
-                        </div>
+                        {producto.descripcion}
                         <CheckIcon
                           className={cn(
                             'ml-auto h-4 w-4',

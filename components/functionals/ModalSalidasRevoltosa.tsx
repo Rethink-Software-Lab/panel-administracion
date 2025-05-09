@@ -168,8 +168,9 @@ export default function ModalSalidaRevoltosa({
                           >
                             {field.value
                               ? productosInfo?.find(
-                                  (producto) => producto?.codigo === field.value
-                                )?.codigo
+                                  (producto) =>
+                                    producto?.id.toString() === field.value
+                                )?.descripcion
                               : 'Selecciona un producto'}
                             <ChevronDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                           </Button>
@@ -189,11 +190,12 @@ export default function ModalSalidaRevoltosa({
                               {productosInfo?.map((producto) => (
                                 <CommandItem
                                   key={producto.id}
-                                  value={producto.codigo}
+                                  value={producto.id.toString()}
+                                  keywords={[producto.descripcion]}
                                   onSelect={(currentValue) => {
                                     const esZapato =
                                       productosInfo?.find(
-                                        (e) => e.codigo === currentValue
+                                        (e) => e.id.toString() === currentValue
                                       )?.categoria.nombre === 'Zapatos';
 
                                     if (esZapato) {
@@ -211,11 +213,11 @@ export default function ModalSalidaRevoltosa({
                                     setOpen(false);
                                   }}
                                 >
-                                  {producto.codigo}
+                                  {producto.descripcion}
                                   <CheckIcon
                                     className={cn(
                                       'ml-auto h-4 w-4',
-                                      producto.codigo === field.value
+                                      producto.id.toString() === field.value
                                         ? 'opacity-100'
                                         : 'opacity-0'
                                     )}
@@ -234,8 +236,8 @@ export default function ModalSalidaRevoltosa({
             </div>
 
             {info_producto &&
-              productosInfo?.find((p) => p.codigo === info_producto)?.categoria
-                ?.nombre === 'Zapatos' && (
+              productosInfo?.find((p) => p.id.toString() === info_producto)
+                ?.categoria?.nombre === 'Zapatos' && (
                 <div className="space-y-2">
                   <Label>Productos</Label>
 
@@ -281,8 +283,8 @@ export default function ModalSalidaRevoltosa({
               )}
 
             {info_producto &&
-              productosInfo?.find((p) => p.codigo === info_producto)?.categoria
-                ?.nombre !== 'Zapatos' && (
+              productosInfo?.find((p) => p.id.toString() === info_producto)
+                ?.categoria?.nombre !== 'Zapatos' && (
                 <div className="space-y-2">
                   <Label>Cantidad</Label>
                   <Input

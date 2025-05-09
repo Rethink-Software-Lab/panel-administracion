@@ -40,11 +40,6 @@ export const columns: ColumnDef<ProductInfo>[] = [
     },
   },
   {
-    id: 'codigo',
-    accessorKey: 'codigo',
-    header: 'Código',
-  },
-  {
     accessorKey: 'descripcion',
     header: 'Descripción',
   },

@@ -3,7 +3,6 @@ import { Categoria } from '../categorias/types';
 
 export interface Zapatos {
   id: number;
-  info__codigo: string;
   info__descripcion: string;
   color: string;
   numero: string;

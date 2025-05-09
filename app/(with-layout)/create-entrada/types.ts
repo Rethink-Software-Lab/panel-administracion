@@ -18,7 +18,7 @@ export interface ResponseCreateEntrada {
 
 export interface ProductoInfoCreateEntrada {
   id: number;
-  codigo: string;
+  descripcion: string;
   categoria: string | null;
 }
 

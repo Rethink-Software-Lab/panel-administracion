@@ -330,8 +330,9 @@ export default function ModalVentas({
                         >
                           {field.value
                             ? productosInfo?.find(
-                                (producto) => producto?.codigo === field.value
-                              )?.codigo
+                                (producto) =>
+                                  producto?.id?.toString() === field.value
+                              )?.descripcion
                             : 'Selecciona un producto'}
                           <ChevronDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                         </Button>
@@ -351,12 +352,12 @@ export default function ModalVentas({
                             {productosInfo?.map((producto) => (
                               <CommandItem
                                 key={producto.id}
-                                value={producto.codigo}
+                                value={producto.id?.toString()}
                                 keywords={[producto.descripcion]}
                                 onSelect={(currentValue) => {
                                   const esZapato =
                                     productosInfo?.find(
-                                      (e) => e.codigo === currentValue
+                                      (e) => e.id.toString() === currentValue
                                     )?.categoria === 'Zapatos';
 
                                   if (esZapato) {
@@ -374,16 +375,11 @@ export default function ModalVentas({
                                   setOpen(false);
                                 }}
                               >
-                                <div>
-                                  <p className="font-semibold">
-                                    {producto.codigo}
-                                  </p>
-                                  <span>{producto.descripcion}</span>
-                                </div>
+                                {producto.descripcion}
                                 <CheckIcon
                                   className={cn(
                                     'ml-auto h-4 w-4',
-                                    producto.codigo === field.value
+                                    producto.id?.toString() === field.value
                                       ? 'opacity-100'
                                       : 'opacity-0'
                                   )}

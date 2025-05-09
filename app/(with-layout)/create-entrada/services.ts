@@ -16,7 +16,7 @@ export async function getProductos(): Promise<{
     const productos = await db
       .select({
         id: inventarioProductoinfo.id,
-        codigo: inventarioProductoinfo.codigo,
+        descripcion: inventarioProductoinfo.descripcion,
         categoria: inventarioCategorias.nombre,
       })
       .from(inventarioProductoinfo)

@@ -82,31 +82,6 @@ export function DataTable({ columns, data, categorias }: Props) {
           <Input
             className="max-w-60"
             value={
-              (columnFilters?.find((el) => el.id === 'codigo')
-                ?.value as string) || ''
-            }
-            onChange={(e) =>
-              setColumnFilters((prevState) => {
-                const has = prevState?.find((el) => el.id === 'codigo');
-                if (!has) {
-                  return prevState.concat({
-                    id: 'codigo',
-                    value: e.target.value,
-                  });
-                }
-                return prevState
-                  .filter((f) => f.id !== 'codigo')
-                  .concat({
-                    id: 'codigo',
-                    value: e.target.value,
-                  });
-              })
-            }
-            placeholder="Filtrar por Código"
-          />
-          <Input
-            className="max-w-60"
-            value={
               (columnFilters?.find((el) => el.id === 'descripcion')
                 ?.value as string) || ''
             }
