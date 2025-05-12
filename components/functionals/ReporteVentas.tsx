@@ -9,6 +9,7 @@ import {
 
 import { DateTime } from 'luxon';
 import { ClipboardX, FolderSearch } from 'lucide-react';
+import styles from '@/styles/reportes.module.css';
 
 interface Producto {
   id: number;
@@ -33,6 +34,7 @@ interface Params {
   productos: Producto[];
   total: SubtotalYTotalReporteVenta;
   pago_trabajador: number;
+  ventas_por_usuario: { [key: string]: number };
   gastos_variables: GastosReporteVenta[];
   gastos_fijos: GastosReporteVenta[];
   subtotal: SubtotalYTotalReporteVenta;
@@ -195,6 +197,7 @@ export default async function ReporteVentas({
                 )}
               </TableCell>
             </TableRow>
+
             <TableRow>
               <TableCell className="font-bold px-4 border-t border-gray-300 print:px-0">
                 Total
@@ -310,10 +313,33 @@ export default async function ReporteVentas({
                     }).format(data.pago_trabajador)}
                   </TableCell>
                 </TableRow>
+                <TableRow className="relative hover:bg-white">
+                  <TableCell colSpan={2} className="pl-4">
+                    <div className={styles.subrowGroup}>
+                      <div className={styles.verticalLine} />
+                      {Object.keys(data.ventas_por_usuario).map(
+                        (usuario, index) => (
+                          <div className="pl-4 relative " key={index}>
+                            <div className={styles.branchLine} />
+                            <div className="flex justify-between items-center px-2 py-1">
+                              <p>{usuario}</p>
+                              <p>
+                                {Intl.NumberFormat('es-CU', {
+                                  style: 'currency',
+                                  currency: 'CUP',
+                                }).format(data.ventas_por_usuario[usuario])}
+                              </p>
+                            </div>
+                          </div>
+                        )
+                      )}
+                    </div>
+                  </TableCell>
+                </TableRow>
 
                 {data.gastos_variables.map((gasto_variable, index) => (
                   <TableRow key={index}>
-                    <TableCell className="px-4 border-t border-gray-300 print:px-0">
+                    <TableCell className="px-4 border-t border-gray-300 print:px-0 print:border-t print:border-gray-300">
                       {gasto_variable.descripcion}
                     </TableCell>
                     <TableCell className="text-right px-4 border-t border-gray-300 print:px-0">
