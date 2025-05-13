@@ -34,6 +34,7 @@ export async function addProducto(formData: FormData) {
     };
   }
   revalidatePath('/productos');
+  revalidatePath('/create-entrada');
   return {
     data: 'Producto agregado con éxito.',
     error: null,
