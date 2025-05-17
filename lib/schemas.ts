@@ -90,8 +90,18 @@ export const ProductSchema = object({
     string('La categoría es requeriada'),
     nonEmpty('La categoría es requeriada')
   ),
-  precio_costo: string('El precio de costo es un número'),
-  precio_venta: string('El precio de venta es un número'),
+  precio_costo: optional(
+    pipe(
+      number('El precio de costo es un número'),
+      minValue(1, 'El precio de costo es requerido')
+    )
+  ),
+  precio_venta: optional(
+    pipe(
+      number('El precio de venta es un número'),
+      minValue(1, 'El precio de venta es requerido')
+    )
+  ),
   pago_trabajador: pipe(
     number('El pago del trabajador es un número'),
     minValue(0, 'Debe ser un número positivo')

@@ -47,6 +47,7 @@ import {
 } from '@/components/ui/tooltip';
 import { Categoria } from '@/app/(with-layout)/categorias/types';
 import { ProductInfo } from '@/app/(with-layout)/products/types';
+import { Label } from '../ui/label';
 
 interface Props {
   categorias: Categoria[];
@@ -110,11 +111,13 @@ function ModalProduct({
   open,
   setOpen,
 }: ModalProductProps) {
-  const [imagen, setImage] = useState(data?.imagen?.url);
+  const [imagen, setImage] = useState(data?.imagen);
   const form = useForm({
     resolver: valibotResolver(ProductSchema),
     defaultValues: {
       ...data,
+      precio_costo: data ? undefined : 0,
+      precio_venta: data ? undefined : 0,
       pago_trabajador: data?.pago_trabajador || 0,
       categoria: data?.categoria?.id?.toString(),
       deletePhoto: false,
@@ -245,44 +248,52 @@ function ModalProduct({
                 accept="image/*"
                 hidden
               />
-              <FormField
-                control={form.control}
-                name="precio_costo"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Precio de costo</FormLabel>
-                    <FormControl>
-                      <Input
-                        {...field}
-                        placeholder="0.00"
-                        type="number"
-                        step="0.01"
-                        min="0.1"
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="precio_venta"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Precio de venta</FormLabel>
-                    <FormControl>
-                      <Input
-                        {...field}
-                        placeholder="0.00"
-                        type="number"
-                        step="0.01"
-                        min="0"
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+              {!data && (
+                <>
+                  <FormField
+                    control={form.control}
+                    name="precio_costo"
+                    render={({ field }) => (
+                      <FormItem>
+                        <Label>Precio de costo</Label>
+                        <FormControl>
+                          <Input
+                            {...field}
+                            placeholder="0.00"
+                            type="number"
+                            step="0.01"
+                            onChange={(e) =>
+                              field.onChange(Number(e.target.value))
+                            }
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="precio_venta"
+                    render={({ field }) => (
+                      <FormItem>
+                        <Label>Precio de venta</Label>
+                        <FormControl>
+                          <Input
+                            {...field}
+                            placeholder="0.00"
+                            type="number"
+                            step="0.01"
+                            onChange={(e) =>
+                              field.onChange(Number(e.target.value))
+                            }
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </>
+              )}
             </div>
             <div className="grid gap-4 col-span-2">
               <DialogFooter className="w-full flex gap-2 mt-2">

@@ -1,30 +1,64 @@
-import { cookies } from 'next/headers';
-import { EndpointProductos, ProductInfo } from './types';
+import { EndpointProductos } from './types';
+import { db } from '@/db/initial';
+import {
+  inventarioCategorias,
+  inventarioHistorialpreciocostosalon,
+  inventarioHistorialprecioventasalon,
+  inventarioImage,
+  inventarioProductoinfo,
+} from '@/db/schema';
+import { desc, eq, sql } from 'drizzle-orm';
+
+// TODO: actualizar drizzle-orm y usar el nuevo joinLateral
 
 export async function getProductosWithCategorias(): Promise<{
   data: EndpointProductos | null;
   error: string | null;
 }> {
-  const token = cookies().get('session')?.value;
-
   try {
-    const res = await fetch(
-      process.env.BACKEND_URL_V2 + '/productos/with-categorias/',
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
+    const productos = await db
+      .select({
+        id: inventarioProductoinfo.id,
+        imagen: inventarioImage.url,
+        descripcion: inventarioProductoinfo.descripcion,
+        categoria: {
+          id: inventarioCategorias.id,
+          nombre: inventarioCategorias.nombre,
         },
-      }
-    );
-    if (!res.ok) {
-      if (res.status === 401)
-        return { data: null, error: 'Credenciales inválidas' };
-      return { data: null, error: 'Algo salió mal.' };
-    }
-    const data = await res.json();
+        precio_costo: sql<string>`(
+          SELECT precio 
+          FROM ${inventarioHistorialpreciocostosalon} 
+          WHERE ${inventarioHistorialpreciocostosalon.productoInfoId} = ${inventarioProductoinfo.id}
+          ORDER BY ${inventarioHistorialpreciocostosalon.fechaInicio} DESC 
+          LIMIT 1
+        )`,
+        precio_venta: sql<string>`(
+          SELECT precio 
+          FROM ${inventarioHistorialprecioventasalon} 
+          WHERE ${inventarioHistorialprecioventasalon.productoInfoId} = ${inventarioProductoinfo.id}
+          ORDER BY ${inventarioHistorialprecioventasalon.fechaInicio} DESC 
+          LIMIT 1
+        )`,
+        pago_trabajador: inventarioProductoinfo.pagoTrabajador,
+      })
+      .from(inventarioProductoinfo)
+      .leftJoin(
+        inventarioImage,
+        eq(inventarioProductoinfo.imagenId, inventarioImage.id)
+      )
+      .innerJoin(
+        inventarioCategorias,
+        eq(inventarioProductoinfo.categoriaId, inventarioCategorias.id)
+      )
+      .orderBy(desc(inventarioProductoinfo.id));
+    const categorias = await db.select().from(inventarioCategorias);
+
     return {
       error: null,
-      data,
+      data: {
+        productos,
+        categorias,
+      },
     };
   } catch (e) {
     return {
