@@ -14,9 +14,9 @@ import {
   inventarioProductoinfo,
   inventarioSalidaalmacenrevoltosa,
   inventarioEntradaalmacen,
+  inventarioProveedor,
   inventarioCategorias,
   inventarioImage,
-  inventarioProveedor,
   djangoAdminLog,
   inventarioTransferencia,
   inventarioTransferenciaProductos,
@@ -54,6 +54,8 @@ import {
   inventarioElaboracionesCantidadMerma,
   inventarioMermacafeteriaProductos,
   inventarioProductosCantidadMerma,
+  inventarioHistorialpreciocostosalon,
+  inventarioHistorialprecioventasalon,
 } from './schema';
 
 export const authPermissionRelations = relations(
@@ -151,6 +153,12 @@ export const inventarioUserRelations = relations(
     inventarioSalidasCafeterias: many(inventarioSalidasCafeteria),
     inventarioCuentacasas: many(inventarioCuentacasa),
     inventarioMermacafeterias: many(inventarioMermacafeteria),
+    inventarioHistorialpreciocostosalons: many(
+      inventarioHistorialpreciocostosalon
+    ),
+    inventarioHistorialprecioventasalons: many(
+      inventarioHistorialprecioventasalon
+    ),
   })
 );
 
@@ -243,6 +251,12 @@ export const inventarioProductoinfoRelations = relations(
       fields: [inventarioProductoinfo.imagenId],
       references: [inventarioImage.id],
     }),
+    inventarioHistorialpreciocostosalons: many(
+      inventarioHistorialpreciocostosalon
+    ),
+    inventarioHistorialprecioventasalons: many(
+      inventarioHistorialprecioventasalon
+    ),
   })
 );
 
@@ -273,6 +287,14 @@ export const inventarioEntradaalmacenRelations = relations(
   })
 );
 
+export const inventarioProveedorRelations = relations(
+  inventarioProveedor,
+  ({ many }) => ({
+    inventarioEntradaalmacens: many(inventarioEntradaalmacen),
+    inventarioEntradasCafeterias: many(inventarioEntradasCafeteria),
+  })
+);
+
 export const inventarioCategoriasRelations = relations(
   inventarioCategorias,
   ({ many }) => ({
@@ -284,13 +306,6 @@ export const inventarioImageRelations = relations(
   inventarioImage,
   ({ many }) => ({
     inventarioProductoinfos: many(inventarioProductoinfo),
-  })
-);
-
-export const inventarioProveedorRelations = relations(
-  inventarioProveedor,
-  ({ many }) => ({
-    inventarioEntradaalmacens: many(inventarioEntradaalmacen),
   })
 );
 
@@ -516,6 +531,10 @@ export const inventarioEntradasCafeteriaRelations = relations(
     inventarioUser: one(inventarioUser, {
       fields: [inventarioEntradasCafeteria.usuarioId],
       references: [inventarioUser.id],
+    }),
+    inventarioProveedor: one(inventarioProveedor, {
+      fields: [inventarioEntradasCafeteria.proveedorId],
+      references: [inventarioProveedor.id],
     }),
     inventarioEntradasCafeteriaProductos: many(
       inventarioEntradasCafeteriaProductos
@@ -855,6 +874,34 @@ export const inventarioProductosCantidadMermaRelations = relations(
     inventarioProductosCafeteria: one(inventarioProductosCafeteria, {
       fields: [inventarioProductosCantidadMerma.productoId],
       references: [inventarioProductosCafeteria.id],
+    }),
+  })
+);
+
+export const inventarioHistorialpreciocostosalonRelations = relations(
+  inventarioHistorialpreciocostosalon,
+  ({ one }) => ({
+    inventarioUser: one(inventarioUser, {
+      fields: [inventarioHistorialpreciocostosalon.usuarioId],
+      references: [inventarioUser.id],
+    }),
+    inventarioProductoinfo: one(inventarioProductoinfo, {
+      fields: [inventarioHistorialpreciocostosalon.productoInfoId],
+      references: [inventarioProductoinfo.id],
+    }),
+  })
+);
+
+export const inventarioHistorialprecioventasalonRelations = relations(
+  inventarioHistorialprecioventasalon,
+  ({ one }) => ({
+    inventarioUser: one(inventarioUser, {
+      fields: [inventarioHistorialprecioventasalon.usuarioId],
+      references: [inventarioUser.id],
+    }),
+    inventarioProductoinfo: one(inventarioProductoinfo, {
+      fields: [inventarioHistorialprecioventasalon.productoInfoId],
+      references: [inventarioProductoinfo.id],
     }),
   })
 );

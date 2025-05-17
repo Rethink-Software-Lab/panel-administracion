@@ -1,7 +1,7 @@
 'use client';
 
 import { Badge } from '@/components/ui/badge';
-import { FileX } from 'lucide-react';
+import { FileX, History } from 'lucide-react';
 import Image from 'next/image';
 import EspecialWarningDelete from '@/components/functionals/EspecialWarningDelete';
 
@@ -11,13 +11,15 @@ import Wrap from '@/components/functionals/ModalProduct';
 import { ColumnDef } from '@tanstack/react-table';
 import { ProductInfo } from './types';
 import { CustomTableOptions } from '@/components/ui/data-table-productos';
+import Link from 'next/link';
+import { Button } from '@/components/ui/button';
 
 export const columns: ColumnDef<ProductInfo>[] = [
   {
     accessorKey: 'imagen',
     header: 'Imagen',
     cell: ({ row }) => {
-      const url = row.original.imagen?.url;
+      const url = row.original.imagen;
 
       if (!url) {
         return (
@@ -71,6 +73,11 @@ export const columns: ColumnDef<ProductInfo>[] = [
 
       return (
         <div className="flex items-center justify-end gap-2">
+          <Link href={`/products/historial-precios/${row.original.id}`}>
+            <Button variant="outline" size="icon">
+              <History size={18} />
+            </Button>
+          </Link>
           <Wrap data={row.original} categorias={categorias} isEdit />
           <EspecialWarningDelete
             id={row.original.id}

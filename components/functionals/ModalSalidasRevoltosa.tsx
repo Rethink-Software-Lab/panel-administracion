@@ -196,7 +196,7 @@ export default function ModalSalidaRevoltosa({
                                     const esZapato =
                                       productosInfo?.find(
                                         (e) => e.id.toString() === currentValue
-                                      )?.categoria.nombre === 'Zapatos';
+                                      )?.categoria?.nombre === 'Zapatos';
 
                                     if (esZapato) {
                                       form.setValue('cantidad', undefined);
