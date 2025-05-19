@@ -76,7 +76,9 @@ export default function SheetEntradasCafeteria({
       proveedor: '',
       comprador: '',
       metodo_pago: undefined,
-      productos: [{ producto: '', cantidad: '0' }],
+      productos: [
+        { producto: '', cantidad: '0', precio_costo: '0', precio_venta: '0' },
+      ],
     },
   });
 
@@ -326,16 +328,37 @@ export default function SheetEntradasCafeteria({
                 <TableBody>
                   {fields.map((producto, index) => (
                     <TableRow key={producto.id}>
-                      <TableCell className="font-semibold align-top w-1/2">
+                      <TableCell className="align-top w-1/2 space-y-2">
                         <SelectProductoEntradaCafeteria
                           form={form}
                           index={index}
                           productos={productos || []}
                           formRef={formRef}
                         />
+                        <FormField
+                          control={form.control}
+                          name={`productos.${index}.precio_costo`}
+                          render={({ field }) => (
+                            <FormItem className="space-y-1">
+                              <Label className="text-sm font-medium text-muted-foreground">
+                                Precio Costo
+                              </Label>
+                              <FormControl>
+                                <Input
+                                  style={{ marginTop: 0 }}
+                                  type="number"
+                                  min={0.01}
+                                  step="0.01"
+                                  {...field}
+                                />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
                       </TableCell>
 
-                      <TableCell>
+                      <TableCell className="space-y-2">
                         <FormField
                           control={form.control}
                           name={`productos.${index}.cantidad`}
@@ -343,6 +366,27 @@ export default function SheetEntradasCafeteria({
                             <FormItem>
                               <FormControl>
                                 <Input
+                                  type="number"
+                                  min={0.01}
+                                  step="0.01"
+                                  {...field}
+                                />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                        <FormField
+                          control={form.control}
+                          name={`productos.${index}.precio_venta`}
+                          render={({ field }) => (
+                            <FormItem className="space-y-1">
+                              <Label className="text-sm font-medium text-muted-foreground">
+                                Precio Venta
+                              </Label>
+                              <FormControl>
+                                <Input
+                                  style={{ marginTop: 0 }}
                                   type="number"
                                   min={0.01}
                                   step="0.01"

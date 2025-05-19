@@ -12,6 +12,7 @@ export interface ProductoEntrada {
   id: number;
   nombre: string;
   precio_costo: number;
+  precio_venta: number;
 }
 
 interface ProductosInEntrada {

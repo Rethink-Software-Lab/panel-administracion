@@ -7,6 +7,7 @@ import { ProductoCafeteria } from './types';
 
 export default async function Inventario() {
   const { data } = await inventarioAlmacenCafeteria();
+  console.log(data);
 
   return (
     <main className="flex flex-1 flex-col gap-4 py-4 lg:gap-6 lg:py-6 h-full">

@@ -4,6 +4,9 @@ import { ProductoCafeteria } from './types';
 import SheetProductosCafeteria from '@/components/functionals/sheets/SheetProductosCafeteria';
 import TableDeleteV2 from '@/components/functionals/TableDeleteV2';
 import { deleteProductoCafeteria } from './actions';
+import Link from 'next/link';
+import { Button } from '@/components/ui/button';
+import { History } from 'lucide-react';
 
 export const columns: ColumnDef<ProductoCafeteria>[] = [
   {
@@ -32,6 +35,13 @@ export const columns: ColumnDef<ProductoCafeteria>[] = [
     header: ' ',
     cell: ({ row }) => (
       <span className="flex space-x-2">
+        <Link
+          href={`/productos-cafeteria/historial-precios/${row.original.id}`}
+        >
+          <Button variant="outline" size="icon">
+            <History size={18} />
+          </Button>
+        </Link>
         <SheetProductosCafeteria data={row.original} />
         <TableDeleteV2 id={row.original.id} action={deleteProductoCafeteria} />
       </span>
