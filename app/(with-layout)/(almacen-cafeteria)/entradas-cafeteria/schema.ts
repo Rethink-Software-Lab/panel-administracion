@@ -79,6 +79,18 @@ export const EntradaCafeteriaSchema = pipe(
           string('La cantidad es requerida'),
           nonEmpty('La cantidad es requerida')
         ),
+        precio_costo: optional(
+          pipe(
+            string('La cantidad es requerida'),
+            nonEmpty('La cantidad es requerida')
+          )
+        ),
+        precio_venta: optional(
+          pipe(
+            string('La cantidad es requerida'),
+            nonEmpty('La cantidad es requerida')
+          )
+        ),
       })
     ),
   }),
