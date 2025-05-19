@@ -32,7 +32,7 @@ export default async function CardMasVendidos({ data }: { data: Props[] }) {
           <CardTitle>Productos más vendidos</CardTitle>
         </CardHeader>
         <CardContent className="h-full">
-          {data.length < 1 ? (
+          {data?.length < 1 ? (
             <div className="flex justify-center items-center h-3/4 py-4">
               <div className="flex flex-col items-center text-muted-foreground">
                 <FolderXIcon size={50} />
