@@ -116,6 +116,7 @@ function ModalProduct({
     resolver: valibotResolver(ProductSchema),
     defaultValues: {
       ...data,
+      imagen: undefined,
       precio_costo: data ? undefined : 0,
       precio_venta: data ? undefined : 0,
       pago_trabajador: data?.pago_trabajador || 0,
