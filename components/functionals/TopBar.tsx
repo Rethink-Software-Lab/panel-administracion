@@ -8,26 +8,29 @@ import {
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { CircleUser, LifeBuoy, LogOut } from 'lucide-react';
-// import SearchForm from '@/components/functionals/SeachForm';
 import { logout } from '@/lib/actions';
 import { AreaVenta } from '@/app/(with-layout)/areas-de-venta/types';
 import { Session } from '@/lib/getSession';
 import { NoRepresentados } from './NoRepresentados';
 import NavbarMobile from './NavbarMobile';
+import { SearchCommand } from './search-command';
+import { getProductosToSearch } from '@/app/(with-layout)/services';
 
 interface Props {
   session: Session;
   areasVenta: AreaVenta[];
 }
 
-export default function TopBar({ session, areasVenta }: Props) {
+export default async function TopBar({ session, areasVenta }: Props) {
+  const { data: productos } = await getProductosToSearch();
+
   return (
-    <header className="flex h-14 items-center gap-2 border-b bg-muted/40 px-4 lg:h-[60px] lg:px-6">
+    <header className="flex justify-end h-14 items-center gap-2 border-b bg-muted/40 px-4 lg:h-[60px] lg:px-6">
       {/* TODO : Arreglar navegacion en vista mobile */}
 
       <NavbarMobile session={session} areasVenta={areasVenta} />
 
-      <div className="w-full flex-1">{/* <SearchForm /> */}</div>
+      <SearchCommand productos={productos || []} />
 
       <Link
         target="blank"

@@ -18,8 +18,7 @@ import { getSession } from '@/lib/getSession';
 import { Fragment } from 'react';
 
 interface SearchParams {
-  codigo: string;
-  numero?: string;
+  id: string;
 }
 
 export default async function Search({
@@ -28,7 +27,7 @@ export default async function Search({
   searchParams: SearchParams;
 }) {
   const { isStaff } = getSession();
-  const { data, error } = await searchProduct(searchParams);
+  const { data, error } = await searchProduct(searchParams.id);
   const info = data?.info;
   const inventario = data?.inventario;
   const isZapato = data?.zapato;
