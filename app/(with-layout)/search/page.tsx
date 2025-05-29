@@ -32,6 +32,8 @@ export default async function Search({
   const inventario = data?.inventario;
   const isZapato = data?.zapato;
 
+  console.log(info);
+
   return (
     <main className="flex flex-1 flex-col gap-4 p-4 lg:gap-6 lg:p-6">
       {!data ? (
