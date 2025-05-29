@@ -51,8 +51,6 @@ interface Params {
   gastos_variables: GastosVariablesReporteCafeteria[];
   gastos_fijos: GastosFijosReporteCafeteria[];
   subtotal: SubtotalReporteCafeteria;
-  merma: number;
-  cuenta_casa: number;
   mano_obra: number;
 }
 
