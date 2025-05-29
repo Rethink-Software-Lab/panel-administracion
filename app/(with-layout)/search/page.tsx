@@ -72,36 +72,37 @@ export default async function Search({
               <Card className="col-span-3 md:col-span-2 overflow-hidden">
                 <CardHeader className="flex flex-row gap-2 items-start bg-muted/50">
                   <CardTitle className="group flex items-center gap-2 text-lg">
-                    {info?.codigo}
+                    {info?.descripcion}
                   </CardTitle>
                 </CardHeader>
                 <Separator />
                 <CardContent className="p-6 text-sm">
                   <div className="grid gap-3">
                     <ul className="grid gap-3">
-                      <li className="flex items-center justify-between">
-                        <span className="text-muted-foreground">
-                          Descripción
-                        </span>
-                        <span>{info?.descripcion}</span>
-                      </li>
                       {isStaff && (
-                        <>
-                          <Separator className="my-2" />
-                          <li className="flex items-center justify-between">
-                            <span className="text-muted-foreground">
-                              Precio de Costo
-                            </span>
-                            <span>${info?.precio_costo}</span>
-                          </li>
-                        </>
+                        <li className="flex items-center justify-between">
+                          <span className="text-muted-foreground">
+                            Precio de Costo
+                          </span>
+                          <span>
+                            {Intl.NumberFormat('es-CU', {
+                              style: 'currency',
+                              currency: 'CUP',
+                            }).format(info?.precio_costo)}
+                          </span>
+                        </li>
                       )}
                       <Separator className="my-2" />
                       <li className="flex items-center justify-between">
                         <span className="text-muted-foreground">
                           Precio de Venta
                         </span>
-                        <span>${info?.precio_venta}</span>
+                        <span>
+                          {Intl.NumberFormat('es-CU', {
+                            style: 'currency',
+                            currency: 'CUP',
+                          }).format(info?.precio_venta)}
+                        </span>
                       </li>
                     </ul>
                   </div>
@@ -174,23 +175,6 @@ export default async function Search({
                   </TableBody>
                 </Table>
               )}
-
-              {/* Si no hay cantidad y hay productos, no se muestra nada */}
-              {/* {!cantidad && productos && null} */}
-              {/* Si no hay cantidad ni productos, se muestra un mensaje */}
-              {/* {!cantidad && !productos && (
-                <div className=" min-h-80 flex flex-1 items-center justify-center rounded-lg border border-dashed shadow-sm">
-                  <div className="flex flex-col items-center gap-1 text-center">
-                    <PackageX size={72} className="inline-flex mb-4" />
-                    <h3 className="text-2xl font-bold tracking-tight">
-                      Upsss.. No tienes productos
-                    </h3>
-                    <p className="text-sm text-muted-foreground">
-                      Cuando agregues productos aparecerán aquí.
-                    </p>
-                  </div>
-                </div>
-              )} */}
             </CardContent>
           </Card>
         </div>
