@@ -14,8 +14,6 @@ import Link from 'next/link';
 export async function NoRepresentados() {
   const { data } = await getNoRepresentados();
 
-  console.log(data);
-
   return (
     <Popover>
       <PopoverTrigger asChild>
@@ -30,7 +28,7 @@ export async function NoRepresentados() {
               className="absolute -top-1 -left-1 text-[10px] font-bold font-mono px-1 py-0.2"
               variant="destructive"
             >
-              {data?.length > 10 ? '10+' : data?.length}
+              {data?.length}
             </Badge>
           )}
           <CircleOff className="h-5 w-5" />
@@ -46,7 +44,7 @@ export async function NoRepresentados() {
         <DropdownMenuSeparator />
 
         {data && data?.length > 0 ? (
-          <ScrollArea className="h-[300px]">
+          <ScrollArea className="max-h-[300px] pb-2">
             <div className="flex flex-col gap-2">
               {data?.map((p) => (
                 <Link key={p.id} href={`/search/?id=${p.id}`}>
