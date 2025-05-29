@@ -44,7 +44,7 @@ export async function NoRepresentados() {
         <DropdownMenuSeparator />
 
         {data && data?.length > 0 ? (
-          <ScrollArea className="max-h-[300px] pb-2">
+          <ScrollArea className="h-[300px] pb-2">
             <div className="flex flex-col gap-2">
               {data?.map((p) => (
                 <Link key={p.id} href={`/search/?id=${p.id}`}>
