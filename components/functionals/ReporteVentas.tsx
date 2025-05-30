@@ -10,6 +10,7 @@ import {
 import { DateTime } from 'luxon';
 import { ClipboardX, FolderSearch } from 'lucide-react';
 import styles from '@/styles/reportes.module.css';
+import { getSession } from '@/lib/getSession';
 
 interface Producto {
   id: number;
@@ -39,6 +40,7 @@ interface Params {
   gastos_fijos: GastosReporteVenta[];
   subtotal: SubtotalYTotalReporteVenta;
   area: string;
+  ganancia: number;
 }
 
 export default async function ReporteVentas({
@@ -52,6 +54,7 @@ export default async function ReporteVentas({
   desde: string;
   hasta: string;
 }) {
+  const { isAdmin } = getSession();
   if (!data && !error) {
     return (
       <div className="bg-muted h-full">
@@ -209,6 +212,19 @@ export default async function ReporteVentas({
                 }).format(data.total.general)}
               </TableCell>
             </TableRow>
+            {isAdmin && (
+              <TableRow>
+                <TableCell className="font-bold px-4 border-t border-gray-300 print:px-0">
+                  Ganancia
+                </TableCell>
+                <TableCell className="text-right font-bold px-4 border-t border-gray-300 print:px-0">
+                  {Intl.NumberFormat('es-CU', {
+                    style: 'currency',
+                    currency: 'CUP',
+                  }).format(data.ganancia)}
+                </TableCell>
+              </TableRow>
+            )}
           </TableBody>
         </Table>
 
