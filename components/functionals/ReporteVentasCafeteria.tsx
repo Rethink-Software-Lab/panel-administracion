@@ -12,6 +12,7 @@ import { ClipboardX, FolderSearch } from 'lucide-react';
 
 import { ProductoCafeteria } from '@/app/(with-layout)/(almacen-cafeteria)/inventario-cafeteria/types';
 import { Elaboraciones } from '@/app/(with-layout)/(almacen-cafeteria)/elaboraciones/types';
+import { getSession } from '@/lib/getSession';
 
 interface Producto extends ProductoCafeteria {
   cantidad: string;
@@ -52,6 +53,7 @@ interface Params {
   gastos_fijos: GastosFijosReporteCafeteria[];
   subtotal: SubtotalReporteCafeteria;
   mano_obra: number;
+  ganancia: number;
 }
 
 export default async function ReporteVentasCafeteria({
@@ -65,6 +67,7 @@ export default async function ReporteVentasCafeteria({
   desde: string;
   hasta: string;
 }) {
+  const { isAdmin } = getSession();
   if (!data && !error) {
     return (
       <div className="bg-muted h-full">
@@ -249,6 +252,19 @@ export default async function ReporteVentasCafeteria({
                 }).format(data.total.general)}
               </TableCell>
             </TableRow>
+            {isAdmin && (
+              <TableRow>
+                <TableCell className="font-bold px-4 border-t border-gray-300 print:px-0">
+                  Ganancia
+                </TableCell>
+                <TableCell className="text-right font-bold px-4 border-t border-gray-300 print:px-0">
+                  {Intl.NumberFormat('es-CU', {
+                    style: 'currency',
+                    currency: 'CUP',
+                  }).format(data.ganancia)}
+                </TableCell>
+              </TableRow>
+            )}
           </TableBody>
         </Table>
 
