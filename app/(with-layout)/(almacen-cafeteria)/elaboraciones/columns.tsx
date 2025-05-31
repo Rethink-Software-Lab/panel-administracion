@@ -7,6 +7,9 @@ import { Elaboraciones } from './types';
 import SheetElaboraciones from '@/components/functionals/sheets/SheetElaboraciones';
 import { CustomTableOptions } from '@/components/functionals/data-tables/data-table-elaboraciones';
 import SheetInfoElaboraciones from '@/components/functionals/sheets/SheetInfoElaboraciones';
+import Link from 'next/link';
+import { Button } from '@/components/ui/button';
+import { History } from 'lucide-react';
 
 export const columns: ColumnDef<Elaboraciones>[] = [
   {
@@ -41,6 +44,11 @@ export const columns: ColumnDef<Elaboraciones>[] = [
       return (
         <span className="space-x-2">
           <SheetInfoElaboraciones data={row.original} />
+          <Link href={`/elaboraciones/historial-precio/${row.original.id}`}>
+            <Button variant="outline" size="icon">
+              <History size={18} />
+            </Button>
+          </Link>
           <SheetElaboraciones data={row.original} productos={productos} />
           <TableDeleteV2 id={row.original.id} action={deleteElaboracion} />
         </span>
