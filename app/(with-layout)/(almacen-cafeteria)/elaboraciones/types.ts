@@ -15,3 +15,10 @@ export interface Elaboraciones {
   mano_obra: number;
   ingredientes_cantidad: Ingredientes_Cantidad[];
 }
+
+export interface PrecioElaboracion {
+  id: number;
+  precio: string;
+  usuario: string;
+  fecha_inicio: string;
+}

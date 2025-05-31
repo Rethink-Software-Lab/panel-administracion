@@ -20,6 +20,7 @@ interface Producto extends ProductoCafeteria {
 }
 
 interface ElaboracionesType extends Elaboraciones {
+  precio_unitario: number;
   cantidad: string;
   importe: number;
 }
@@ -150,7 +151,7 @@ export default async function ReporteVentasCafeteria({
                   {p.nombre}
                 </TableCell>
                 <TableCell className="border-b border-gray-300 px-4 print:px-0">
-                  ${p.precio}
+                  ${p.precio_unitario}
                 </TableCell>
                 <TableCell className="text-right border-b border-gray-300 px-4 print:px-0">
                   {Intl.NumberFormat('es-CU', {
