@@ -30,7 +30,7 @@ export interface Productos_Elaboraciones {
 export interface VentasCafeteria {
   id: number;
   created_at: string;
-  usuario: Usuario;
+  usuario: string;
   metodo_pago: METODOS_PAGO;
   productos: Prod_Elab_Venta[];
   elaboraciones: Prod_Elab_Venta[];

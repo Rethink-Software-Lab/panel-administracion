@@ -40,7 +40,7 @@ export const columns: ColumnDef<VentasCafeteria>[] = [
     accessorKey: 'usuario.username',
     header: 'Usuario',
     cell: ({ row }) => {
-      const username = row.original.usuario?.username;
+      const username = row.original.usuario;
       if (username) {
         return username;
       } else {
