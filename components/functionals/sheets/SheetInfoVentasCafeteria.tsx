@@ -41,13 +41,21 @@ export default function SheetInfoVentasCafeteria({
             Información de venta
           </SheetTitle>
           <SheetDescription className="flex justify-between items-center gap-2">
-            <span className="text-sm text-muted-foreground">
-              Método de pago: {data.metodo_pago}
-            </span>
-            {data.metodo_pago !== METODOS_PAGO.EFECTIVO && (
+            <div className="flex flex-col">
               <span className="text-sm text-muted-foreground">
-                Tarjeta: {data.tarjeta}
+                Método de pago: {data.metodo_pago}
               </span>
+              {data.metodo_pago !== METODOS_PAGO.EFECTIVO && (
+                <span className="text-sm text-muted-foreground">
+                  Cuenta: {data.cuenta}
+                </span>
+              )}
+            </div>
+            {data.metodo_pago !== METODOS_PAGO.EFECTIVO && (
+              <div className="flex flex-col">
+                <span>Efectivo: {data.efectivo}</span>
+                <span>Transferencia: {data.transferencia}</span>
+              </div>
             )}
           </SheetDescription>
         </SheetHeader>
