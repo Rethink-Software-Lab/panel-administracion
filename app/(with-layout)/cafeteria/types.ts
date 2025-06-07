@@ -34,7 +34,10 @@ export interface VentasCafeteria {
   metodo_pago: METODOS_PAGO;
   productos: Prod_Elab_Venta[];
   elaboraciones: Prod_Elab_Venta[];
-  tarjeta: string | null;
+  cuenta: string | null;
+  importe: string;
+  efectivo: string;
+  transferencia: string;
 }
 
 export interface TarjetasVentas {
