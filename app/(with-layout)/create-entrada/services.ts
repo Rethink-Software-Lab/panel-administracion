@@ -7,6 +7,7 @@ import {
   inventarioProveedor,
 } from '@/db/schema';
 import { desc, eq } from 'drizzle-orm';
+import { TipoCuenta } from '../tarjetas/types';
 
 export async function getProductos(): Promise<{
   data: EndpointFormEntrada | null;
@@ -28,6 +29,7 @@ export async function getProductos(): Promise<{
     const cuentas = await db
       .select()
       .from(inventarioCuentas)
+      .where(eq(inventarioCuentas.tipo, TipoCuenta.BANCARIA))
       .orderBy(desc(inventarioCuentas.id));
     const proveedores = await db
       .select({

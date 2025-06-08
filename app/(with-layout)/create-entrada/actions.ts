@@ -18,11 +18,27 @@ export async function createEntrada(
     body: JSON.stringify({ ...data }),
   });
   if (!res.ok) {
+    const d = await res.json();
+    console.error(d.detail);
     if (res.status === 401)
       return {
         data: null,
         error: 'No autorizado',
       };
+
+    if (res.status === 404) {
+      return {
+        data: null,
+        error: 'Recurso no encontrado',
+      };
+    }
+
+    if (res.status === 400) {
+      return {
+        data: null,
+        error: d.detail,
+      };
+    }
 
     return {
       data: null,

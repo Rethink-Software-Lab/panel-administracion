@@ -1,6 +1,3 @@
-import { Proveedor } from '../proveedores/types';
-import { Banco } from '../tarjetas/types';
-
 interface Numero {
   numero: number;
   ids: string;

@@ -120,10 +120,14 @@ export const EntradaSchema = pipe(
       nonEmpty('El comprador es requerido.')
     ),
     metodoPago: enum_(METODOS_PAGO, 'Método de pago requerido.'),
-    cuenta: pipe(
-      string('El producto es requerido.'),
-      nonEmpty('El producto es requerido.')
+    cuenta: optional(
+      pipe(
+        string('El producto es requerido.'),
+        nonEmpty('El producto es requerido.')
+      )
     ),
+    efectivo: optional(pipe(number(), minValue(1))),
+    transferencia: optional(pipe(number(), minValue(1))),
     productos: pipe(
       array(
         object({
@@ -189,6 +193,19 @@ export const EntradaSchema = pipe(
     ),
     ['productos']
   )
+  // forward(
+  //   partialCheck(
+  //     [['metodoPago'], ['efectivo'], ['transferencia']],
+  //     (input) => {
+  //       if (input.metodoPago === METODOS_PAGO.MIXTO) {
+  //         if (!input.efectivo || !input.transferencia) return false;
+  //       }
+  //       return true;
+  //     },
+  //     'Debe asignar el efectivo y transferencia'
+  //   ),
+  //   ['productos']
+  // )
 );
 
 export const SalidaSchema = object({
