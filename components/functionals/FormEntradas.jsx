@@ -73,6 +73,7 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { Banco } from '@/app/(with-layout)/tarjetas/types';
 import { Alert, AlertTitle, AlertDescription } from '../ui/alert';
+import { METODOS_PAGO } from '@/app/(with-layout)/(almacen-cafeteria)/entradas-cafeteria/types';
 
 function NestedArray({
   nestedIndex,
@@ -299,19 +300,20 @@ export default function FormEntradas({ productos, cuentas, proveedores }) {
   });
 
   const productosWatch = useWatch({ control: form.control, name: 'productos' });
+  const metodoWatch = useWatch({ control: form.control, name: 'metodoPago' });
 
   const onSubmit = async (dataForm) => {
     setLoading(true);
-    const { data, errors } = await createEntrada(dataForm);
+    const { data, error } = await createEntrada(dataForm);
     setLoading(false);
-    if (!errors && !data) {
+    if (!error && !data) {
       toast.success('Entrada creada con éxito.');
       router.push('/entradas');
-    } else if (!errors) {
+    } else if (!error) {
       setData(data);
       setOpenDialog(true);
     } else {
-      toast.error(errors?.map((e) => e.message));
+      toast.error(error);
     }
   };
 
@@ -433,7 +435,25 @@ export default function FormEntradas({ productos, cuentas, proveedores }) {
                   <FormItem>
                     <FormLabel>Método de pago</FormLabel>
                     <Select
-                      onValueChange={field.onChange}
+                      onValueChange={(currentValue) => {
+                        if (currentValue === METODOS_PAGO.MIXTO) {
+                          form.setValue('efectivo', 0),
+                            form.setValue('transferencia', 0);
+                        } else {
+                          form.setValue('efectivo', undefined),
+                            form.setValue('transferencia', undefined);
+                        }
+
+                        if (currentValue === METODOS_PAGO.EFECTIVO) {
+                          form.setValue('cuenta', undefined);
+                        } else {
+                          if (form.getValues('cuenta') === undefined) {
+                            form.setValue('cuenta', '');
+                          }
+                        }
+
+                        field.onChange(currentValue);
+                      }}
                       defaultValue={field.value}
                     >
                       <FormControl>
@@ -446,58 +466,110 @@ export default function FormEntradas({ productos, cuentas, proveedores }) {
                         <SelectItem value="TRANSFERENCIA">
                           Transferencia
                         </SelectItem>
+                        <SelectItem value={METODOS_PAGO.MIXTO}>
+                          Mixto
+                        </SelectItem>
                       </SelectContent>
                     </Select>
                     <FormMessage />
                   </FormItem>
                 )}
               />
-              <FormField
-                control={form.control}
-                name="cuenta"
-                render={({ field }) => (
-                  <FormItem className="flex flex-col mt-2">
-                    <FormLabel className="flex justify-start">Cuenta</FormLabel>
-                    <Select
-                      onValueChange={field.onChange}
-                      defaultValue={field.value}
-                    >
-                      <FormControl>
-                        <SelectTrigger
-                          className={cn(
-                            form.formState.errors?.tarjeta &&
-                              'border-destructive'
-                          )}
-                        >
-                          <SelectValue placeholder="Selecciona una tarjeta" />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent>
-                        {cuentas?.map((cuenta) => (
-                          <SelectItem
-                            key={cuenta.id}
-                            value={cuenta.id.toString()}
+
+              {metodoWatch !== METODOS_PAGO.EFECTIVO && (
+                <FormField
+                  control={form.control}
+                  name="cuenta"
+                  render={({ field }) => (
+                    <FormItem className="flex flex-col mt-2">
+                      <FormLabel className="flex justify-start">
+                        Cuenta a transferir
+                      </FormLabel>
+                      <Select
+                        onValueChange={field.onChange}
+                        defaultValue={field.value}
+                      >
+                        <FormControl>
+                          <SelectTrigger
+                            className={cn(
+                              form.formState.errors?.tarjeta &&
+                                'border-destructive'
+                            )}
                           >
-                            <div className="flex gap-2 items-center ">
-                              <div
-                                className={cn(
-                                  'w-6 aspect-square rounded-full bg-gradient-to-br',
-                                  cuenta.banco === Banco.BANDEC &&
-                                    'from-[#6c0207] to-[#bc1f26]',
-                                  cuenta.banco === Banco.BPA &&
-                                    'from-[#1d6156] to-[#1d6156]'
-                                )}
-                              ></div>
-                              <p>{cuenta.nombre}</p>
-                            </div>
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+                            <SelectValue placeholder="Selecciona una cuenta" />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          {cuentas?.map((cuenta) => (
+                            <SelectItem
+                              key={cuenta.id}
+                              value={cuenta.id.toString()}
+                            >
+                              <div className="flex gap-2 items-center ">
+                                <div
+                                  className={cn(
+                                    'w-6 aspect-square rounded-full bg-gradient-to-br',
+                                    cuenta.banco === Banco.BANDEC &&
+                                      'from-[#6c0207] to-[#bc1f26]',
+                                    cuenta.banco === Banco.BPA &&
+                                      'from-[#1d6156] to-[#1d6156]'
+                                  )}
+                                ></div>
+                                <p>{cuenta.nombre}</p>
+                              </div>
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              )}
+              {metodoWatch === METODOS_PAGO.MIXTO && (
+                <>
+                  <FormField
+                    control={form.control}
+                    name="efectivo"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Efectivo</FormLabel>
+                        <FormControl>
+                          <Input
+                            {...field}
+                            type="number"
+                            onChange={(e) => {
+                              const value = parseFloat(e.target.value);
+                              field.onChange(isNaN(value) ? 0 : value);
+                            }}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="transferencia"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Transferencia</FormLabel>
+                        <FormControl>
+                          <Input
+                            {...field}
+                            type="number"
+                            onChange={(e) => {
+                              const value = parseFloat(e.target.value);
+                              field.onChange(isNaN(value) ? 0 : value);
+                            }}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </>
+              )}
             </CardContent>
           </Card>
 

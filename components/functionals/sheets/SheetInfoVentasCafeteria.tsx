@@ -51,7 +51,7 @@ export default function SheetInfoVentasCafeteria({
                 </span>
               )}
             </div>
-            {data.metodo_pago !== METODOS_PAGO.EFECTIVO && (
+            {data.metodo_pago === METODOS_PAGO.MIXTO && (
               <div className="flex flex-col">
                 <span>Efectivo: {data.efectivo}</span>
                 <span>Transferencia: {data.transferencia}</span>
