@@ -1,13 +1,12 @@
-import DataTable from '@/components/functionals/data-tables/data-table-general';
+import DataTable from "@/components/functionals/data-tables/data-table-general";
 
-import { inventarioAlmacenCafeteria } from '@/app/(with-layout)/(almacen-cafeteria)/inventario-cafeteria/services';
-import { CloudOff } from 'lucide-react';
-import { columns } from './columns';
-import { ProductoCafeteria } from './types';
+import { inventarioAlmacenCafeteria } from "@/app/(with-layout)/(almacen-cafeteria)/inventario-cafeteria/services";
+import { CloudOff } from "lucide-react";
+import { columns } from "./columns";
+import { ProductoCafeteria } from "./types";
 
 export default async function Inventario() {
   const { data } = await inventarioAlmacenCafeteria();
-  console.log(data);
 
   return (
     <main className="flex flex-1 flex-col gap-4 py-4 lg:gap-6 lg:py-6 h-full">

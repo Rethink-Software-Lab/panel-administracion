@@ -1,14 +1,13 @@
-import { CloudOff } from 'lucide-react';
+import { CloudOff } from "lucide-react";
 
-import { getEntradasCafeteria } from '@/app/(with-layout)/(almacen-cafeteria)/entradas-cafeteria/services';
+import { getEntradasCafeteria } from "@/app/(with-layout)/(almacen-cafeteria)/entradas-cafeteria/services";
 
-import SheetEntradasCafeteria from '@/components/functionals/sheets/SheetEntradasCafeteria';
-import WrapperEntradasCafeteria from '@/components/functionals/wrapper-entradas-cafeteria';
+import SheetEntradasCafeteria from "@/components/functionals/sheets/SheetEntradasCafeteria";
+import WrapperEntradasCafeteria from "@/components/functionals/wrapper-entradas-cafeteria";
 
 export default async function EntradasCafeteria() {
   const { data } = await getEntradasCafeteria();
 
-  console.log(data?.productos);
   return (
     <main className="flex flex-1 flex-col gap-4 p-4 lg:gap-6 lg:p-6">
       <div className="flex justify-between items-center">

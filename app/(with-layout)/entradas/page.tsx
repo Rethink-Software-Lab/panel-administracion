@@ -1,12 +1,12 @@
-import { CloudOff, PlusCircle } from 'lucide-react';
+import { CloudOff, PlusCircle } from "lucide-react";
 
-import { Button } from '@/components/ui/button';
+import { Button } from "@/components/ui/button";
 
-import Link from 'next/link';
-import DataTable from '@/components/functionals/data-tables/data-table-general';
-import { columns } from './columns';
-import { getEntradas } from './services';
-import { Entrada } from './types';
+import Link from "next/link";
+import DataTable from "@/components/functionals/data-tables/data-table-general";
+import { columns } from "./columns";
+import { getEntradas } from "./services";
+import { Entrada } from "./types";
 
 export default async function Entradas() {
   const { data } = await getEntradas();

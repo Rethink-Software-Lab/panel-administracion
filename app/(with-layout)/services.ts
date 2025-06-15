@@ -1,16 +1,16 @@
-import { cookies } from 'next/headers';
-import { ResponseNoRepresentados, ResponseSearchProducts } from './types';
-import { db } from '@/db/initial';
-import { inventarioProducto, inventarioProductoinfo } from '@/db/schema';
-import { count, eq, gt, isNull } from 'drizzle-orm';
+import { cookies } from "next/headers";
+import { ResponseNoRepresentados, ResponseSearchProducts } from "./types";
+import { db } from "@/db/initial";
+import { inventarioProducto, inventarioProductoinfo } from "@/db/schema";
+import { count, eq, gt, isNull } from "drizzle-orm";
 
 export async function getNoRepresentados(): Promise<{
   data: ResponseNoRepresentados[] | null;
   error: string | null;
 }> {
-  const token = cookies().get('session')?.value;
+  const token = cookies().get("session")?.value;
   try {
-    const res = await fetch(process.env.BACKEND_URL_V2 + '/no-representados/', {
+    const res = await fetch(process.env.BACKEND_URL_V2 + "/no-representados/", {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -19,8 +19,8 @@ export async function getNoRepresentados(): Promise<{
 
     return { data: noRepresentados, error: null };
   } catch (e) {
-    console.log(e);
-    return { data: null, error: 'Error al conectar con el servidor.' };
+    console.error(e);
+    return { data: null, error: "Error al conectar con el servidor." };
   }
 }
 
@@ -45,7 +45,7 @@ export async function getProductosToSearch(): Promise<{
 
     return { data: productos, error: null };
   } catch (e) {
-    console.log(e);
-    return { data: null, error: 'Error al conectar con el servidor.' };
+    console.error(e);
+    return { data: null, error: "Error al conectar con el servidor." };
   }
 }
