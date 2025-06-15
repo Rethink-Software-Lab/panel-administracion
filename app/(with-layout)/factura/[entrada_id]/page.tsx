@@ -6,10 +6,10 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from '@/components/ui/table';
-import { getFactura } from './services';
-import { DateTime } from 'luxon';
-import ButtonPrint from '@/components/functionals/ButtonPrint';
+} from "@/components/ui/table";
+import { getFactura } from "./services";
+import { DateTime } from "luxon";
+import ButtonPrint from "@/components/functionals/ButtonPrint";
 
 export default async function Factura({
   params,
@@ -27,23 +27,23 @@ export default async function Factura({
         <div>
           <h2 className="text-3xl font-medium">Factura</h2>
           <p className="print:hidden">
-            {DateTime.fromSQL(data?.createdAt || '').toLocaleString(
+            {DateTime.fromSQL(data?.createdAt || "").toLocaleString(
               DateTime.DATE_FULL,
-              { locale: 'es' }
+              { locale: "es" }
             )}
           </p>
         </div>
         <ButtonPrint className="print:hidden" />
         <div className="text-right hidden print:block">
           <p>
-            {DateTime.fromSQL(data?.createdAt || '').toLocaleString(
+            {DateTime.fromSQL(data?.createdAt || "").toLocaleString(
               DateTime.DATE_FULL,
-              { locale: 'es' }
+              { locale: "es" }
             )}
           </p>
           <p className="text-sm">
-            No. Factura:{' '}
-            {DateTime.fromSQL(data?.createdAt || '')
+            No. Factura:{" "}
+            {DateTime.fromSQL(data?.createdAt || "")
               .toMillis()
               .toString()
               .substring(0, 10)}
@@ -77,8 +77,8 @@ export default async function Factura({
           Proveedor: {data?.proveedor?.nombre}
         </p>
         <p className="text-xl font-ligth print:hidden">
-          No. Factura:{' '}
-          {DateTime.fromSQL(data?.createdAt || '')
+          No. Factura:{" "}
+          {DateTime.fromSQL(data?.createdAt || "")
             .toMillis()
             .toString()
             .substring(0, 10)}
@@ -102,15 +102,15 @@ export default async function Factura({
               </TableCell>
               <TableCell>{producto.cantidad}</TableCell>
               <TableCell>
-                {Intl.NumberFormat('es-CU', {
-                  style: 'currency',
-                  currency: 'CUP',
+                {Intl.NumberFormat("es-CU", {
+                  style: "currency",
+                  currency: "CUP",
                 }).format(producto.precio_unitario)}
               </TableCell>
               <TableCell className="text-right">
-                {Intl.NumberFormat('es-CU', {
-                  style: 'currency',
-                  currency: 'CUP',
+                {Intl.NumberFormat("es-CU", {
+                  style: "currency",
+                  currency: "CUP",
                 }).format(producto.importe)}
               </TableCell>
             </TableRow>
