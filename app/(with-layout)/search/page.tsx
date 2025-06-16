@@ -105,7 +105,7 @@ export default async function Search({
             )}
           </div>
 
-          <Tabs defaultValue="inventario" className=" h-full">
+          <Tabs defaultValue="inventario" className=" h-full contain-content">
             <TabsList className="px-4 lg:px-6 bg-transparent py-0">
               <TabsTrigger
                 value="inventario"
@@ -128,7 +128,7 @@ export default async function Search({
             </TabsContent>
             <TabsContent
               value="movimientos"
-              className="p-4 m-0 bg-muted/40 h-full border-t-2 border-muted"
+              className="m-0 bg-muted/40 h-full border-muted"
             >
               <TimeLineProducto infoId={searchParams.id} />
             </TabsContent>
