@@ -7,8 +7,6 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Separator } from "../ui/separator";
 import { ProductInfo } from "@/app/(with-layout)/products/types";
 import { Fragment } from "react";
 
@@ -51,7 +49,6 @@ export function SearchDisponibles({
               <TableHeader>
                 <TableRow>
                   <TableHead className="font-bold">Id</TableHead>
-                  {!info && <TableHead className="font-bold">Código</TableHead>}
                   <TableHead className="font-bold">Número</TableHead>
                   <TableHead className="font-bold">Color</TableHead>
                 </TableRow>
@@ -87,7 +84,7 @@ export function SearchDisponibles({
           <TableBody>
             {inventario?.map((res) => (
               <TableRow key={res.area}>
-                <TableCell>{res?.productos[0]?.color}</TableCell>
+                <TableCell>{res?.area}</TableCell>
                 <TableCell>{res?.cantidad}</TableCell>
               </TableRow>
             ))}
