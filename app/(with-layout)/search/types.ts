@@ -1,6 +1,7 @@
 export enum TipoMovimiento {
   ENTRADA = "Entrada",
   SALIDA = "Salida",
+  SALIDA_REVOLTOSA = "Salida Revoltosa",
   TRANSFERENCIA = "Transferencia",
   AJUSTE = "Ajuste",
   VENTA = "Venta",

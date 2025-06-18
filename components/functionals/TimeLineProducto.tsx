@@ -4,17 +4,19 @@ import {
   ArrowDownLeft,
   ArrowRightLeft,
   ArrowUpRight,
+  CornerUpRight,
   DollarSign,
   Wrench,
 } from "lucide-react";
 
-// Componente para el icono del movimiento
 const MovimientoIcon = ({ tipo }: { tipo: TipoMovimiento }) => {
   switch (tipo) {
     case TipoMovimiento.ENTRADA:
       return <ArrowDownLeft className="text-green-500 w-4 h-4" />;
     case TipoMovimiento.SALIDA:
       return <ArrowUpRight className="text-red-500 w-4 h-4" />;
+    case TipoMovimiento.SALIDA_REVOLTOSA:
+      return <CornerUpRight className="text-pink-500 w-4 h-4" />;
     case TipoMovimiento.TRANSFERENCIA:
       return <ArrowRightLeft className="text-blue-500 w-4 h-4" />;
     case TipoMovimiento.AJUSTE:
@@ -26,12 +28,10 @@ const MovimientoIcon = ({ tipo }: { tipo: TipoMovimiento }) => {
   }
 };
 
-// Componente para formatear la cantidad de productos
 const FormatoCantidad = ({ cantidad }: { cantidad: number }) => {
   return <>{`${cantidad} ${cantidad === 1 ? "producto" : "productos"}`}</>;
 };
 
-// Componente para el contenido de Entrada
 const ContenidoEntrada = ({
   movimiento,
 }: {
@@ -56,7 +56,6 @@ const ContenidoEntrada = ({
   );
 };
 
-// Componente para el contenido de Salida
 const ContenidoSalida = ({
   movimiento,
 }: {
@@ -66,7 +65,7 @@ const ContenidoSalida = ({
     <>
       <p className="text-sm text-muted-foreground">
         <b>{movimiento.user || "Usuario"}</b> agregó una{" "}
-        {movimiento.type.toLowerCase()}
+        {movimiento.type.toLowerCase()} en almacén principal
       </p>
       <div className="border rounded-md w-full md:w-fit py-2 px-4 flex flex-col gap-2">
         <p className="text-sm">
@@ -81,7 +80,30 @@ const ContenidoSalida = ({
   );
 };
 
-// Componente para el contenido de Transferencia
+const ContenidoSalidaRevoltosa = ({
+  movimiento,
+}: {
+  movimiento: Movimiento & { areaVenta?: string; user?: string };
+}) => {
+  return (
+    <>
+      <p className="text-sm text-muted-foreground">
+        <b>{movimiento.user || "Usuario"}</b> agregó una salida en almacén
+        revoltosa
+      </p>
+      <div className="border rounded-md w-full md:w-fit py-2 px-4 flex flex-col gap-2">
+        <p className="text-sm">
+          <FormatoCantidad cantidad={movimiento.cantidad} /> hacia{" "}
+          {movimiento.areaVenta}
+        </p>
+        <div className="text-xs text-muted-foreground">
+          <span>{movimiento.createdAt}</span>
+        </div>
+      </div>
+    </>
+  );
+};
+
 const ContenidoTransferencia = ({
   movimiento,
 }: {
@@ -106,7 +128,6 @@ const ContenidoTransferencia = ({
   );
 };
 
-// Componente para el contenido de Ajuste
 const ContenidoAjuste = ({
   movimiento,
 }: {
@@ -131,7 +152,6 @@ const ContenidoAjuste = ({
   );
 };
 
-// Componente para el contenido de Venta
 const ContenidoVenta = ({
   movimiento,
 }: {
@@ -160,13 +180,14 @@ const ContenidoVenta = ({
   );
 };
 
-// Componente para renderizar el contenido según el tipo de movimiento
 const ContenidoMovimiento = ({ movimiento }: { movimiento: any }) => {
   switch (movimiento.type) {
     case TipoMovimiento.ENTRADA:
       return <ContenidoEntrada movimiento={movimiento} />;
     case TipoMovimiento.SALIDA:
       return <ContenidoSalida movimiento={movimiento} />;
+    case TipoMovimiento.SALIDA_REVOLTOSA:
+      return <ContenidoSalidaRevoltosa movimiento={movimiento} />;
     case TipoMovimiento.TRANSFERENCIA:
       return <ContenidoTransferencia movimiento={movimiento} />;
     case TipoMovimiento.AJUSTE:
@@ -178,16 +199,13 @@ const ContenidoMovimiento = ({ movimiento }: { movimiento: any }) => {
   }
 };
 
-// Componente para un elemento de la línea de tiempo
 const TimeLineItem = ({ movimiento }: { movimiento: any }) => {
   return (
     <div className="relative pl-8 pb-6 last:pb-0">
-      {/* Timeline Icon */}
-      <div className="absolute left-px -translate-x-1/2 h-6 w-6 flex items-center justify-center rounded-full bg-background ring-2 ring-slate-200">
+      <div className="absolute left-px -translate-x-1/2 h-6 w-6 flex items-center justify-center rounded-full bg-background ring-1 ring-slate-200">
         <MovimientoIcon tipo={movimiento.type} />
       </div>
 
-      {/* Content */}
       <div className="space-y-3">
         <ContenidoMovimiento movimiento={movimiento} />
       </div>
@@ -195,14 +213,11 @@ const TimeLineItem = ({ movimiento }: { movimiento: any }) => {
   );
 };
 
-// Componente principal
 export async function TimeLineProducto({ infoId }: { infoId: string }) {
   const { data: movimientos } = await getHistoricoProducto(Number(infoId));
-
   return (
     <div className="max-w-screen-sm p-6">
       <div className="relative ml-4">
-        {/* Timeline line */}
         <div className="absolute left-0 inset-y-0 border-l-2" />
 
         {movimientos?.map((movimiento, index) => (

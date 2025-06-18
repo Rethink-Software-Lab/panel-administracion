@@ -108,34 +108,40 @@ export default async function Search({
             )}
           </div>
 
-          <Tabs defaultValue="inventario" className=" h-full contain-content">
-            <TabsList className="px-4 lg:px-6 bg-transparent py-0">
-              <TabsTrigger
+          {isStaff ? (
+            <Tabs defaultValue="inventario" className=" h-full contain-content">
+              <TabsList className="px-4 lg:px-6 bg-transparent py-0">
+                <TabsTrigger
+                  value="inventario"
+                  className="h-full rounded-none data-[state=active]:bg-white data-[state=active]:text-foreground data-[state=active]:shadow-none data-[state=active]:border-foreground border-b-[3px] border-white"
+                >
+                  Inventario
+                </TabsTrigger>
+                <TabsTrigger
+                  value="movimientos"
+                  className="h-full rounded-none data-[state=active]:bg-white data-[state=active]:text-foreground data-[state=active]:shadow-none data-[state=active]:border-foreground border-b-[3px] border-white"
+                >
+                  Movimientos
+                </TabsTrigger>
+              </TabsList>
+              <TabsContent
                 value="inventario"
-                className="h-full rounded-none data-[state=active]:bg-white data-[state=active]:text-foreground data-[state=active]:shadow-none data-[state=active]:border-foreground border-b-[3px] border-white"
+                className="p-4 m-0 bg-muted/40 h-full border-t-2 border-muted"
               >
-                Inventario
-              </TabsTrigger>
-              <TabsTrigger
+                <SearchDisponibles {...data} />
+              </TabsContent>
+              <TabsContent
                 value="movimientos"
-                className="h-full rounded-none data-[state=active]:bg-white data-[state=active]:text-foreground data-[state=active]:shadow-none data-[state=active]:border-foreground border-b-[3px] border-white"
+                className="m-0 bg-muted/40 h-full border-muted"
               >
-                Movimientos
-              </TabsTrigger>
-            </TabsList>
-            <TabsContent
-              value="inventario"
-              className="p-4 m-0 bg-muted/40 h-full border-t-2 border-muted"
-            >
+                <TimeLineProducto infoId={searchParams.id} />
+              </TabsContent>
+            </Tabs>
+          ) : (
+            <div className="px-4 md:px-6">
               <SearchDisponibles {...data} />
-            </TabsContent>
-            <TabsContent
-              value="movimientos"
-              className="m-0 bg-muted/40 h-full border-muted"
-            >
-              <TimeLineProducto infoId={searchParams.id} />
-            </TabsContent>
-          </Tabs>
+            </div>
+          )}
         </>
       )}
     </main>

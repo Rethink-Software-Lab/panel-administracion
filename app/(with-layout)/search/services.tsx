@@ -6,6 +6,7 @@ import {
   inventarioEntradaalmacen,
   inventarioProducto,
   inventarioSalidaalmacen,
+  inventarioSalidaalmacenrevoltosa,
   inventarioTransferencia,
   inventarioTransferenciaProductos,
   inventarioUser,
@@ -25,6 +26,7 @@ export async function getHistoricoProducto(
         entradaId: inventarioProducto.entradaId,
         salidaId: inventarioProducto.salidaId,
         ventaId: inventarioProducto.ventaId,
+        salidaRevoltosaId: inventarioProducto.salidaRevoltosaId,
       })
       .from(inventarioProducto)
       .where(eq(inventarioProducto.infoId, infoId));
@@ -32,6 +34,7 @@ export async function getHistoricoProducto(
     let entradasIds: number[] = [];
     let salidasIds: number[] = [];
     let ventasIds: number[] = [];
+    let salidaRevoltosaId: number[] = [];
 
     productos.map((p) => {
       if (p.entradaId) {
@@ -42,6 +45,9 @@ export async function getHistoricoProducto(
       }
       if (p.ventaId) {
         ventasIds.push(p.ventaId);
+      }
+      if (p.salidaRevoltosaId) {
+        salidaRevoltosaId.push(p.salidaRevoltosaId);
       }
     });
 
@@ -90,6 +96,32 @@ export async function getHistoricoProducto(
         inventarioSalidaalmacen.createdAt,
         inventarioUser.username,
         inventarioAreaventa.nombre
+      );
+
+    const salidasRevoltosa = await db
+      .select({
+        createdAt: inventarioSalidaalmacenrevoltosa.createdAt,
+        type: sql<TipoMovimiento>`'Salida Revoltosa'`,
+        cantidad: sql<string>`COUNT (${inventarioProducto})`.as("cantidad"),
+        user: inventarioUser.username,
+        areaVenta: sql<string>`'Revoltosa'`,
+      })
+      .from(inventarioSalidaalmacenrevoltosa)
+      .where(inArray(inventarioSalidaalmacenrevoltosa.id, salidaRevoltosaId))
+      .innerJoin(
+        inventarioProducto,
+        eq(
+          inventarioProducto.salidaRevoltosaId,
+          inventarioSalidaalmacenrevoltosa.id
+        )
+      )
+      .leftJoin(
+        inventarioUser,
+        eq(inventarioSalidaalmacenrevoltosa.usuarioId, inventarioUser.id)
+      )
+      .groupBy(
+        inventarioSalidaalmacenrevoltosa.createdAt,
+        inventarioUser.username
       );
 
     const ajustes = await db
@@ -220,6 +252,7 @@ export async function getHistoricoProducto(
     const movimientos = [
       ...entradas,
       ...salidas,
+      ...salidasRevoltosa,
       ...ajustes,
       ...transferencias,
       ...ventas,
@@ -238,7 +271,6 @@ export async function getHistoricoProducto(
       cantidad: Number(m.cantidad),
     }));
 
-    console.log(formattedMovimientos);
     return {
       data: formattedMovimientos,
       error: null,
