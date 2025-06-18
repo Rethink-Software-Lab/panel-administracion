@@ -1,6 +1,9 @@
 export enum TipoMovimiento {
   ENTRADA = "Entrada",
   SALIDA = "Salida",
+  TRANSFERENCIA = "Transferencia",
+  AJUSTE = "Ajuste",
+  VENTA = "Venta",
 }
 
 export interface Movimiento {

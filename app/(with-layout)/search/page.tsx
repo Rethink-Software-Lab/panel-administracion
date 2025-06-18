@@ -73,19 +73,22 @@ export default async function Search({
                     <div className="grid gap-3">
                       <ul className="grid gap-3">
                         {isStaff && (
-                          <li className="flex items-center justify-between">
-                            <span className="text-muted-foreground">
-                              Precio de Costo
-                            </span>
-                            <span>
-                              {Intl.NumberFormat("es-CU", {
-                                style: "currency",
-                                currency: "CUP",
-                              }).format(info?.precio_costo)}
-                            </span>
-                          </li>
+                          <>
+                            <li className="flex items-center justify-between">
+                              <span className="text-muted-foreground">
+                                Precio de Costo
+                              </span>
+                              <span>
+                                {Intl.NumberFormat("es-CU", {
+                                  style: "currency",
+                                  currency: "CUP",
+                                }).format(info?.precio_costo)}
+                              </span>
+                            </li>
+
+                            <Separator className="my-2" />
+                          </>
                         )}
-                        <Separator className="my-2" />
                         <li className="flex items-center justify-between">
                           <span className="text-muted-foreground">
                             Precio de Venta
