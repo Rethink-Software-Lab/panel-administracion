@@ -1,3 +1,5 @@
+import { METODOS_PAGO } from "../(almacen-cafeteria)/entradas-cafeteria/types";
+
 export enum TipoMovimiento {
   ENTRADA = "Entrada",
   SALIDA = "Salida",
@@ -11,4 +13,9 @@ export interface Movimiento {
   createdAt: string;
   cantidad: number;
   type: TipoMovimiento;
+  user: string | null;
+  areaVenta?: string;
+  metodoPago?: METODOS_PAGO;
+  desde?: string;
+  hacia?: string;
 }

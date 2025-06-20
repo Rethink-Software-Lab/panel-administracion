@@ -32,11 +32,7 @@ const FormatoCantidad = ({ cantidad }: { cantidad: number }) => {
   return <>{`${cantidad} ${cantidad === 1 ? "producto" : "productos"}`}</>;
 };
 
-const ContenidoEntrada = ({
-  movimiento,
-}: {
-  movimiento: Movimiento & { user?: string };
-}) => {
+const ContenidoEntrada = ({ movimiento }: { movimiento: Movimiento }) => {
   return (
     <>
       <p className="text-sm text-muted-foreground">
@@ -56,11 +52,7 @@ const ContenidoEntrada = ({
   );
 };
 
-const ContenidoSalida = ({
-  movimiento,
-}: {
-  movimiento: Movimiento & { areaVenta?: string; user?: string };
-}) => {
+const ContenidoSalida = ({ movimiento }: { movimiento: Movimiento }) => {
   return (
     <>
       <p className="text-sm text-muted-foreground">
@@ -83,7 +75,7 @@ const ContenidoSalida = ({
 const ContenidoSalidaRevoltosa = ({
   movimiento,
 }: {
-  movimiento: Movimiento & { areaVenta?: string; user?: string };
+  movimiento: Movimiento;
 }) => {
   return (
     <>
@@ -104,11 +96,7 @@ const ContenidoSalidaRevoltosa = ({
   );
 };
 
-const ContenidoTransferencia = ({
-  movimiento,
-}: {
-  movimiento: Movimiento & { desde?: string; hacia?: string; user?: string };
-}) => {
+const ContenidoTransferencia = ({ movimiento }: { movimiento: Movimiento }) => {
   return (
     <>
       <p className="text-sm text-muted-foreground">
@@ -128,11 +116,7 @@ const ContenidoTransferencia = ({
   );
 };
 
-const ContenidoAjuste = ({
-  movimiento,
-}: {
-  movimiento: Movimiento & { user?: string; areaVenta?: string };
-}) => {
+const ContenidoAjuste = ({ movimiento }: { movimiento: Movimiento }) => {
   return (
     <>
       <p className="text-sm text-muted-foreground">
@@ -152,15 +136,7 @@ const ContenidoAjuste = ({
   );
 };
 
-const ContenidoVenta = ({
-  movimiento,
-}: {
-  movimiento: Movimiento & {
-    areaVenta?: string;
-    user?: string;
-    metodoPago?: string;
-  };
-}) => {
+const ContenidoVenta = ({ movimiento }: { movimiento: Movimiento }) => {
   return (
     <>
       <p className="text-sm text-muted-foreground">
@@ -169,7 +145,8 @@ const ContenidoVenta = ({
       </p>
       <div className="border rounded-md w-full md:w-fit py-2 px-4 flex flex-col gap-2">
         <p className="text-sm">
-          {movimiento.areaVenta && ` En ${movimiento.areaVenta}`} por método de
+          {FormatoCantidad({ cantidad: movimiento.cantidad })}
+          {movimiento.areaVenta && ` en ${movimiento.areaVenta}`} por método de
           pago {movimiento.metodoPago?.toLowerCase()}
         </p>
         <div className="text-xs text-muted-foreground">
@@ -180,7 +157,7 @@ const ContenidoVenta = ({
   );
 };
 
-const ContenidoMovimiento = ({ movimiento }: { movimiento: any }) => {
+const ContenidoMovimiento = ({ movimiento }: { movimiento: Movimiento }) => {
   switch (movimiento.type) {
     case TipoMovimiento.ENTRADA:
       return <ContenidoEntrada movimiento={movimiento} />;
