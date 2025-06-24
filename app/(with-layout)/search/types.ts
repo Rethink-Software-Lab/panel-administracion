@@ -18,4 +18,6 @@ export interface Movimiento {
   metodoPago?: METODOS_PAGO;
   desde?: string;
   hacia?: string;
+  proveedor?: string;
+  motivo?: string;
 }

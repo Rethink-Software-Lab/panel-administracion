@@ -8,6 +8,8 @@ import {
   DollarSign,
   Wrench,
 } from "lucide-react";
+import DataTableMovimientos from "./data-tables/data-table-movimientos";
+import { columns } from "@/app/(with-layout)/search/columns";
 
 const MovimientoIcon = ({ tipo }: { tipo: TipoMovimiento }) => {
   switch (tipo) {
@@ -193,14 +195,19 @@ const TimeLineItem = ({ movimiento }: { movimiento: any }) => {
 export async function TimeLineProducto({ infoId }: { infoId: string }) {
   const { data: movimientos } = await getHistoricoProducto(Number(infoId));
   return (
-    <div className="max-w-screen-sm p-6">
-      <div className="relative ml-4">
-        <div className="absolute left-0 inset-y-0 border-l-2" />
-
-        {movimientos?.map((movimiento, index) => (
-          <TimeLineItem key={index} movimiento={movimiento} />
-        ))}
+    <>
+      <div className="p-4">
+        <DataTableMovimientos columns={columns} data={movimientos || []} />
       </div>
-    </div>
+      {/* <div className="max-w-screen-sm p-6">
+        <div className="relative ml-4">
+          <div className="absolute left-0 inset-y-0 border-l-2" />
+
+          {movimientos?.map((movimiento, index) => (
+            <TimeLineItem key={index} movimiento={movimiento} />
+          ))}
+        </div>
+      </div> */}
+    </>
   );
 }

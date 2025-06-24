@@ -5,6 +5,7 @@ import {
   inventarioAreaventa,
   inventarioEntradaalmacen,
   inventarioProducto,
+  inventarioProveedor,
   inventarioSalidaalmacen,
   inventarioSalidaalmacenrevoltosa,
   inventarioTransferencia,
@@ -58,6 +59,8 @@ export async function getHistoricoProducto(
         type: sql<TipoMovimiento>`'Entrada'`,
         cantidad: sql<string>`COUNT (${inventarioProducto})`.as("cantidad"),
         user: inventarioUser.username,
+        proveedor: inventarioProveedor.nombre,
+        metodoPago: sql<METODOS_PAGO>`${inventarioEntradaalmacen.metodoPago}`,
       })
       .from(inventarioEntradaalmacen)
       .where(inArray(inventarioEntradaalmacen.id, entradasIds))
@@ -65,11 +68,20 @@ export async function getHistoricoProducto(
         inventarioProducto,
         eq(inventarioProducto.entradaId, inventarioEntradaalmacen.id)
       )
+      .innerJoin(
+        inventarioProveedor,
+        eq(inventarioEntradaalmacen.proveedorId, inventarioProveedor.id)
+      )
       .leftJoin(
         inventarioUser,
         eq(inventarioEntradaalmacen.usuarioId, inventarioUser.id)
       )
-      .groupBy(inventarioEntradaalmacen.createdAt, inventarioUser.username);
+      .groupBy(
+        inventarioEntradaalmacen.createdAt,
+        inventarioUser.username,
+        inventarioProveedor.nombre,
+        inventarioEntradaalmacen.metodoPago
+      );
 
     const salidas = await db
       .select({
@@ -132,6 +144,7 @@ export async function getHistoricoProducto(
         cantidad: sql<string>`COUNT (${inventarioProducto})`.as("cantidad"),
         user: inventarioUser.username,
         areaVenta: sql<string>`COALESCE(${inventarioAreaventa.nombre}, 'Almacen Principal')`,
+        motivo: inventarioAjusteinventario.motivo,
       })
       .from(inventarioAjusteinventarioProductos)
       .innerJoin(
@@ -165,7 +178,8 @@ export async function getHistoricoProducto(
       .groupBy(
         inventarioAjusteinventario.createdAt,
         inventarioUser.username,
-        inventarioAreaventa.nombre
+        inventarioAreaventa.nombre,
+        inventarioAjusteinventario.motivo
       );
 
     const areaVentaDesde = aliasedTable(
