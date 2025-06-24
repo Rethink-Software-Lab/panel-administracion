@@ -5,6 +5,7 @@ import {
   inventarioAreaventa,
   inventarioEntradaalmacen,
   inventarioProducto,
+  inventarioProveedor,
   inventarioSalidaalmacen,
   inventarioSalidaalmacenrevoltosa,
   inventarioTransferencia,
@@ -12,9 +13,10 @@ import {
   inventarioUser,
   inventarioVentas,
 } from "@/db/schema";
-import { aliasedTable, eq, inArray, sql } from "drizzle-orm";
+import { aliasedTable, count, eq, inArray, sql } from "drizzle-orm";
 import { DateTime } from "luxon";
 import { Movimiento, TipoMovimiento } from "./types";
+import { METODOS_PAGO } from "../(almacen-cafeteria)/entradas-cafeteria/types";
 
 export async function getHistoricoProducto(
   infoId: number
@@ -57,6 +59,8 @@ export async function getHistoricoProducto(
         type: sql<TipoMovimiento>`'Entrada'`,
         cantidad: sql<string>`COUNT (${inventarioProducto})`.as("cantidad"),
         user: inventarioUser.username,
+        proveedor: inventarioProveedor.nombre,
+        metodoPago: sql<METODOS_PAGO>`${inventarioEntradaalmacen.metodoPago}`,
       })
       .from(inventarioEntradaalmacen)
       .where(inArray(inventarioEntradaalmacen.id, entradasIds))
@@ -64,11 +68,20 @@ export async function getHistoricoProducto(
         inventarioProducto,
         eq(inventarioProducto.entradaId, inventarioEntradaalmacen.id)
       )
+      .innerJoin(
+        inventarioProveedor,
+        eq(inventarioEntradaalmacen.proveedorId, inventarioProveedor.id)
+      )
       .leftJoin(
         inventarioUser,
         eq(inventarioEntradaalmacen.usuarioId, inventarioUser.id)
       )
-      .groupBy(inventarioEntradaalmacen.createdAt, inventarioUser.username);
+      .groupBy(
+        inventarioEntradaalmacen.createdAt,
+        inventarioUser.username,
+        inventarioProveedor.nombre,
+        inventarioEntradaalmacen.metodoPago
+      );
 
     const salidas = await db
       .select({
@@ -131,6 +144,7 @@ export async function getHistoricoProducto(
         cantidad: sql<string>`COUNT (${inventarioProducto})`.as("cantidad"),
         user: inventarioUser.username,
         areaVenta: sql<string>`COALESCE(${inventarioAreaventa.nombre}, 'Almacen Principal')`,
+        motivo: inventarioAjusteinventario.motivo,
       })
       .from(inventarioAjusteinventarioProductos)
       .innerJoin(
@@ -164,7 +178,8 @@ export async function getHistoricoProducto(
       .groupBy(
         inventarioAjusteinventario.createdAt,
         inventarioUser.username,
-        inventarioAreaventa.nombre
+        inventarioAreaventa.nombre,
+        inventarioAjusteinventario.motivo
       );
 
     const areaVentaDesde = aliasedTable(
@@ -221,15 +236,12 @@ export async function getHistoricoProducto(
 
     const ventas = await db
       .select({
-        // createdAt: sql<string>`DATE(${inventarioVentas.createdAt})`.as(
-        //   "createdAt"
-        // ),
         createdAt: inventarioVentas.createdAt,
         type: sql<TipoMovimiento>`'Venta'`,
-        cantidad: sql<string>`COUNT(*)`.as("cantidad"),
+        cantidad: count(inventarioProducto),
         user: inventarioUser.username,
         areaVenta: inventarioAreaventa.nombre,
-        metodoPago: inventarioVentas.metodoPago,
+        metodoPago: sql<METODOS_PAGO>`${inventarioVentas.metodoPago}`,
       })
       .from(inventarioVentas)
       .leftJoin(
@@ -240,6 +252,10 @@ export async function getHistoricoProducto(
         inventarioAreaventa,
         eq(inventarioAreaventa.id, inventarioVentas.areaVentaId)
       )
+      .innerJoin(
+        inventarioProducto,
+        eq(inventarioProducto.ventaId, inventarioVentas.id)
+      )
       .where(inArray(inventarioVentas.id, ventasIds))
       .groupBy(
         inventarioVentas.createdAt,
@@ -247,7 +263,6 @@ export async function getHistoricoProducto(
         inventarioAreaventa.nombre,
         inventarioVentas.metodoPago
       );
-    // .groupBy(sql`DATE(${inventarioVentas.createdAt})`);
 
     const movimientos = [
       ...entradas,
