@@ -1,4 +1,7 @@
-import { getHistoricoProducto } from "@/app/(with-layout)/search/services";
+import {
+  getMovimientosProducto,
+  getMovimientosProductoCafeteria,
+} from "@/app/(with-layout)/search/services";
 import { Movimiento, TipoMovimiento } from "@/app/(with-layout)/search/types";
 import {
   ArrowDownLeft,
@@ -192,12 +195,24 @@ const TimeLineItem = ({ movimiento }: { movimiento: any }) => {
   );
 };
 
-export async function TimeLineProducto({ infoId }: { infoId: string }) {
-  const { data: movimientos } = await getHistoricoProducto(Number(infoId));
+export async function TimeLineProducto({
+  infoId,
+  isCafeteria,
+}: {
+  infoId: string;
+  isCafeteria: boolean;
+}) {
+  const { data } = await (isCafeteria
+    ? getMovimientosProductoCafeteria(Number(infoId))
+    : getMovimientosProducto(Number(infoId)));
   return (
     <>
       <div className="p-4">
-        <DataTableMovimientos columns={columns} data={movimientos || []} />
+        <DataTableMovimientos
+          columns={columns}
+          data={data?.movimientos || []}
+          users={data?.users || []}
+        />
       </div>
       {/* <div className="max-w-screen-sm p-6">
         <div className="relative ml-4">

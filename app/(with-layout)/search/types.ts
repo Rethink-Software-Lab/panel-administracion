@@ -7,6 +7,8 @@ export enum TipoMovimiento {
   TRANSFERENCIA = "Transferencia",
   AJUSTE = "Ajuste",
   VENTA = "Venta",
+  MERMA = "Merma",
+  CUENTA_CASA = "Cuenta Casa",
 }
 
 export interface Movimiento {
@@ -18,6 +20,16 @@ export interface Movimiento {
   metodoPago?: METODOS_PAGO;
   desde?: string;
   hacia?: string;
-  proveedor?: string;
+  proveedor?: string | null;
   motivo?: string;
+}
+
+export interface ResponseMovimientos {
+  movimientos: Movimiento[];
+  users: { username: string }[];
+}
+
+export interface SearchCafeteriaProductos {
+  cafeteria: string;
+  almacen: string;
 }
