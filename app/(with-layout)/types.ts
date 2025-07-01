@@ -6,4 +6,5 @@ export interface ResponseNoRepresentados {
 export interface ResponseSearchProducts {
   id: number;
   nombre: string;
+  isCafeteria: boolean;
 }

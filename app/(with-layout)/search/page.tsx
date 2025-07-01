@@ -10,9 +10,12 @@ import { getSession } from "@/lib/getSession";
 import { TimeLineProducto } from "@/components/functionals/TimeLineProducto";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { SearchDisponibles } from "@/components/functionals/SearchDisponibles";
+import { searchCafeteriaProducto } from "./services";
+import { SearchDisponiblesCafeteria } from "@/components/functionals/SearchDisponiblesCafeteria";
 
 interface SearchParams {
   id: string;
+  isCafeteria?: boolean;
 }
 
 export default async function Search({
@@ -21,7 +24,9 @@ export default async function Search({
   searchParams: SearchParams;
 }) {
   const { isStaff } = getSession();
-  const { data, error } = await searchProduct(searchParams.id);
+  const { data, error } = await (searchParams.isCafeteria!!
+    ? searchCafeteriaProducto(Number(searchParams.id))
+    : searchProduct(searchParams.id));
   const info = data?.info;
 
   return (
@@ -128,13 +133,20 @@ export default async function Search({
                 value="inventario"
                 className="p-4 m-0 bg-muted/40 h-full border-t-2 border-muted"
               >
-                <SearchDisponibles {...data} />
+                {searchParams.isCafeteria!! ? (
+                  <SearchDisponiblesCafeteria data={data} />
+                ) : (
+                  <SearchDisponibles {...data} />
+                )}
               </TabsContent>
               <TabsContent
                 value="movimientos"
                 className="m-0 bg-muted/40 h-full border-muted"
               >
-                <TimeLineProducto infoId={searchParams.id} />
+                <TimeLineProducto
+                  infoId={searchParams.id}
+                  isCafeteria={searchParams.isCafeteria!!}
+                />
               </TabsContent>
             </Tabs>
           ) : (

@@ -1,7 +1,7 @@
-'use client';
+"use client";
 
-import { useState, useEffect } from 'react';
-import { Search } from 'lucide-react';
+import { useState, useEffect } from "react";
+import { Search } from "lucide-react";
 
 import {
   CommandDialog,
@@ -10,10 +10,10 @@ import {
   CommandInput,
   CommandItem,
   CommandList,
-} from '@/components/ui/command';
-import { Button } from '../ui/button';
-import { ResponseSearchProducts } from '@/app/(with-layout)/types';
-import { useRouter } from 'next/navigation';
+} from "@/components/ui/command";
+import { Button } from "../ui/button";
+import { ResponseSearchProducts } from "@/app/(with-layout)/types";
+import { useRouter } from "next/navigation";
 
 export function SearchCommand({
   productos,
@@ -25,14 +25,14 @@ export function SearchCommand({
 
   useEffect(() => {
     const down = (e: KeyboardEvent) => {
-      if (e.key === 'b' && (e.metaKey || e.ctrlKey)) {
+      if (e.key === "b" && (e.metaKey || e.ctrlKey)) {
         e.preventDefault();
         setOpen((open) => !open);
       }
     };
 
-    document.addEventListener('keydown', down);
-    return () => document.removeEventListener('keydown', down);
+    document.addEventListener("keydown", down);
+    return () => document.removeEventListener("keydown", down);
   }, []);
 
   return (
@@ -54,7 +54,11 @@ export function SearchCommand({
               <CommandItem
                 key={p.id}
                 onSelect={() => {
-                  router.push(`/search/?id=${p.id}`);
+                  router.push(
+                    `/search/?id=${p.id}${
+                      p.isCafeteria ? "&isCafeteria=true" : " "
+                    }`
+                  );
                   setOpen(false);
                 }}
                 className="gap-2 cursor-pointer"

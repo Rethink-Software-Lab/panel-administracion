@@ -33,7 +33,9 @@ export const columns: ColumnDef<Movimiento>[] = [
       const movimiento = row.original;
       switch (movimiento.type) {
         case TipoMovimiento.ENTRADA:
-          return `Proveedor: ${movimiento.proveedor} por método de pago ${movimiento.metodoPago}`;
+          return `Proveedor: ${
+            movimiento.proveedor || "(eliminado)"
+          } por método de pago ${movimiento.metodoPago}`;
         case TipoMovimiento.SALIDA:
           return `Área de destino ${movimiento.areaVenta}`;
         case TipoMovimiento.SALIDA_REVOLTOSA:
@@ -44,6 +46,10 @@ export const columns: ColumnDef<Movimiento>[] = [
           return `Ajustó de ${movimiento.areaVenta} por ${movimiento.motivo}`;
         case TipoMovimiento.VENTA:
           return `Área ${movimiento.areaVenta} - ${movimiento.metodoPago}`;
+        case TipoMovimiento.MERMA:
+          return `${movimiento.areaVenta}`;
+        case TipoMovimiento.CUENTA_CASA:
+          return `${movimiento.areaVenta}`;
         default:
           return null;
       }

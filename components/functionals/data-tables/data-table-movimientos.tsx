@@ -38,11 +38,7 @@ import { Check } from "lucide-react";
 interface DataTableProps<TData> {
   columns: ColumnDef<TData>[];
   data: TData[];
-  setDataToPrint?: Dispatch<SetStateAction<TData | undefined>>;
-}
-
-export interface ExtendedTableOptions<TData> extends TableOptions<TData> {
-  setDataToPrint?: Dispatch<SetStateAction<TData | undefined>>;
+  users: { username: string }[];
 }
 
 const Types = [
@@ -52,19 +48,20 @@ const Types = [
   "Ajuste",
   "Transferencia",
   "Venta",
+  "Merma",
+  "Cuenta Casa",
 ];
 
 export default function DataTableMovimientos<TData>({
   columns,
   data,
-  setDataToPrint,
+  users,
 }: DataTableProps<TData>) {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const table = useReactTable({
     data,
     columns,
-    setDataToPrint,
     getCoreRowModel: getCoreRowModel(),
     initialState: {},
     onSortingChange: setSorting,
@@ -79,7 +76,7 @@ export default function DataTableMovimientos<TData>({
     },
     onColumnFiltersChange: setColumnFilters,
     getFilteredRowModel: getFilteredRowModel(),
-  } as ExtendedTableOptions<TData>);
+  });
 
   return (
     <div className="p-2 rounded-md shadow-sm bg-white">
@@ -129,6 +126,49 @@ export default function DataTableMovimientos<TData>({
         {table.getColumn("createdAt") && (
           <DatePickerWithRange column={table.getColumn("createdAt")} />
         )}
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="outline" size="sm" className=" flex gap-1">
+              {columnFilters.find((f) => f.id === "user") ? (
+                // @ts-ignore
+                <>
+                  <Check size={16} />
+                  {columnFilters.find((f) => f.id === "user")?.value ||
+                    "Usuario"}
+                </>
+              ) : (
+                "Usuario"
+              )}
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end" className="max-h-[300px]">
+            <DropdownMenuRadioGroup
+              // @ts-ignore
+              value={columnFilters?.find((el) => el.id === "user")?.value || ""}
+              onValueChange={(value) =>
+                setColumnFilters((prevState) => {
+                  const has = prevState?.find((el) => el.id === "user");
+                  if (!has) {
+                    return prevState.concat({ id: "user", value });
+                  }
+                  if (has.value === value) {
+                    return prevState.filter((f) => f.id !== "user");
+                  } else {
+                    return prevState
+                      .filter((f) => f.id !== "user")
+                      .concat({ id: "user", value });
+                  }
+                })
+              }
+            >
+              {users.map((u, index) => (
+                <DropdownMenuRadioItem key={`${u}-${index}`} value={u.username}>
+                  {u.username}
+                </DropdownMenuRadioItem>
+              ))}
+            </DropdownMenuRadioGroup>
+          </DropdownMenuContent>
+        </DropdownMenu>
       </div>
       <Table>
         <TableHeader>
@@ -165,8 +205,11 @@ export default function DataTableMovimientos<TData>({
                     "bg-green-500 hover:bg-green-600",
                   row.getValue("type") === TipoMovimiento.SALIDA &&
                     "bg-orange-500 hover:bg-orange-600 ",
-                  row.getValue("type") === TipoMovimiento.AJUSTE &&
-                    "bg-red-500 hover:bg-red-600",
+                  row.getValue("type") === TipoMovimiento.AJUSTE ||
+                    (row.getValue("type") === TipoMovimiento.MERMA &&
+                      "bg-red-500 hover:bg-red-600"),
+                  row.getValue("type") === TipoMovimiento.CUENTA_CASA &&
+                    "bg-pink-500 hover:bg-pink-600",
                   row.getValue("type") === TipoMovimiento.VENTA &&
                     "bg-violet-500 hover:bg-violet-600",
                   row.getValue("type") === TipoMovimiento.SALIDA_REVOLTOSA &&
