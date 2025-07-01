@@ -56,7 +56,6 @@ import {
 } from "drizzle-orm";
 import { DateTime } from "luxon";
 import {
-  Movimiento,
   ResponseMovimientos,
   SearchCafeteriaProductos,
   TipoMovimiento,

@@ -29,7 +29,15 @@ export interface ResponseMovimientos {
   users: { username: string }[];
 }
 
+interface Info {
+  imagen: null;
+  descripcion: string;
+  precio_costo: string;
+  precio_venta: string;
+}
+
 export interface SearchCafeteriaProductos {
+  info: Info;
   cafeteria: string;
   almacen: string;
 }
