@@ -39,7 +39,7 @@ export const columns: ColumnDef<Movimiento>[] = [
         case TipoMovimiento.SALIDA:
           return `Área de destino ${movimiento.areaVenta}`;
         case TipoMovimiento.SALIDA_REVOLTOSA:
-          return ``;
+          return `Área de destino Revoltosa`;
         case TipoMovimiento.TRANSFERENCIA:
           return `Área de origen ${movimiento.desde} - Área de destino ${movimiento.hacia}`;
         case TipoMovimiento.AJUSTE:

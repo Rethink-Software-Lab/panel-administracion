@@ -9,7 +9,6 @@ import {
   ColumnDef,
   SortingState,
   ColumnFiltersState,
-  TableOptions,
 } from "@tanstack/react-table";
 
 import {
@@ -21,7 +20,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 
-import { Dispatch, SetStateAction, useState } from "react";
+import { useState } from "react";
 import { cn } from "@/lib/utils";
 import { TipoMovimiento } from "@/app/(with-layout)/search/types";
 import { DatePickerWithRange } from "../date-range-picker";
@@ -80,7 +79,7 @@ export default function DataTableMovimientos<TData>({
 
   return (
     <div className="p-2 rounded-md shadow-sm bg-white">
-      <div className="flex gap-2">
+      <div className="flex gap-2 overflow-x-auto">
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="outline" size="sm" className=" flex gap-1">
@@ -115,11 +114,47 @@ export default function DataTableMovimientos<TData>({
                 })
               }
             >
-              {Types.map((t, index) => (
-                <DropdownMenuRadioItem key={`${t}-${index}`} value={t}>
-                  {t}
-                </DropdownMenuRadioItem>
-              ))}
+              {Types.map((t, index) => {
+                const selected =
+                  columnFilters.find((f) => f.id === "type")?.value === t;
+                return (
+                  <DropdownMenuRadioItem
+                    key={`${t}-${index}`}
+                    value={t}
+                    className="relative pl-8"
+                  >
+                    {/* Forzar el indicador manualmente */}
+                    <span className="absolute left-2 top-1/2 -translate-y-1/2 w-4 h-4 flex items-center justify-center">
+                      {selected ? (
+                        <Check className="w-4 h-4 text-primary" />
+                      ) : (
+                        <div
+                          className={cn(
+                            "w-2 h-2 rounded-full",
+                            t === TipoMovimiento.ENTRADA &&
+                              "bg-green-500 hover:bg-green-600",
+                            t === TipoMovimiento.SALIDA &&
+                              "bg-orange-500 hover:bg-orange-600 ",
+                            t === TipoMovimiento.AJUSTE &&
+                              "bg-red-500 hover:bg-red-600",
+                            t === TipoMovimiento.MERMA &&
+                              "bg-red-500 hover:bg-red-600",
+                            t === TipoMovimiento.CUENTA_CASA &&
+                              "bg-pink-500 hover:bg-pink-600",
+                            t === TipoMovimiento.VENTA &&
+                              "bg-violet-500 hover:bg-violet-600",
+                            t === TipoMovimiento.SALIDA_REVOLTOSA &&
+                              "bg-yellow-500 hover:bg-yellow-600 text-black/80",
+                            t === TipoMovimiento.TRANSFERENCIA &&
+                              "bg-cyan-500 hover:bg-cyan-600 "
+                          )}
+                        />
+                      )}
+                    </span>
+                    {t}
+                  </DropdownMenuRadioItem>
+                );
+              })}
             </DropdownMenuRadioGroup>
           </DropdownMenuContent>
         </DropdownMenu>
@@ -205,9 +240,10 @@ export default function DataTableMovimientos<TData>({
                     "bg-green-500 hover:bg-green-600",
                   row.getValue("type") === TipoMovimiento.SALIDA &&
                     "bg-orange-500 hover:bg-orange-600 ",
-                  row.getValue("type") === TipoMovimiento.AJUSTE ||
-                    (row.getValue("type") === TipoMovimiento.MERMA &&
-                      "bg-red-500 hover:bg-red-600"),
+                  row.getValue("type") === TipoMovimiento.AJUSTE &&
+                    "bg-red-500 hover:bg-red-600",
+                  row.getValue("type") === TipoMovimiento.MERMA &&
+                    "bg-red-500 hover:bg-red-600",
                   row.getValue("type") === TipoMovimiento.CUENTA_CASA &&
                     "bg-pink-500 hover:bg-pink-600",
                   row.getValue("type") === TipoMovimiento.VENTA &&
