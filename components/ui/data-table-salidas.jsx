@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import {
   getPaginationRowModel,
@@ -7,7 +7,7 @@ import {
   getCoreRowModel,
   useReactTable,
   getFilteredRowModel,
-} from '@tanstack/react-table';
+} from "@tanstack/react-table";
 
 import {
   Table,
@@ -16,28 +16,29 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from '@/components/ui/table';
+} from "@/components/ui/table";
 
-import { useState } from 'react';
-import { DataTablePagination } from '@/components/ui/data-table-pagination';
+import { useState } from "react";
+import { DataTablePagination } from "@/components/ui/data-table-pagination";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuRadioGroup,
   DropdownMenuRadioItem,
   DropdownMenuTrigger,
-} from './dropdown-menu';
-import { Button } from './button';
-import { Check } from 'lucide-react';
+} from "./dropdown-menu";
+import { Button } from "./button";
+import { Check } from "lucide-react";
 
 // TODO: Agregar filtro de fecha
 
-export function DataTable({ columns, data, areas = null }) {
+export function DataTable({ columns, data, areas, handleOpen }) {
   const [sorting, setSorting] = useState([]);
   const [columnFilters, setColumnFilters] = useState([]);
   const table = useReactTable({
     data,
     columns,
+    meta: { handleOpen },
     getCoreRowModel: getCoreRowModel(),
     initialState: {
       pagination: {
@@ -64,42 +65,37 @@ export function DataTable({ columns, data, areas = null }) {
         <DropdownMenu>
           <DropdownMenuTrigger asChild disabled={areas.length < 1}>
             <Button variant="outline" size="sm" className="ml-auto flex gap-1">
-              {columnFilters.find((f) => f.id === 'area_venta__nombre') ? (
+              {columnFilters.find((f) => f.id === "destino") ? (
                 <>
                   <Check size={16} />
-                  {columnFilters.find((f) => f.id === 'area_venta__nombre')
-                    ?.value || 'Almacén Revoltosa'}
+                  {columnFilters.find((f) => f.id === "destino")?.value ||
+                    "Almacén Revoltosa"}
                 </>
               ) : (
-                'Destino'
+                "Destino"
               )}
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="max-h-[300px]">
             <DropdownMenuRadioGroup
               value={
-                columnFilters?.find((el) => el.id === 'area_venta__nombre')
-                  ?.value || ''
+                columnFilters?.find((el) => el.id === "destino")?.value || ""
               }
               onValueChange={(value) =>
                 setColumnFilters((prevState) => {
-                  const has = prevState?.find(
-                    (el) => el.id === 'area_venta__nombre'
-                  );
+                  const has = prevState?.find((el) => el.id === "destino");
                   if (!has) {
                     return prevState.concat({
-                      id: 'area_venta__nombre',
+                      id: "destino",
                       value,
                     });
                   }
                   if (has.value === value) {
-                    return prevState.filter(
-                      (f) => f.id !== 'area_venta__nombre'
-                    );
+                    return prevState.filter((f) => f.id !== "destino");
                   } else {
                     return prevState
-                      .filter((f) => f.id !== 'area_venta__nombre')
-                      .concat({ id: 'area_venta__nombre', value });
+                      .filter((f) => f.id !== "destino")
+                      .concat({ id: "destino", value });
                   }
                 })
               }
@@ -144,7 +140,7 @@ export function DataTable({ columns, data, areas = null }) {
             table.getRowModel().rows.map((row) => (
               <TableRow
                 key={row.id}
-                data-state={row.getIsSelected() && 'selected'}
+                data-state={row.getIsSelected() && "selected"}
               >
                 {row.getVisibleCells().map((cell) => (
                   <TableCell

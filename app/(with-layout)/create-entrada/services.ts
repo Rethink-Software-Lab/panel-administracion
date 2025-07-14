@@ -1,13 +1,12 @@
-import { EndpointFormEntrada } from './types';
-import { db } from '@/db/initial';
+import { EndpointFormEntrada } from "./types";
+import { db } from "@/db/initial";
 import {
   inventarioCategorias,
   inventarioCuentas,
   inventarioProductoinfo,
   inventarioProveedor,
-} from '@/db/schema';
-import { desc, eq } from 'drizzle-orm';
-import { TipoCuenta } from '../tarjetas/types';
+} from "@/db/schema";
+import { desc, eq } from "drizzle-orm";
 
 export async function getProductos(): Promise<{
   data: EndpointFormEntrada | null;
@@ -27,9 +26,12 @@ export async function getProductos(): Promise<{
       )
       .orderBy(desc(inventarioProductoinfo.id));
     const cuentas = await db
-      .select()
+      .select({
+        id: inventarioCuentas.id,
+        nombre: inventarioCuentas.nombre,
+        banco: inventarioCuentas.banco,
+      })
       .from(inventarioCuentas)
-      .where(eq(inventarioCuentas.tipo, TipoCuenta.BANCARIA))
       .orderBy(desc(inventarioCuentas.id));
     const proveedores = await db
       .select({
@@ -51,7 +53,7 @@ export async function getProductos(): Promise<{
     console.error(e);
     return {
       data: null,
-      error: 'Error al conectar con el servidor.',
+      error: "Error al conectar con el servidor.",
     };
   }
 }
