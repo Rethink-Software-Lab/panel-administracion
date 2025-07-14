@@ -56,8 +56,7 @@ export async function getSalidas(): Promise<{
         inventarioUser.username,
         inventarioAreaventa.nombre
       )
-      .orderBy(desc(inventarioSalidaalmacen.createdAt))
-      .limit(10);
+      .orderBy(desc(inventarioSalidaalmacen.createdAt));
 
     const productos_en_almacen_principal = await db
       .selectDistinct({
