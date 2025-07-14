@@ -36,6 +36,6 @@
     "components/functionals/EspecialWarningDelete.jsx",
     "app/(with-layout)/products/page.tsx",
     "components/ui/data-table-areas.jsx"
-  ],
+, "components/ui/data-table-salidas.jsx"  ],
   "exclude": ["node_modules"]
 }

@@ -1,60 +1,62 @@
-'use client';
-import TableDeleteV2 from '@/components/functionals/TableDeleteV2';
-import { deleteSalida } from './actions';
-import { DateTime } from 'luxon';
-import { Row } from '@tanstack/react-table';
-import { Badge } from '@/components/ui/badge';
+"use client";
+import TableDeleteV2 from "@/components/functionals/TableDeleteV2";
+import { deleteSalida } from "./actions";
+import { DateTime } from "luxon";
+import { ColumnDef } from "@tanstack/react-table";
+import { Salida } from "./types";
+import { Button } from "@/components/ui/button";
+import { Eye } from "lucide-react";
 
-interface Data {
-  id: number;
-  created_at: string;
-  producto__info__descripcion: string;
-  cantidad: number;
-  area_venta__nombre: string;
-  usuario__username: string;
-}
-
-export const columns = [
+export const columns: ColumnDef<Salida>[] = [
   {
-    accessorKey: 'created_at',
-    header: 'Fecha',
-    cell: ({ row }: { row: Row<Data> }) =>
-      DateTime.fromISO(row.getValue('created_at')).toLocaleString(
+    accessorKey: "createdAt",
+    header: "Fecha",
+    cell: ({ row }) =>
+      DateTime.fromSQL(row.getValue("createdAt")).toLocaleString(
         DateTime.DATETIME_MED,
-        { locale: 'es' }
+        { locale: "es" }
       ),
   },
   {
-    accessorKey: 'producto__info__descripcion',
+    accessorKey: "producto",
     size: 300,
-    header: 'Producto',
+    header: "Productos",
   },
   {
-    accessorKey: 'cantidad',
-    header: 'Cantidad',
+    accessorKey: "cantidad",
+    header: "Cantidad total",
   },
   {
-    accessorKey: 'area_venta__nombre',
-    header: 'Destino',
-  },
-
-  {
-    accessorKey: 'usuario__username',
-    header: 'Usuario',
-    cell: ({ row }: { row: Row<Data> }) => {
-      const username = row.original.usuario__username;
-      if (username) {
-        return username;
-      } else {
-        return <Badge variant="outline">Usuario eliminado</Badge>;
-      }
-    },
+    accessorKey: "destino",
+    header: "Destino",
   },
 
   {
-    header: ' ',
-    cell: ({ row }: { row: Row<Data> }) => (
-      <TableDeleteV2 id={row.original.id} action={deleteSalida} />
+    accessorKey: "usuario",
+    header: "Usuario",
+  },
+
+  {
+    header: " ",
+    cell: ({ table, row }) => (
+      <div className="flex items-center gap-2">
+        <Button
+          variant="outline"
+          size="icon"
+          onClick={() =>
+            // @ts-ignore
+            table.options?.meta?.handleOpen({
+              id: row.original.id,
+              createdAt: row.original.createdAt,
+              usuario: row.original.usuario,
+              destino: row.original.destino,
+            })
+          }
+        >
+          <Eye size={18} />
+        </Button>
+        <TableDeleteV2 id={row.original.id} action={deleteSalida} />
+      </div>
     ),
   },
 ];
