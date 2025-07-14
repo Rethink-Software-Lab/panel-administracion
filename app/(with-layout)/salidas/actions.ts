@@ -16,11 +16,14 @@ import { and, eq, inArray, isNull } from "drizzle-orm";
 export async function addSalida(data: InferInput<typeof SalidaSchema>) {
   const { userId } = getSession();
   try {
+    const esAlmacenRevoltosa = data.destino === "almacen-revoltosa";
+    const areaVentaId = esAlmacenRevoltosa ? null : Number(data.destino);
+
     const salidaInsertada = await db
       .insert(inventarioSalidaalmacen)
       .values({
         usuarioId: Number(userId),
-        areaVentaId: Number(data.destino),
+        areaVentaId: areaVentaId,
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
       })
@@ -68,7 +71,8 @@ export async function addSalida(data: InferInput<typeof SalidaSchema>) {
           .update(inventarioProducto)
           .set({
             salidaId: salidaInsertada[0].id,
-            areaVentaId: Number(data.destino),
+            areaVentaId: areaVentaId,
+            almacenRevoltosa: esAlmacenRevoltosa,
           })
           .where(inArray(inventarioProducto.id, idsZapatos));
       } else {
@@ -110,7 +114,8 @@ export async function addSalida(data: InferInput<typeof SalidaSchema>) {
           .update(inventarioProducto)
           .set({
             salidaId: salidaInsertada[0].id,
-            areaVentaId: Number(data.destino),
+            areaVentaId: areaVentaId,
+            almacenRevoltosa: esAlmacenRevoltosa,
           })
           .where(inArray(inventarioProducto.id, idsAActualizar));
       }
