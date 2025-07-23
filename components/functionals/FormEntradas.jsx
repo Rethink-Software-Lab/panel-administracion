@@ -1,4 +1,4 @@
-'use client';
+"use client";
 import {
   CheckIcon,
   ChevronDown,
@@ -6,8 +6,8 @@ import {
   MinusCircle,
   PlusCircle,
   X,
-} from 'lucide-react';
-import { Button } from '@/components/ui/button';
+} from "lucide-react";
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -15,17 +15,17 @@ import {
   CardHeader,
   CardTitle,
   CardDescription,
-} from '@/components/ui/card';
+} from "@/components/ui/card";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select';
+} from "@/components/ui/select";
 
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 
 import {
   Table,
@@ -34,9 +34,9 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from '@/components/ui/table';
+} from "@/components/ui/table";
 
-import { useFieldArray, useForm, useWatch } from 'react-hook-form';
+import { useFieldArray, useForm, useWatch } from "react-hook-form";
 import {
   Form,
   FormControl,
@@ -44,7 +44,7 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from '@/components/ui/form';
+} from "@/components/ui/form";
 import {
   AlertDialog,
   AlertDialogCancel,
@@ -53,12 +53,12 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-} from '@/components/ui/alert-dialog';
-import { EntradaSchema } from '@/lib/schemas';
-import { valibotResolver } from '@hookform/resolvers/valibot';
-import { createEntrada } from '@/app/(with-layout)/create-entrada/actions';
-import { Fragment, useRef, useState } from 'react';
-import { toast } from 'sonner';
+} from "@/components/ui/alert-dialog";
+import { EntradaSchema } from "@/lib/schemas";
+import { valibotResolver } from "@hookform/resolvers/valibot";
+import { createEntrada } from "@/app/(with-layout)/create-entrada/actions";
+import { Fragment, useRef, useState } from "react";
+import { toast } from "sonner";
 import {
   Command,
   CommandEmpty,
@@ -66,14 +66,14 @@ import {
   CommandInput,
   CommandItem,
   CommandList,
-} from '../ui/command';
-import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover';
-import { cn } from '@/lib/utils';
-import { useRouter } from 'next/navigation';
-import Link from 'next/link';
-import { Banco } from '@/app/(with-layout)/tarjetas/types';
-import { Alert, AlertTitle, AlertDescription } from '../ui/alert';
-import { METODOS_PAGO } from '@/app/(with-layout)/(almacen-cafeteria)/entradas-cafeteria/types';
+} from "../ui/command";
+import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
+import { cn } from "@/lib/utils";
+import { useRouter } from "next/navigation";
+import Link from "next/link";
+import { Banco } from "@/app/(with-layout)/tarjetas/types";
+import { Alert, AlertTitle, AlertDescription } from "../ui/alert";
+import { METODOS_PAGO } from "@/app/(with-layout)/(almacen-cafeteria)/entradas-cafeteria/types";
 
 function NestedArray({
   nestedIndex,
@@ -173,7 +173,7 @@ function NestedArray({
                   <Button
                     onClick={() =>
                       appendVariant({
-                        color: '',
+                        color: "",
                         numeros: [{ numero: 0, cantidad: 0 }],
                       })
                     }
@@ -281,12 +281,13 @@ export default function FormEntradas({ productos, cuentas, proveedores }) {
   const form = useForm({
     resolver: valibotResolver(EntradaSchema),
     defaultValues: {
-      proveedor: '',
-      comprador: '',
-      metodoPago: '',
+      proveedor: "",
+      comprador: "",
+      metodoPago: "",
       productos: [
-        { producto: '', isZapato: false, cantidad: 0, variantes: undefined },
+        { producto: "", isZapato: false, cantidad: 0, variantes: undefined },
       ],
+      cuentas: [{ cuenta: "", cantidad: undefined }],
     },
   });
 
@@ -296,19 +297,28 @@ export default function FormEntradas({ productos, cuentas, proveedores }) {
     remove: removeProducto,
   } = useFieldArray({
     control: form.control,
-    name: 'productos',
+    name: "productos",
   });
 
-  const productosWatch = useWatch({ control: form.control, name: 'productos' });
-  const metodoWatch = useWatch({ control: form.control, name: 'metodoPago' });
+  const {
+    fields: fieldsCuentas,
+    append: appendCuenta,
+    remove: removeCuenta,
+  } = useFieldArray({
+    control: form.control,
+    name: "cuentas",
+  });
+
+  const productosWatch = useWatch({ control: form.control, name: "productos" });
+  const metodoWatch = useWatch({ control: form.control, name: "metodoPago" });
 
   const onSubmit = async (dataForm) => {
     setLoading(true);
     const { data, error } = await createEntrada(dataForm);
     setLoading(false);
     if (!error && !data) {
-      toast.success('Entrada creada con éxito.');
-      router.push('/entradas');
+      toast.success("Entrada creada con éxito.");
+      router.push("/entradas");
     } else if (!error) {
       setData(data);
       setOpenDialog(true);
@@ -367,7 +377,7 @@ export default function FormEntradas({ productos, cuentas, proveedores }) {
           <AlertDialogFooter>
             <AlertDialogCancel
               onClick={() => {
-                router.push('/entradas');
+                router.push("/entradas");
               }}
             >
               Cerrar
@@ -437,18 +447,18 @@ export default function FormEntradas({ productos, cuentas, proveedores }) {
                     <Select
                       onValueChange={(currentValue) => {
                         if (currentValue === METODOS_PAGO.MIXTO) {
-                          form.setValue('efectivo', 0),
-                            form.setValue('transferencia', 0);
+                          form.setValue("efectivo", 0),
+                            form.setValue("transferencia", 0);
                         } else {
-                          form.setValue('efectivo', undefined),
-                            form.setValue('transferencia', undefined);
+                          form.setValue("efectivo", undefined),
+                            form.setValue("transferencia", undefined);
                         }
 
                         if (currentValue === METODOS_PAGO.EFECTIVO) {
-                          form.setValue('cuenta', undefined);
+                          form.setValue("cuenta", undefined);
                         } else {
-                          if (form.getValues('cuenta') === undefined) {
-                            form.setValue('cuenta', '');
+                          if (form.getValues("cuenta") === undefined) {
+                            form.setValue("cuenta", "");
                           }
                         }
 
@@ -476,56 +486,192 @@ export default function FormEntradas({ productos, cuentas, proveedores }) {
                 )}
               />
 
-              {metodoWatch !== METODOS_PAGO.EFECTIVO && (
-                <FormField
-                  control={form.control}
-                  name="cuenta"
-                  render={({ field }) => (
-                    <FormItem className="flex flex-col mt-2">
-                      <FormLabel className="flex justify-start">
-                        Cuenta a transferir
-                      </FormLabel>
-                      <Select
-                        onValueChange={field.onChange}
-                        defaultValue={field.value}
-                      >
-                        <FormControl>
-                          <SelectTrigger
-                            className={cn(
-                              form.formState.errors?.tarjeta &&
-                                'border-destructive'
-                            )}
-                          >
-                            <SelectValue placeholder="Selecciona una cuenta" />
-                          </SelectTrigger>
-                        </FormControl>
-                        <SelectContent>
-                          {cuentas?.map((cuenta) => (
-                            <SelectItem
-                              key={cuenta.id}
-                              value={cuenta.id.toString()}
-                            >
-                              <div className="flex gap-2 items-center ">
-                                <div
+              <div className="grid grid-cols-2 col-span-2 gap-4">
+                {fieldsCuentas.map((cuenta, index) => (
+                  <Fragment key={cuenta.id}>
+                    <FormField
+                      control={form.control}
+                      name={`cuentas.${index}.cuenta`}
+                      render={({ field }) => (
+                        <FormItem className="flex flex-col">
+                          <Popover>
+                            <PopoverTrigger asChild>
+                              <FormControl>
+                                <Button
+                                  variant="outline"
+                                  role="combobox"
                                   className={cn(
-                                    'w-6 aspect-square rounded-full bg-gradient-to-br',
-                                    cuenta.banco === Banco.BANDEC &&
-                                      'from-[#6c0207] to-[#bc1f26]',
-                                    cuenta.banco === Banco.BPA &&
-                                      'from-[#1d6156] to-[#1d6156]'
+                                    "justify-between",
+                                    !field.value && "text-muted-foreground"
                                   )}
-                                ></div>
-                                <p>{cuenta.nombre}</p>
-                              </div>
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              )}
+                                >
+                                  {field.value
+                                    ? productos?.find(
+                                        (producto) =>
+                                          producto?.id.toString() ===
+                                          field.value
+                                      )?.descripcion
+                                    : "Selecciona un producto"}
+                                  <ChevronDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                                </Button>
+                              </FormControl>
+                            </PopoverTrigger>
+                            <PopoverContent className="w-[320px] p-0">
+                              <Command className="rounded-lg border shadow-md">
+                                <CommandInput placeholder="Escribe un código..." />
+                                <CommandList>
+                                  <CommandEmpty>
+                                    Ningún resultado encontrado.
+                                  </CommandEmpty>
+                                  <CommandGroup heading="Sugerencias">
+                                    {cuentas?.map((cuenta) => (
+                                      <CommandItem
+                                        key={cuenta.id}
+                                        value={cuenta.id.toString()}
+                                        keywords={[cuenta.nombre]}
+                                        onSelect={(currentValue) => {
+                                          productos?.find(
+                                            (e) =>
+                                              e.id.toString() === currentValue
+                                          )?.categoria !== "Zapatos"
+                                            ? (() => {
+                                                form.setValue(
+                                                  `productos.${index}.isZapato`,
+                                                  false
+                                                );
+                                                form.setValue(
+                                                  `productos.${index}.variantes`,
+                                                  undefined
+                                                );
+                                                form.setValue(
+                                                  `productos.${index}.cantidad`,
+                                                  0
+                                                );
+                                              })()
+                                            : (() => {
+                                                form.setValue(
+                                                  `productos.${index}.isZapato`,
+                                                  true
+                                                );
+                                                form.setValue(
+                                                  `productos.${index}.cantidad`,
+                                                  undefined
+                                                );
+                                                form.setValue(
+                                                  `productos.${index}.variantes`,
+                                                  [
+                                                    {
+                                                      color: "",
+                                                      numeros: [
+                                                        {
+                                                          numero: 0,
+                                                          cantidad: 0,
+                                                        },
+                                                      ],
+                                                    },
+                                                  ]
+                                                );
+                                              })();
+                                          field.onChange(
+                                            currentValue === field.value
+                                              ? ""
+                                              : currentValue
+                                          );
+                                        }}
+                                      >
+                                        {cuenta.nombre}
+                                        <CheckIcon
+                                          className={cn(
+                                            "ml-auto h-4 w-4",
+                                            cuenta.id.toString() === field.value
+                                              ? "opacity-100"
+                                              : "opacity-0"
+                                          )}
+                                        />
+                                      </CommandItem>
+                                    ))}
+                                  </CommandGroup>
+                                </CommandList>
+                              </Command>
+                            </PopoverContent>
+                          </Popover>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+
+                    <FormField
+                      control={form.control}
+                      name={`cuentas.${index}.cantidad`}
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Cantidad</FormLabel>
+                          <FormControl>
+                            <Input
+                              {...field}
+                              type="number"
+                              onChange={(e) => {
+                                const value = parseFloat(e.target.value);
+                                field.onChange(isNaN(value) ? 0 : value);
+                              }}
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </Fragment>
+                ))}
+              </div>
+
+              <FormField
+                control={form.control}
+                name="cuenta"
+                render={({ field }) => (
+                  <FormItem className="flex flex-col mt-2">
+                    <FormLabel className="flex justify-start">
+                      Cuenta a transferir
+                    </FormLabel>
+                    <Select
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                    >
+                      <FormControl>
+                        <SelectTrigger
+                          className={cn(
+                            form.formState.errors?.tarjeta &&
+                              "border-destructive"
+                          )}
+                        >
+                          <SelectValue placeholder="Selecciona una cuenta" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        {cuentas?.map((cuenta) => (
+                          <SelectItem
+                            key={cuenta.id}
+                            value={cuenta.id.toString()}
+                          >
+                            <div className="flex gap-2 items-center ">
+                              <div
+                                className={cn(
+                                  "w-6 aspect-square rounded-full bg-gradient-to-br",
+                                  cuenta.banco === Banco.BANDEC &&
+                                    "from-[#6c0207] to-[#bc1f26]",
+                                  cuenta.banco === Banco.BPA &&
+                                    "from-[#1d6156] to-[#1d6156]"
+                                )}
+                              ></div>
+                              <p>{cuenta.nombre}</p>
+                            </div>
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
               {metodoWatch === METODOS_PAGO.MIXTO && (
                 <>
                   <FormField
@@ -592,10 +738,10 @@ export default function FormEntradas({ productos, cuentas, proveedores }) {
               <div>
                 <div
                   className={cn(
-                    'grid [&>span]:pl-2 [&>span]:text-muted-foreground border-b border-muted',
+                    "grid [&>span]:pl-2 [&>span]:text-muted-foreground border-b border-muted",
                     productosWatch?.some((p) => p.isZapato)
-                      ? 'grid-cols-4'
-                      : 'grid-cols-2'
+                      ? "grid-cols-4"
+                      : "grid-cols-2"
                   )}
                 >
                   <span>Producto</span>
@@ -610,10 +756,10 @@ export default function FormEntradas({ productos, cuentas, proveedores }) {
                 {fieldsProducto.map((producto, index) => (
                   <div
                     className={cn(
-                      'grid [&>*]:p-2',
+                      "grid [&>*]:p-2",
                       productosWatch?.some((p) => p.isZapato)
-                        ? 'grid-cols-4'
-                        : 'grid-cols-2'
+                        ? "grid-cols-4"
+                        : "grid-cols-2"
                     )}
                     key={producto.id}
                   >
@@ -629,8 +775,8 @@ export default function FormEntradas({ productos, cuentas, proveedores }) {
                                   variant="outline"
                                   role="combobox"
                                   className={cn(
-                                    'justify-between',
-                                    !field.value && 'text-muted-foreground'
+                                    "justify-between",
+                                    !field.value && "text-muted-foreground"
                                   )}
                                 >
                                   {field.value
@@ -639,7 +785,7 @@ export default function FormEntradas({ productos, cuentas, proveedores }) {
                                           producto?.id.toString() ===
                                           field.value
                                       )?.descripcion
-                                    : 'Selecciona un producto'}
+                                    : "Selecciona un producto"}
                                   <ChevronDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                                 </Button>
                               </FormControl>
@@ -661,7 +807,7 @@ export default function FormEntradas({ productos, cuentas, proveedores }) {
                                           productos?.find(
                                             (e) =>
                                               e.id.toString() === currentValue
-                                          )?.categoria !== 'Zapatos'
+                                          )?.categoria !== "Zapatos"
                                             ? (() => {
                                                 form.setValue(
                                                   `productos.${index}.isZapato`,
@@ -689,7 +835,7 @@ export default function FormEntradas({ productos, cuentas, proveedores }) {
                                                   `productos.${index}.variantes`,
                                                   [
                                                     {
-                                                      color: '',
+                                                      color: "",
                                                       numeros: [
                                                         {
                                                           numero: 0,
@@ -702,7 +848,7 @@ export default function FormEntradas({ productos, cuentas, proveedores }) {
                                               })();
                                           field.onChange(
                                             currentValue === field.value
-                                              ? ''
+                                              ? ""
                                               : currentValue
                                           );
                                         }}
@@ -710,11 +856,11 @@ export default function FormEntradas({ productos, cuentas, proveedores }) {
                                         {producto.descripcion}
                                         <CheckIcon
                                           className={cn(
-                                            'ml-auto h-4 w-4',
+                                            "ml-auto h-4 w-4",
                                             producto.id.toString() ===
                                               field.value
-                                              ? 'opacity-100'
-                                              : 'opacity-0'
+                                              ? "opacity-100"
+                                              : "opacity-0"
                                           )}
                                         />
                                       </CommandItem>
@@ -786,7 +932,7 @@ export default function FormEntradas({ productos, cuentas, proveedores }) {
               <Button
                 onClick={() =>
                   appendProducto({
-                    producto: '',
+                    producto: "",
                     cantidad: 0,
                     isZapato: false,
                     variantes: undefined,

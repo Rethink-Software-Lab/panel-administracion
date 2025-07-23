@@ -15,6 +15,7 @@ import {
   CirclePlus,
   CircleX,
   MinusCircle,
+  Pencil,
   PlusCircle,
 } from "lucide-react";
 import {
@@ -45,6 +46,7 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import {
   AreaVentaSalida,
   ProductoSalida,
+  Salida,
 } from "@/app/(with-layout)/salidas/types";
 import {
   Popover,
@@ -61,14 +63,16 @@ import {
   CommandItem,
 } from "@/components/ui/command";
 import { SalidaSchema } from "@/app/(with-layout)/salidas/schema";
-import { addSalida } from "@/app/(with-layout)/salidas/actions";
+import { addSalida, updateSalida } from "@/app/(with-layout)/salidas/actions";
 
 export function SheetSalidaAlmacenPrincipal({
   productos,
   areas,
+  salida,
 }: {
   productos: ProductoSalida[];
   areas: AreaVentaSalida[];
+  salida?: Salida;
 }) {
   const [open, setOpen] = useState(false);
   const [openPopover, setOpenPopover] = useState(false);
@@ -81,10 +85,22 @@ export function SheetSalidaAlmacenPrincipal({
   const form = useForm<InferInput<typeof SalidaSchema>>({
     resolver: valibotResolver(SalidaSchema),
     defaultValues: {
-      destino: "",
-      productos: [
-        { id: "", cantidad: 0, zapatos_id: undefined, esZapato: false },
-      ],
+      destino: salida?.destino?.id?.toString() ?? "",
+      productos: salida?.detalle
+        ? salida?.detalle?.map((producto) => ({
+            id: producto.id.toString(),
+            cantidad: producto.cantidad,
+            zapatos_id: producto.zapatos_id || undefined,
+            esZapato: producto.esZapato,
+          }))
+        : [
+            {
+              id: "",
+              cantidad: 0,
+              zapatos_id: undefined,
+              esZapato: false,
+            },
+          ],
     },
   });
 
@@ -96,7 +112,9 @@ export function SheetSalidaAlmacenPrincipal({
   const onSubmit = async (
     dataForm: InferInput<typeof SalidaSchema>
   ): Promise<void> => {
-    const { data: dataRes, error } = await addSalida(dataForm);
+    const { data: dataRes, error } = await (salida
+      ? updateSalida(dataForm, salida.id)
+      : addSalida(dataForm));
 
     if (error) {
       setError(error);
@@ -114,12 +132,18 @@ export function SheetSalidaAlmacenPrincipal({
   return (
     <Sheet open={open} onOpenChange={setOpen} modal={true}>
       <SheetTrigger asChild>
-        <Button className="gap-1 items-center">
-          <PlusCircle size={18} />
-          <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
-            Agregar
-          </span>
-        </Button>
+        {salida ? (
+          <Button variant="outline" size="icon">
+            <Pencil size={18} />
+          </Button>
+        ) : (
+          <Button className="gap-1 items-center">
+            <PlusCircle size={18} />
+            <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
+              Agregar
+            </span>
+          </Button>
+        )}
       </SheetTrigger>
       <SheetContent className="w-full sm:max-w-[600px] overflow-y-scroll">
         <SheetHeader>
@@ -251,7 +275,7 @@ export function SheetSalidaAlmacenPrincipal({
                 <TableHeader>
                   <TableRow>
                     <TableHead className="w-[100px]">Producto</TableHead>
-                    <TableHead>Cantidad</TableHead>
+                    <TableHead>Cantidad/Ids</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>

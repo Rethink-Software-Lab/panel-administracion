@@ -6,6 +6,8 @@ import { ColumnDef } from "@tanstack/react-table";
 import { Salida } from "./types";
 import { Button } from "@/components/ui/button";
 import { Eye } from "lucide-react";
+import { SheetInfoSalidaAlmacenPrincipal } from "@/components/functionals/sheets/SheetInfoSalidaAlmacenPrincipal";
+import { SheetSalidaAlmacenPrincipal } from "@/components/functionals/sheets/SheetSalidaAlmacenPrincipal";
 
 export const columns: ColumnDef<Salida>[] = [
   {
@@ -27,7 +29,7 @@ export const columns: ColumnDef<Salida>[] = [
     header: "Cantidad total",
   },
   {
-    accessorKey: "destino",
+    accessorKey: "destino.nombre",
     header: "Destino",
   },
 
@@ -40,21 +42,14 @@ export const columns: ColumnDef<Salida>[] = [
     header: " ",
     cell: ({ table, row }) => (
       <div className="flex items-center gap-2">
-        <Button
-          variant="outline"
-          size="icon"
-          onClick={() =>
-            // @ts-ignore
-            table.options?.meta?.handleOpen({
-              id: row.original.id,
-              createdAt: row.original.createdAt,
-              usuario: row.original.usuario,
-              destino: row.original.destino,
-            })
-          }
-        >
-          <Eye size={18} />
-        </Button>
+        <SheetInfoSalidaAlmacenPrincipal salida={row.original} />
+        <SheetSalidaAlmacenPrincipal
+          salida={row.original}
+          // @ts-ignore
+          areas={table.options?.meta?.areas || []}
+          // @ts-ignore
+          productos={table.options?.meta?.productos || []}
+        />
         <TableDeleteV2 id={row.original.id} action={deleteSalida} />
       </div>
     ),
