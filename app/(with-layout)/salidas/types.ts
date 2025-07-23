@@ -1,10 +1,24 @@
+export interface DetalleSalida {
+  id: number;
+  nombre: string;
+  cantidad: number;
+  esZapato: boolean;
+  zapatos_id: string;
+}
+
+interface Destino {
+  id: number;
+  nombre: string;
+}
+
 export interface Salida {
   id: number;
   usuario: string;
   createdAt: string;
-  destino: string;
+  destino: Destino;
   producto: number;
   cantidad: number;
+  detalle: DetalleSalida[];
 }
 
 export interface ProductoSalida {
@@ -22,10 +36,4 @@ export interface ResponseSalidas {
   salidas: Salida[];
   productos: ProductoSalida[];
   areasVenta: AreaVentaSalida[];
-}
-
-export interface ResponseDetalleSalida {
-  id: number;
-  nombre: string;
-  cantidad: number;
 }

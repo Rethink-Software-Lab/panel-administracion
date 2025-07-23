@@ -1,6 +1,7 @@
 import { SheetSalidaAlmacenPrincipal } from "@/components/functionals/sheets/SheetSalidaAlmacenPrincipal";
 import { getSalidas } from "./services";
-import SheetInfoSalidaAlmacenPrincipal from "@/components/functionals/sheets/SheetInfoSalidaAlmacenPrincipal";
+import { DataTable } from "@/components/ui/data-table-salidas";
+import { columns } from "@/app/(with-layout)/salidas/columns";
 
 export default async function Salidas() {
   const { data } = await getSalidas();
@@ -15,7 +16,14 @@ export default async function Salidas() {
           productos={data?.productos || []}
         />
       </div>
-      <SheetInfoSalidaAlmacenPrincipal data={data} />
+      {data && (
+        <DataTable
+          columns={columns}
+          areas={data.areasVenta}
+          data={data.salidas}
+          productos={data.productos}
+        />
+      )}
     </main>
   );
 }

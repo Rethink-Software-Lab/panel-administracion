@@ -32,13 +32,13 @@ import { Check } from "lucide-react";
 
 // TODO: Agregar filtro de fecha
 
-export function DataTable({ columns, data, areas, handleOpen }) {
+export function DataTable({ columns, data, areas, productos }) {
   const [sorting, setSorting] = useState([]);
   const [columnFilters, setColumnFilters] = useState([]);
   const table = useReactTable({
     data,
     columns,
-    meta: { handleOpen },
+    meta: { areas, productos },
     getCoreRowModel: getCoreRowModel(),
     initialState: {
       pagination: {
