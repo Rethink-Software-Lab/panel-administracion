@@ -287,7 +287,7 @@ export default function FormEntradas({ productos, cuentas, proveedores }) {
       productos: [
         { producto: "", isZapato: false, cantidad: 0, variantes: undefined },
       ],
-      cuentas: [{ cuenta: "", cantidad: undefined }],
+      /* cuentas: [{ cuenta: "", cantidad: undefined }], */
     },
   });
 
@@ -300,14 +300,14 @@ export default function FormEntradas({ productos, cuentas, proveedores }) {
     name: "productos",
   });
 
-  const {
+  /*  const {
     fields: fieldsCuentas,
     append: appendCuenta,
     remove: removeCuenta,
   } = useFieldArray({
     control: form.control,
     name: "cuentas",
-  });
+  }); */
 
   const productosWatch = useWatch({ control: form.control, name: "productos" });
   const metodoWatch = useWatch({ control: form.control, name: "metodoPago" });
@@ -486,7 +486,7 @@ export default function FormEntradas({ productos, cuentas, proveedores }) {
                 )}
               />
 
-              <div className="grid grid-cols-2 col-span-2 gap-4">
+              {/*  <div className="grid grid-cols-2 col-span-2 gap-4">
                 {fieldsCuentas.map((cuenta, index) => (
                   <Fragment key={cuenta.id}>
                     <FormField
@@ -622,56 +622,58 @@ export default function FormEntradas({ productos, cuentas, proveedores }) {
                     />
                   </Fragment>
                 ))}
-              </div>
+              </div> */}
 
-              <FormField
-                control={form.control}
-                name="cuenta"
-                render={({ field }) => (
-                  <FormItem className="flex flex-col mt-2">
-                    <FormLabel className="flex justify-start">
-                      Cuenta a transferir
-                    </FormLabel>
-                    <Select
-                      onValueChange={field.onChange}
-                      defaultValue={field.value}
-                    >
-                      <FormControl>
-                        <SelectTrigger
-                          className={cn(
-                            form.formState.errors?.tarjeta &&
-                              "border-destructive"
-                          )}
-                        >
-                          <SelectValue placeholder="Selecciona una cuenta" />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent>
-                        {cuentas?.map((cuenta) => (
-                          <SelectItem
-                            key={cuenta.id}
-                            value={cuenta.id.toString()}
+              {metodoWatch !== METODOS_PAGO.EFECTIVO && (
+                <FormField
+                  control={form.control}
+                  name="cuenta"
+                  render={({ field }) => (
+                    <FormItem className="flex flex-col mt-2">
+                      <FormLabel className="flex justify-start">
+                        Cuenta a transferir
+                      </FormLabel>
+                      <Select
+                        onValueChange={field.onChange}
+                        defaultValue={field.value}
+                      >
+                        <FormControl>
+                          <SelectTrigger
+                            className={cn(
+                              form.formState.errors?.tarjeta &&
+                                "border-destructive"
+                            )}
                           >
-                            <div className="flex gap-2 items-center ">
-                              <div
-                                className={cn(
-                                  "w-6 aspect-square rounded-full bg-gradient-to-br",
-                                  cuenta.banco === Banco.BANDEC &&
-                                    "from-[#6c0207] to-[#bc1f26]",
-                                  cuenta.banco === Banco.BPA &&
-                                    "from-[#1d6156] to-[#1d6156]"
-                                )}
-                              ></div>
-                              <p>{cuenta.nombre}</p>
-                            </div>
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+                            <SelectValue placeholder="Selecciona una cuenta" />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          {cuentas?.map((cuenta) => (
+                            <SelectItem
+                              key={cuenta.id}
+                              value={cuenta.id.toString()}
+                            >
+                              <div className="flex gap-2 items-center ">
+                                <div
+                                  className={cn(
+                                    "w-6 aspect-square rounded-full bg-gradient-to-br",
+                                    cuenta.banco === Banco.BANDEC &&
+                                      "from-[#6c0207] to-[#bc1f26]",
+                                    cuenta.banco === Banco.BPA &&
+                                      "from-[#1d6156] to-[#1d6156]"
+                                  )}
+                                ></div>
+                                <p>{cuenta.nombre}</p>
+                              </div>
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              )}
               {metodoWatch === METODOS_PAGO.MIXTO && (
                 <>
                   <FormField
