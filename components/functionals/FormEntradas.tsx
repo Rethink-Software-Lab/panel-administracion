@@ -36,7 +36,18 @@ import {
   TableRow,
 } from "@/components/ui/table";
 
-import { useFieldArray, useForm, useWatch } from "react-hook-form";
+import {
+  Control,
+  FieldArrayWithId,
+  FieldErrors,
+  useFieldArray,
+  UseFieldArrayAppend,
+  UseFieldArrayRemove,
+  useForm,
+  UseFormRegister,
+  UseFormReturn,
+  useWatch,
+} from "react-hook-form";
 import {
   Form,
   FormControl,
@@ -54,7 +65,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
-import { EntradaSchema } from "@/lib/schemas";
+import { EntradaSchema } from "@/app/(with-layout)/create-entrada/schema";
 import { valibotResolver } from "@hookform/resolvers/valibot";
 import { createEntrada } from "@/app/(with-layout)/create-entrada/actions";
 import { Fragment, useRef, useState } from "react";
@@ -71,9 +82,16 @@ import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import { cn } from "@/lib/utils";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { Banco } from "@/app/(with-layout)/tarjetas/types";
+import { Banco, TipoCuenta } from "@/app/(with-layout)/tarjetas/types";
 import { Alert, AlertTitle, AlertDescription } from "../ui/alert";
 import { METODOS_PAGO } from "@/app/(with-layout)/(almacen-cafeteria)/entradas-cafeteria/types";
+import {
+  ProductoInfoCreateEntrada,
+  CuentasCreateEntrada,
+  ProveedorCreateEntrada,
+  DataInResponseAddEntrada,
+} from "@/app/(with-layout)/create-entrada/types";
+import { InferInput } from "valibot";
 
 function NestedArray({
   nestedIndex,
@@ -85,6 +103,19 @@ function NestedArray({
   register,
   control,
   errors,
+}: {
+  nestedIndex: number;
+  nestedIndexRow: FieldArrayWithId<
+    InferInput<typeof EntradaSchema>,
+    `productos.${number}.variantes`
+  >[];
+  productosIndex: number;
+  appendVariant: UseFieldArrayAppend<InferInput<typeof EntradaSchema>>;
+  removeVariant: UseFieldArrayRemove;
+  removeProducto: UseFieldArrayRemove;
+  register: UseFormRegister<InferInput<typeof EntradaSchema>>;
+  control: Control<InferInput<typeof EntradaSchema>>;
+  errors: FieldErrors<InferInput<typeof EntradaSchema>>;
 }) {
   const { fields, append, remove } = useFieldArray({
     control,
@@ -224,7 +255,15 @@ function NestedArray({
   );
 }
 
-function VariantesFieldArray({ productosIndex, form, removeProducto }) {
+function VariantesFieldArray({
+  productosIndex,
+  form,
+  removeProducto,
+}: {
+  productosIndex: number;
+  form: UseFormReturn<InferInput<typeof EntradaSchema>>;
+  removeProducto: UseFieldArrayRemove;
+}) {
   const {
     fields: fieldsVariant,
     append: appendVariant,
@@ -271,23 +310,34 @@ function VariantesFieldArray({ productosIndex, form, removeProducto }) {
   );
 }
 
-export default function FormEntradas({ productos, cuentas, proveedores }) {
+export default function FormEntradas({
+  productos,
+  cuentas,
+  proveedores,
+}: {
+  productos: ProductoInfoCreateEntrada[];
+  cuentas: CuentasCreateEntrada[];
+  proveedores: ProveedorCreateEntrada[];
+}) {
   const router = useRouter();
   const [openDialog, setOpenDialog] = useState(false);
-  const [dataModal, setData] = useState(null);
+  const [dataModal, setData] = useState<DataInResponseAddEntrada[] | null>(
+    null
+  );
   const [loading, setLoading] = useState(false);
   const cardRef = useRef(null);
+  const [openPopovers, setOpenPopovers] = useState<Record<number, boolean>>({});
 
-  const form = useForm({
+  const form = useForm<InferInput<typeof EntradaSchema>>({
     resolver: valibotResolver(EntradaSchema),
     defaultValues: {
       proveedor: "",
       comprador: "",
-      metodoPago: "",
+      metodoPago: undefined,
       productos: [
         { producto: "", isZapato: false, cantidad: 0, variantes: undefined },
       ],
-      /* cuentas: [{ cuenta: "", cantidad: undefined }], */
+      cuentas: [{ cuenta: "", cantidad: undefined, tipo: "" }],
     },
   });
 
@@ -300,19 +350,19 @@ export default function FormEntradas({ productos, cuentas, proveedores }) {
     name: "productos",
   });
 
-  /*  const {
+  const {
     fields: fieldsCuentas,
     append: appendCuenta,
     remove: removeCuenta,
   } = useFieldArray({
     control: form.control,
     name: "cuentas",
-  }); */
+  });
 
   const productosWatch = useWatch({ control: form.control, name: "productos" });
   const metodoWatch = useWatch({ control: form.control, name: "metodoPago" });
 
-  const onSubmit = async (dataForm) => {
+  const onSubmit = async (dataForm: InferInput<typeof EntradaSchema>) => {
     setLoading(true);
     const { data, error } = await createEntrada(dataForm);
     setLoading(false);
@@ -327,9 +377,30 @@ export default function FormEntradas({ productos, cuentas, proveedores }) {
     }
   };
 
+  const handlePopoverOpenChange = (index: number, open: boolean) => {
+    setOpenPopovers((prev) => ({ ...prev, [index]: open }));
+  };
+
+  const getColors = (selectedValue: string): string | undefined => {
+    const { tipo, banco } =
+      cuentas?.find((cuenta) => cuenta?.id.toString() === selectedValue) || {};
+
+    if (tipo === TipoCuenta.EFECTIVO) {
+      return "from-blue-500 to-blue-700";
+    }
+    if (tipo === TipoCuenta.BANCARIA) {
+      switch (banco) {
+        case Banco.BANDEC:
+          return "from-[#6c0207] to-[#bc1f26]";
+        case Banco.BPA:
+          return "from-[#1d6156] to-[#1d6156]";
+      }
+    }
+  };
+
   return (
     <>
-      <AlertDialog open={openDialog} setOpen={setOpenDialog}>
+      <AlertDialog open={openDialog} onOpenChange={setOpenDialog}>
         <AlertDialogContent>
           <AlertDialogHeader>
             <AlertDialogTitle>Entrada creada con éxito!</AlertDialogTitle>
@@ -387,131 +458,194 @@ export default function FormEntradas({ productos, cuentas, proveedores }) {
       </AlertDialog>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-          <Card>
-            <CardHeader>
-              <CardTitle>Detalles de la entrada</CardTitle>
-              <CardDescription>
-                Todos los campos son requeridos.
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="grid md:grid-cols-2 gap-4">
-              <FormField
-                control={form.control}
-                name="proveedor"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Proveedor</FormLabel>
-                    <Select
-                      onValueChange={field.onChange}
-                      defaultValue={field.value}
-                    >
+          <div className="grid md:grid-cols-2 gap-4">
+            <Card>
+              <CardHeader className="p-4 md:p-6">
+                <CardTitle>Detalles de la entrada</CardTitle>
+                <CardDescription>
+                  Todos los campos son requeridos.
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-2 px-4 pb-4 md:px-6 md:pb-6">
+                <FormField
+                  control={form.control}
+                  name="proveedor"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Proveedor</FormLabel>
+                      <Select
+                        onValueChange={field.onChange}
+                        defaultValue={field.value}
+                      >
+                        <FormControl>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Selecciona un proveedor" />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          {proveedores?.map((proveedor) => (
+                            <SelectItem
+                              key={proveedor.id}
+                              value={proveedor.id.toString()}
+                            >
+                              {proveedor.nombre}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="comprador"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Comprador</FormLabel>
                       <FormControl>
-                        <SelectTrigger>
-                          <SelectValue placeholder="Selecciona un proveedor" />
-                        </SelectTrigger>
+                        <Input {...field} />
                       </FormControl>
-                      <SelectContent>
-                        {proveedores?.map((proveedor) => (
-                          <SelectItem
-                            key={proveedor.id}
-                            value={proveedor.id.toString()}
-                          >
-                            {proveedor.nombre}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="comprador"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Comprador</FormLabel>
-                    <FormControl>
-                      <Input {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="metodoPago"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Método de pago</FormLabel>
-                    <Select
-                      onValueChange={(currentValue) => {
-                        if (currentValue === METODOS_PAGO.MIXTO) {
-                          form.setValue("efectivo", 0),
-                            form.setValue("transferencia", 0);
-                        } else {
-                          form.setValue("efectivo", undefined),
-                            form.setValue("transferencia", undefined);
-                        }
-
-                        if (currentValue === METODOS_PAGO.EFECTIVO) {
-                          form.setValue("cuenta", undefined);
-                        } else {
-                          if (form.getValues("cuenta") === undefined) {
-                            form.setValue("cuenta", "");
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="metodoPago"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Método de pago</FormLabel>
+                      <Select
+                        onValueChange={(currentValue) => {
+                          if (currentValue === METODOS_PAGO.EFECTIVO) {
+                            const cuentasActuales = form.getValues("cuentas");
+                            const cuentasFiltradas = cuentasActuales.map(
+                              (c) => {
+                                const cuenta = cuentas.find(
+                                  (cuentaDisponible) =>
+                                    cuentaDisponible.id.toString() === c.cuenta
+                                );
+                                return cuenta?.banco
+                                  ? {
+                                      cuenta: "",
+                                      cantidad: undefined,
+                                      tipo: "",
+                                    }
+                                  : c;
+                              }
+                            );
+                            form.setValue("cuentas", cuentasFiltradas);
                           }
-                        }
 
-                        field.onChange(currentValue);
-                      }}
-                      defaultValue={field.value}
-                    >
-                      <FormControl>
-                        <SelectTrigger>
-                          <SelectValue placeholder="Selecciona un método de pago" />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent>
-                        <SelectItem value="EFECTIVO">Efectivo</SelectItem>
-                        <SelectItem value="TRANSFERENCIA">
-                          Transferencia
-                        </SelectItem>
-                        <SelectItem value={METODOS_PAGO.MIXTO}>
-                          Mixto
-                        </SelectItem>
-                      </SelectContent>
-                    </Select>
-                    <FormMessage />
-                  </FormItem>
+                          if (currentValue === METODOS_PAGO.TRANSFERENCIA) {
+                            const cuentasActuales = form.getValues("cuentas");
+                            const cuentasFiltradas = cuentasActuales.map(
+                              (c) => {
+                                const cuenta = cuentas.find(
+                                  (cuentaDisponible) =>
+                                    cuentaDisponible.id.toString() === c.cuenta
+                                );
+                                return cuenta?.banco
+                                  ? c
+                                  : {
+                                      cuenta: "",
+                                      cantidad: undefined,
+                                      tipo: "",
+                                    };
+                              }
+                            );
+                            form.setValue("cuentas", cuentasFiltradas);
+                          }
+
+                          field.onChange(currentValue);
+                        }}
+                        defaultValue={field.value}
+                      >
+                        <FormControl>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Selecciona un método de pago" />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          <SelectItem value="EFECTIVO">Efectivo</SelectItem>
+                          <SelectItem value="TRANSFERENCIA">
+                            Transferencia
+                          </SelectItem>
+                          <SelectItem value={METODOS_PAGO.MIXTO}>
+                            Mixto
+                          </SelectItem>
+                        </SelectContent>
+                      </Select>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </CardContent>
+            </Card>
+
+            <Card className="h-fit">
+              <CardHeader className="p-4 md:p-6">
+                <CardTitle>Detalle del pago</CardTitle>
+                <CardDescription>
+                  Seleccione las cuentas y el monto a pagar.
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="grid grid-cols-2 gap-2 px-4 pb-4 md:px-6 md:pb-6">
+                {form.formState.errors?.cuentas?.root?.message && (
+                  <Alert variant="destructive" className="col-span-2">
+                    <AlertDescription>
+                      {form.formState.errors?.cuentas?.root?.message}
+                    </AlertDescription>
+                  </Alert>
                 )}
-              />
-
-              {/*  <div className="grid grid-cols-2 col-span-2 gap-4">
-                {fieldsCuentas.map((cuenta, index) => (
+                {fieldsCuentas.map((cuenta, index, row) => (
                   <Fragment key={cuenta.id}>
                     <FormField
                       control={form.control}
                       name={`cuentas.${index}.cuenta`}
                       render={({ field }) => (
-                        <FormItem className="flex flex-col">
-                          <Popover>
+                        <FormItem
+                          className={cn(
+                            "flex flex-col",
+                            row.length < 2 && "col-span-2"
+                          )}
+                        >
+                          <Popover
+                            open={openPopovers[index] ?? false}
+                            onOpenChange={(open) =>
+                              handlePopoverOpenChange(index, open)
+                            }
+                          >
                             <PopoverTrigger asChild>
                               <FormControl>
                                 <Button
                                   variant="outline"
                                   role="combobox"
                                   className={cn(
-                                    "justify-between",
+                                    "justify-between contain-strict",
                                     !field.value && "text-muted-foreground"
                                   )}
                                 >
-                                  {field.value
-                                    ? productos?.find(
-                                        (producto) =>
-                                          producto?.id.toString() ===
-                                          field.value
-                                      )?.descripcion
-                                    : "Selecciona un producto"}
+                                  <div className="flex">
+                                    {field.value && (
+                                      <div
+                                        className={cn(
+                                          "hidden md:block w-6 aspect-square rounded-full bg-gradient-to-br mr-2 shrink-0",
+                                          getColors(field.value)
+                                        )}
+                                      />
+                                    )}
+
+                                    {field.value
+                                      ? cuentas?.find(
+                                          (cuenta) =>
+                                            cuenta?.id.toString() ===
+                                            field.value
+                                        )?.nombre ?? "Cuenta no encontrada"
+                                      : "Selecciona una cuenta"}
+                                  </div>
+
                                   <ChevronDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                                 </Button>
                               </FormControl>
@@ -524,72 +658,76 @@ export default function FormEntradas({ productos, cuentas, proveedores }) {
                                     Ningún resultado encontrado.
                                   </CommandEmpty>
                                   <CommandGroup heading="Sugerencias">
-                                    {cuentas?.map((cuenta) => (
-                                      <CommandItem
-                                        key={cuenta.id}
-                                        value={cuenta.id.toString()}
-                                        keywords={[cuenta.nombre]}
-                                        onSelect={(currentValue) => {
-                                          productos?.find(
-                                            (e) =>
-                                              e.id.toString() === currentValue
-                                          )?.categoria !== "Zapatos"
-                                            ? (() => {
-                                                form.setValue(
-                                                  `productos.${index}.isZapato`,
-                                                  false
-                                                );
-                                                form.setValue(
-                                                  `productos.${index}.variantes`,
-                                                  undefined
-                                                );
-                                                form.setValue(
-                                                  `productos.${index}.cantidad`,
-                                                  0
-                                                );
-                                              })()
-                                            : (() => {
-                                                form.setValue(
-                                                  `productos.${index}.isZapato`,
-                                                  true
-                                                );
-                                                form.setValue(
-                                                  `productos.${index}.cantidad`,
-                                                  undefined
-                                                );
-                                                form.setValue(
-                                                  `productos.${index}.variantes`,
-                                                  [
-                                                    {
-                                                      color: "",
-                                                      numeros: [
-                                                        {
-                                                          numero: 0,
-                                                          cantidad: 0,
-                                                        },
-                                                      ],
-                                                    },
-                                                  ]
-                                                );
-                                              })();
-                                          field.onChange(
-                                            currentValue === field.value
-                                              ? ""
-                                              : currentValue
+                                    {cuentas
+                                      ?.filter((c) => {
+                                        const cuentasSeleccionadas = form
+                                          .getValues("cuentas")
+                                          .map(
+                                            (cuentaObj, i) =>
+                                              i !== index && cuentaObj.cuenta
+                                          )
+                                          .filter(Boolean);
+
+                                        const yaSeleccionada =
+                                          cuentasSeleccionadas.includes(
+                                            c.id.toString()
                                           );
-                                        }}
-                                      >
-                                        {cuenta.nombre}
-                                        <CheckIcon
-                                          className={cn(
-                                            "ml-auto h-4 w-4",
-                                            cuenta.id.toString() === field.value
-                                              ? "opacity-100"
-                                              : "opacity-0"
-                                          )}
-                                        />
-                                      </CommandItem>
-                                    ))}
+                                        if (yaSeleccionada) return false;
+
+                                        if (
+                                          !metodoWatch ||
+                                          metodoWatch === METODOS_PAGO.MIXTO
+                                        ) {
+                                          return true;
+                                        }
+                                        if (
+                                          metodoWatch === METODOS_PAGO.EFECTIVO
+                                        ) {
+                                          return !c.banco;
+                                        }
+                                        return !!c.banco;
+                                      })
+                                      .map((cuenta) => (
+                                        <CommandItem
+                                          key={cuenta.id}
+                                          value={cuenta.id.toString()}
+                                          keywords={[cuenta.nombre]}
+                                          onSelect={(currentValue) => {
+                                            field.onChange(
+                                              currentValue === field.value
+                                                ? ""
+                                                : currentValue
+                                            );
+                                            form.setValue(
+                                              `cuentas.${index}.tipo`,
+                                              cuenta.tipo
+                                            );
+                                            handlePopoverOpenChange(
+                                              index,
+                                              false
+                                            );
+                                          }}
+                                        >
+                                          <div className="flex gap-2 items-center ">
+                                            <div
+                                              className={cn(
+                                                "w-6 aspect-square rounded-full bg-gradient-to-br",
+                                                getColors(cuenta.id.toString())
+                                              )}
+                                            ></div>
+                                            <p>{cuenta.nombre}</p>
+                                          </div>
+                                          <CheckIcon
+                                            className={cn(
+                                              "ml-auto h-4 w-4",
+                                              cuenta.id.toString() ===
+                                                field.value
+                                                ? "opacity-100"
+                                                : "opacity-0"
+                                            )}
+                                          />
+                                        </CommandItem>
+                                      ))}
                                   </CommandGroup>
                                 </CommandList>
                               </Command>
@@ -600,129 +738,89 @@ export default function FormEntradas({ productos, cuentas, proveedores }) {
                       )}
                     />
 
-                    <FormField
-                      control={form.control}
-                      name={`cuentas.${index}.cantidad`}
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Cantidad</FormLabel>
-                          <FormControl>
-                            <Input
-                              {...field}
-                              type="number"
-                              onChange={(e) => {
-                                const value = parseFloat(e.target.value);
-                                field.onChange(isNaN(value) ? 0 : value);
-                              }}
-                            />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
+                    {row.length > 1 && (
+                      <div className="flex md:gap-1">
+                        <div className="w-full">
+                          <FormField
+                            control={form.control}
+                            name={`cuentas.${index}.cantidad`}
+                            render={({ field }) => (
+                              <FormItem>
+                                <FormControl>
+                                  <Input
+                                    {...field}
+                                    type="number"
+                                    step={0.01}
+                                    onChange={(e) => {
+                                      const value = parseFloat(e.target.value);
+                                      field.onChange(isNaN(value) ? 0 : value);
+                                    }}
+                                  />
+                                </FormControl>
+                                <FormMessage />
+                              </FormItem>
+                            )}
+                          />
+                        </div>
+
+                        {index > 0 && (
+                          <Button
+                            onClick={() => {
+                              form.getValues("cuentas").length === 2 &&
+                                form.setValue("cuentas", [
+                                  {
+                                    cuenta:
+                                      form.getValues("cuentas")?.[0]?.cuenta,
+                                    cantidad: undefined,
+                                    tipo: form.getValues("cuentas")?.[0]?.tipo,
+                                  },
+                                ]),
+                                removeCuenta(index);
+                            }}
+                            size="icon"
+                            variant="ghost"
+                            className="gap-1"
+                          >
+                            <X className="h-3.5 w-3.5" />
+                          </Button>
+                        )}
+                      </div>
+                    )}
                   </Fragment>
                 ))}
-              </div> */}
 
-              {metodoWatch !== METODOS_PAGO.EFECTIVO && (
-                <FormField
-                  control={form.control}
-                  name="cuenta"
-                  render={({ field }) => (
-                    <FormItem className="flex flex-col mt-2">
-                      <FormLabel className="flex justify-start">
-                        Cuenta a transferir
-                      </FormLabel>
-                      <Select
-                        onValueChange={field.onChange}
-                        defaultValue={field.value}
-                      >
-                        <FormControl>
-                          <SelectTrigger
-                            className={cn(
-                              form.formState.errors?.tarjeta &&
-                                "border-destructive"
-                            )}
-                          >
-                            <SelectValue placeholder="Selecciona una cuenta" />
-                          </SelectTrigger>
-                        </FormControl>
-                        <SelectContent>
-                          {cuentas?.map((cuenta) => (
-                            <SelectItem
-                              key={cuenta.id}
-                              value={cuenta.id.toString()}
-                            >
-                              <div className="flex gap-2 items-center ">
-                                <div
-                                  className={cn(
-                                    "w-6 aspect-square rounded-full bg-gradient-to-br",
-                                    cuenta.banco === Banco.BANDEC &&
-                                      "from-[#6c0207] to-[#bc1f26]",
-                                    cuenta.banco === Banco.BPA &&
-                                      "from-[#1d6156] to-[#1d6156]"
-                                  )}
-                                ></div>
-                                <p>{cuenta.nombre}</p>
-                              </div>
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              )}
-              {metodoWatch === METODOS_PAGO.MIXTO && (
-                <>
-                  <FormField
-                    control={form.control}
-                    name="efectivo"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Efectivo</FormLabel>
-                        <FormControl>
-                          <Input
-                            {...field}
-                            type="number"
-                            onChange={(e) => {
-                              const value = parseFloat(e.target.value);
-                              field.onChange(isNaN(value) ? 0 : value);
-                            }}
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  <FormField
-                    control={form.control}
-                    name="transferencia"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Transferencia</FormLabel>
-                        <FormControl>
-                          <Input
-                            {...field}
-                            type="number"
-                            onChange={(e) => {
-                              const value = parseFloat(e.target.value);
-                              field.onChange(isNaN(value) ? 0 : value);
-                            }}
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                </>
-              )}
-            </CardContent>
-          </Card>
+                <div className="col-span-2 text-center">
+                  <Button
+                    onClick={() => {
+                      form.getValues("cuentas").length === 1 &&
+                        form.setValue("cuentas", [
+                          {
+                            cuenta: form.getValues("cuentas")?.[0]?.cuenta,
+                            cantidad: 0,
+                            tipo: form.getValues("cuentas")?.[0]?.tipo,
+                          },
+                        ]),
+                        appendCuenta({
+                          cuenta: "",
+                          cantidad: 0,
+                          tipo: "",
+                        });
+                    }}
+                    size="sm"
+                    variant="ghost"
+                    className="gap-1"
+                  >
+                    <PlusCircle className="h-3.5 w-3.5" />
+                    <span className="hidden md:inline">Añadir </span>
+                    <span>cuenta</span>
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
 
           <Card ref={cardRef}>
-            <CardHeader>
+            <CardHeader className="p-4 md:p-6">
               <CardTitle>Mercancía</CardTitle>
               <CardDescription>
                 Detalla la mercancía entrante por color, número y cantidad.
@@ -736,11 +834,11 @@ export default function FormEntradas({ productos, cuentas, proveedores }) {
                 </Alert>
               )}
             </CardHeader>
-            <CardContent>
+            <CardContent className="px-4 pb-4 md:px-6 md:pb-6">
               <div>
                 <div
                   className={cn(
-                    "grid [&>span]:pl-2 [&>span]:text-muted-foreground border-b border-muted",
+                    "grid [&>span]:pl-2 mb-2 [&>span]:text-muted-foreground border-b border-muted",
                     productosWatch?.some((p) => p.isZapato)
                       ? "grid-cols-4"
                       : "grid-cols-2"
@@ -755,10 +853,10 @@ export default function FormEntradas({ productos, cuentas, proveedores }) {
                   )}
                   <span>Cantidad</span>
                 </div>
-                {fieldsProducto.map((producto, index) => (
+                {fieldsProducto.map((producto, index, row) => (
                   <div
                     className={cn(
-                      "grid [&>*]:p-2",
+                      "grid gap-1 md:gap-2",
                       productosWatch?.some((p) => p.isZapato)
                         ? "grid-cols-4"
                         : "grid-cols-2"
@@ -777,7 +875,7 @@ export default function FormEntradas({ productos, cuentas, proveedores }) {
                                   variant="outline"
                                   role="combobox"
                                   className={cn(
-                                    "justify-between",
+                                    "justify-between contain-strict",
                                     !field.value && "text-muted-foreground"
                                   )}
                                 >
@@ -911,7 +1009,7 @@ export default function FormEntradas({ productos, cuentas, proveedores }) {
                       </>
                     )}
 
-                    {!productosWatch?.[index]?.isZapato && (
+                    {!productosWatch?.[index]?.isZapato && row.length > 1 && (
                       <div className="text-center">
                         <Button
                           onClick={() => removeProducto(index)}

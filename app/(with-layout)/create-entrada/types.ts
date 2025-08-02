@@ -3,14 +3,19 @@ interface Numero {
   ids: string;
 }
 
-interface Data {
+export interface Variantes {
   color: string;
   numeros: Numero[];
 }
 
+export interface DataInResponseAddEntrada {
+  zapato: string;
+  variantes: Variantes[];
+}
+
 export interface ResponseCreateEntrada {
   error: string | null;
-  data: Data | null;
+  data: DataInResponseAddEntrada[] | null;
 }
 
 export interface ProductoInfoCreateEntrada {
@@ -19,13 +24,14 @@ export interface ProductoInfoCreateEntrada {
   categoria: string | null;
 }
 
-interface CuentasCreateEntrada {
+export interface CuentasCreateEntrada {
   id: number;
   nombre: string;
+  tipo: string;
   banco: string | null;
 }
 
-interface ProveedorCreateEntrada {
+export interface ProveedorCreateEntrada {
   id: number;
   nombre: string;
 }

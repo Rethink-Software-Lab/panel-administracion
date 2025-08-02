@@ -1,99 +1,63 @@
-'use server';
+"use server";
 
-import { onlyNombreSchema } from '@/lib/schemas';
-import { revalidatePath } from 'next/cache';
-import { cookies } from 'next/headers';
-import { InferInput } from 'valibot';
+import { db } from "@/db/initial";
+import { inventarioCategorias } from "@/db/schema";
+import { onlyNombreSchema } from "@/lib/schemas";
+import { eq } from "drizzle-orm";
+import { revalidatePath } from "next/cache";
+import { InferInput } from "valibot";
 
-export async function addCategoria(data: InferInput<typeof onlyNombreSchema>) {
-  const token = cookies().get('session')?.value || null;
-  const res = await fetch(process.env.BACKEND_URL_V2 + '/categorias/', {
-    method: 'POST',
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-    body: JSON.stringify({ ...data }),
-  });
-  if (!res.ok) {
-    if (res.status === 401)
-      return {
-        data: null,
-        error: 'No autorizado',
-      };
-
-    return {
-      data: null,
-      error: 'Algo salió mal.',
-    };
+export async function addCategoria(
+  data: InferInput<typeof onlyNombreSchema>
+): Promise<{ data: string | null; error: string | null }> {
+  try {
+    await db.insert(inventarioCategorias).values(data);
+  } catch (e) {
+    console.error(e);
+    return { data: null, error: "Error al crear la categoria" };
   }
-  revalidatePath('/categorias');
-  return {
-    error: null,
-    data: 'Categoria creada con éxito.',
-  };
+  revalidatePath("/categorias");
+  return { data: "Categoria creada exitosamente", error: null };
 }
 
 export async function updateCategoria(
   data: InferInput<typeof onlyNombreSchema>,
   id: number
-) {
-  const token = cookies().get('session')?.value || null;
-  const res = await fetch(
-    process.env.BACKEND_URL_V2 + '/categorias/' + id + '/',
-    {
-      method: 'PUT',
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify({ ...data }),
-    }
-  );
-  if (!res.ok) {
-    if (res.status === 401)
-      return {
-        data: null,
-        error: 'No autorizado',
-      };
-
-    return {
-      data: null,
-      error: 'Algo salió mal.',
-    };
+): Promise<{ data: string | null; error: string | null }> {
+  try {
+    await db
+      .update(inventarioCategorias)
+      .set(data)
+      .where(eq(inventarioCategorias.id, id));
+  } catch (e) {
+    console.error(e);
+    return { data: null, error: "Error al actualizar la categoria" };
   }
-  revalidatePath('/categorias');
+
+  revalidatePath("/categorias");
   return {
     error: null,
-    data: 'Categoría editada con éxito.',
+    data: "Categoría editada con éxito.",
   };
 }
 
-export async function deleteCategoria({ id }: { id: number }) {
-  const token = cookies().get('session')?.value || null;
-  const res = await fetch(process.env.BACKEND_URL_V2 + '/categorias/' + id, {
-    method: 'DELETE',
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  });
-  if (!res.ok) {
-    if (res.status === 401)
-      return {
-        data: null,
-        error: 'No autorizado',
-      };
-    if (res.status === 404)
-      return {
-        data: null,
-        error: 'Categoría no encontrada',
-      };
-    return {
-      data: null,
-      error: 'Algo salió mal.',
-    };
+export async function deleteCategoria({
+  id,
+}: {
+  id: number;
+}): Promise<{ data: string | null; error: string | null }> {
+  try {
+    await db
+      .delete(inventarioCategorias)
+      .where(eq(inventarioCategorias.id, id));
+  } catch (e) {
+    console.error(e);
+    return { data: null, error: "Error al eliminar la categoria" };
   }
-  revalidatePath('/categorias');
+
+  revalidatePath("/categorias");
   return {
-    data: 'Categoría eliminada con éxito.',
+    data: "Categoría eliminada con éxito.",
     error: null,
   };
 }

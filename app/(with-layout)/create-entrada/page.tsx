@@ -1,6 +1,6 @@
-import FormEntradas from '@/components/functionals/FormEntradas';
+import FormEntradas from "@/components/functionals/FormEntradas";
 
-import { getProductos } from './services';
+import { getProductos } from "./services";
 
 export default async function CreateEntrada() {
   const { data, error } = await getProductos();
@@ -15,9 +15,9 @@ export default async function CreateEntrada() {
         </h1>
         <div className="flex flex-col gap-6">
           <FormEntradas
-            productos={data?.productos}
-            cuentas={data?.cuentas}
-            proveedores={data?.proveedores}
+            productos={data?.productos || []}
+            cuentas={data?.cuentas || []}
+            proveedores={data?.proveedores || []}
           />
         </div>
       </div>
