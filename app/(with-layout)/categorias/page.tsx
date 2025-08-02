@@ -1,12 +1,12 @@
-import { CloudOff, PlusCircle } from 'lucide-react';
-import { Button } from '@/components/ui/button';
+import { CloudOff, PlusCircle } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
-import { getCategorias } from '@/lib/services';
+import { getCategorias } from "@/app/(with-layout)/categorias/services";
 
-import { columns } from './columns';
-import DataTable from '@/components/functionals/data-tables/data-table-general';
-import ModalCategoria from '@/components/functionals/ModalCategoria';
-import { Categoria } from './types';
+import { columns } from "./columns";
+import DataTable from "@/components/functionals/data-tables/data-table-general";
+import ModalCategoria from "@/components/functionals/ModalCategoria";
+import { Categoria } from "./types";
 
 export default async function Proyectos() {
   const { data } = await getCategorias();

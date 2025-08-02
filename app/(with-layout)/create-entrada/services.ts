@@ -29,6 +29,7 @@ export async function getProductos(): Promise<{
       .select({
         id: inventarioCuentas.id,
         nombre: inventarioCuentas.nombre,
+        tipo: inventarioCuentas.tipo,
         banco: inventarioCuentas.banco,
       })
       .from(inventarioCuentas)
