@@ -131,6 +131,7 @@ export const EntradaSchema = pipe(
     partialCheck(
       ["metodoPago", "cuentas"] as any[],
       (input) => {
+        if (input.metodoPago !== METODOS_PAGO.MIXTO) return true;
         if (input.metodoPago === METODOS_PAGO.MIXTO && input.cuentas.length < 2)
           return false;
 
