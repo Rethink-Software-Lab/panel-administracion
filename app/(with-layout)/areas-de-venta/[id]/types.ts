@@ -1,4 +1,4 @@
-import { Categoria } from '../../categorias/types';
+import { Categoria } from "../../categorias/types";
 
 export interface Zapatos {
   id: number;
@@ -38,7 +38,7 @@ export interface Ventas {
 export interface Tarjetas {
   id: number;
   nombre: string;
-  banco: string;
+  banco: string | null;
   disponible: boolean;
 }
 

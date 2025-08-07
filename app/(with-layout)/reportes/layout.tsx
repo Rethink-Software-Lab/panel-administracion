@@ -1,7 +1,7 @@
-import ButtonPrint from '@/components/functionals/ButtonPrint';
-import FormReportes from '@/components/functionals/FormReportes';
-import { getReporteFormData } from './services';
-import { getSession } from '@/lib/getSession';
+import ButtonPrint from "@/components/functionals/ButtonPrint";
+import FormReportes from "@/components/functionals/FormReportes";
+import { getReporteFormData } from "./services";
+import { getSession } from "@/lib/getSession";
 
 export default async function LayoutReportes({
   children,
@@ -17,7 +17,10 @@ export default async function LayoutReportes({
           Reportes
         </h1>
         <div className="flex items-center justify-between max-sm:block max-sm:space-y-2">
-          <FormReportes data={data} session={session} />
+          <FormReportes
+            data={data || { areas: [], categorias: [] }}
+            session={session}
+          />
           <ButtonPrint disabled={!!error} className="max-sm:w-full" />
         </div>
       </div>

@@ -1,12 +1,12 @@
-import { CloudOff, PlusCircle } from 'lucide-react';
+import { CloudOff, PlusCircle } from "lucide-react";
 
-import { Button } from '@/components/ui/button';
-import { getAreasVentas } from '@/lib/services';
-import ModalAreasVenta from '@/components/functionals/ModalAreasVenta';
+import { Button } from "@/components/ui/button";
+import ModalAreasVenta from "@/components/functionals/ModalAreasVenta";
 
-import DataTable from '@/components/functionals/data-tables/data-table-general';
-import { columns } from './columns';
-import { AreaVenta } from './types';
+import DataTable from "@/components/functionals/data-tables/data-table-general";
+import { columns } from "./columns";
+import { AreaVenta } from "./types";
+import { getAreasVentas } from "./services";
 
 export default async function AreasVenta() {
   const { data } = await getAreasVentas();

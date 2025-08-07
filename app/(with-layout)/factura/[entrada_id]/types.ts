@@ -1,4 +1,4 @@
-import { Proveedor } from '../../proveedores/types';
+import { Proveedor } from "../../proveedores/types";
 
 export interface ProductoFactura {
   descripcion: string;
@@ -8,11 +8,7 @@ export interface ProductoFactura {
 }
 
 export interface Factura {
-  id: number;
   createdAt: string;
-  updatedAt: string;
-  usuarioId: number;
   proveedor: Proveedor;
-  comprador: string;
   productos: ProductoFactura[];
 }

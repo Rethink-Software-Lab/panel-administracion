@@ -1,13 +1,13 @@
-import '@/styles/globals.css';
+import "@/styles/globals.css";
 
-import SideBar from '@/components/functionals/SideBar';
-import TopBar from '@/components/functionals/TopBar';
+import SideBar from "@/components/functionals/SideBar";
+import TopBar from "@/components/functionals/TopBar";
 
-import { getSession } from '@/lib/getSession';
-import { getAreasVentas } from '@/lib/services';
-import { Button } from '@/components/ui/button';
-import { BrainCircuit, Facebook } from 'lucide-react';
-import Link from 'next/link';
+import { getSession } from "@/lib/getSession";
+import { Button } from "@/components/ui/button";
+import { BrainCircuit, Facebook } from "lucide-react";
+import Link from "next/link";
+import { getAreasVentas } from "./areas-de-venta/services";
 
 export default async function RootLayout({
   children,
@@ -20,9 +20,9 @@ export default async function RootLayout({
   return (
     <>
       <div className="flex min-h-screen max-w-full box-content w-full">
-        <SideBar areasVenta={data} session={session} />
+        <SideBar areasVenta={data || []} session={session} />
         <div className="flex flex-col w-full">
-          <TopBar session={session} areasVenta={data} />
+          <TopBar session={session} areasVenta={data || []} />
           {children}
         </div>
       </div>
