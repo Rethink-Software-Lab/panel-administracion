@@ -1,7 +1,7 @@
-'use client';
+"use client";
 
-import { Eye } from 'lucide-react';
-import { Button } from '../ui/button';
+import { Eye } from "lucide-react";
+import { Button } from "../ui/button";
 import {
   Sheet,
   SheetContent,
@@ -9,8 +9,8 @@ import {
   SheetHeader,
   SheetTitle,
   SheetTrigger,
-} from '../ui/sheet';
-import { useState } from 'react';
+} from "../ui/sheet";
+import { useState } from "react";
 import {
   Table,
   TableBody,
@@ -18,9 +18,9 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from '../ui/table';
-import { DateTime } from 'luxon';
-import { AjusteInventario } from '@/app/(with-layout)/ajuste-inventario/types';
+} from "../ui/table";
+import { DateTime } from "luxon";
+import { AjusteInventario } from "@/app/(with-layout)/ajuste-inventario/types";
 
 export default function SheetInfoAjusteInventario({
   data,
@@ -42,11 +42,11 @@ export default function SheetInfoAjusteInventario({
           </SheetTitle>
           <SheetDescription className="pb-6 flex items-center gap-2 justify-between">
             <span>
-              {DateTime.fromISO(data.created_at).toLocaleString(
+              {DateTime.fromSQL(data.created_at).toLocaleString(
                 DateTime.DATE_FULL
               )}
             </span>
-            <span>creada por : {data?.usuario?.username}</span>
+            <span>creada por : {data?.usuario}</span>
           </SheetDescription>
         </SheetHeader>
         <Table>
