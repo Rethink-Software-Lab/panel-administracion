@@ -46,6 +46,7 @@ import {
 } from "@/db/schema";
 import {
   aliasedTable,
+  and,
   count,
   desc,
   eq,
@@ -175,7 +176,10 @@ export async function getMovimientosProducto(
       .where(inArray(inventarioEntradaalmacen.id, entradasIds))
       .innerJoin(
         inventarioProducto,
-        eq(inventarioProducto.entradaId, inventarioEntradaalmacen.id)
+        and(
+          eq(inventarioProducto.entradaId, inventarioEntradaalmacen.id),
+          eq(inventarioProducto.infoId, infoId)
+        )
       )
       .leftJoin(
         inventarioProveedor,
