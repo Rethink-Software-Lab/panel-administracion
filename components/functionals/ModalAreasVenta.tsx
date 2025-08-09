@@ -1,7 +1,7 @@
-'use client';
+"use client";
 
-import { Input } from '@/components/ui/input';
-import { Button } from '@/components/ui/button';
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 import {
   DialogFooter,
   DialogClose,
@@ -11,7 +11,7 @@ import {
   DialogHeader,
   DialogTrigger,
   DialogDescription,
-} from '@/components/ui/dialog';
+} from "@/components/ui/dialog";
 
 import {
   Form,
@@ -20,56 +20,50 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from '@/components/ui/form';
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+} from "@/components/ui/form";
 
-import { useForm } from 'react-hook-form';
-import { valibotResolver } from '@hookform/resolvers/valibot';
-import { InferInput } from 'valibot';
-import { AreaVentaSchema } from '@/lib/schemas';
+import { useForm } from "react-hook-form";
+import { valibotResolver } from "@hookform/resolvers/valibot";
+import { InferInput } from "valibot";
 
 import {
   addArea,
   updateArea,
-} from '@/app/(with-layout)/areas-de-venta/actions';
-import { toast } from 'sonner';
-import { CircleX, LoaderCircle } from 'lucide-react';
-import { useState } from 'react';
+} from "@/app/(with-layout)/areas-de-venta/actions";
+import { toast } from "sonner";
+import { LoaderCircle } from "lucide-react";
+import { ReactNode, useState } from "react";
+import { Switch } from "../ui/switch";
+import { AreaVenta } from "@/app/(with-layout)/areas-de-venta/types";
+import { AreaVentaSchema } from "@/app/(with-layout)/areas-de-venta/schema";
 
 export default function ModalAreasVenta({
   data,
   trigger,
 }: {
-  data?: any;
-  trigger: any;
+  data?: AreaVenta;
+  trigger: ReactNode;
 }) {
   const [isOpen, setIsOpen] = useState(false);
-  const [errors, setErrors] = useState<Error[] | null>(null);
   const [isLoading, setIsLoading] = useState(false);
-  const form = useForm({
+  const form = useForm<InferInput<typeof AreaVentaSchema>>({
     resolver: valibotResolver(AreaVentaSchema),
-    defaultValues: { ...data },
+    defaultValues: { ...data, isMesa: data?.isMesa || false },
   });
 
   const onSubmit = async (dataForm: InferInput<typeof AreaVentaSchema>) => {
     setIsLoading(true);
-    if (!data) {
-      const { data, error } = await addArea(dataForm);
-      setIsLoading(false);
-      if (!error) {
-        form.reset();
-        setIsOpen(false);
-        toast.success(data);
-      }
-      setErrors(error);
+    const { data: dataRes, error } = !data
+      ? await addArea(dataForm)
+      : await updateArea(data?.id, dataForm);
+    setIsLoading(false);
+
+    if (!error) {
+      form.reset();
+      setIsOpen(false);
+      toast.success(dataRes);
     } else {
-      const { data: dataRes, error } = await updateArea(data?.id, dataForm);
-      setIsLoading(false);
-      if (!error) {
-        setIsOpen(false);
-        toast.success(dataRes);
-      }
-      setErrors(error);
+      toast.error(error);
     }
   };
 
@@ -78,21 +72,10 @@ export default function ModalAreasVenta({
       <DialogTrigger asChild>{trigger}</DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>{data ? 'Editar' : 'Agregar'} Área de Venta</DialogTitle>
+          <DialogTitle>{data ? "Editar" : "Agregar"} Área de Venta</DialogTitle>
         </DialogHeader>
         <DialogDescription>Todos los campos son requeridos</DialogDescription>
-        {errors &&
-          errors.map((error, index) => (
-            <Alert variant="destructive" key={index}>
-              <CircleX className="h-5 w-5" />
-              <AlertTitle>Error!</AlertTitle>
-              <AlertDescription>
-                {error.message.startsWith('UNIQUE constraint failed')
-                  ? 'Ya existe un usuario con ese nombre'
-                  : error.message}
-              </AlertDescription>
-            </Alert>
-          ))}
+
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
             <FormField
@@ -121,6 +104,22 @@ export default function ModalAreasVenta({
                 </FormItem>
               )}
             />
+            <FormField
+              control={form.control}
+              name="isMesa"
+              render={({ field }) => (
+                <FormItem className="flex flex-row items-center justify-between p-3">
+                  <FormLabel>Es mesa?</FormLabel>
+                  <FormControl>
+                    <Switch
+                      style={{ marginTop: 0 }}
+                      checked={field.value}
+                      onCheckedChange={field.onChange}
+                    />
+                  </FormControl>
+                </FormItem>
+              )}
+            />
             <div className="grid gap-4">
               <DialogFooter className="w-full flex gap-2 mt-2">
                 <DialogClose asChild>
@@ -132,10 +131,10 @@ export default function ModalAreasVenta({
                   {isLoading ? (
                     <>
                       <LoaderCircle className="mr-2 h-4 w-4 animate-spin" />
-                      {data ? 'Editando...' : 'Agregando...'}
+                      {data ? "Editando..." : "Agregando..."}
                     </>
                   ) : (
-                    <>{data ? 'Editar' : 'Agregar'}</>
+                    <>{data ? "Editar" : "Agregar"}</>
                   )}
                 </Button>
               </DialogFooter>

@@ -1,119 +1,67 @@
-'use server';
+"use server";
 
-import { revalidateTag } from 'next/cache';
-import { cookies } from 'next/headers';
+import { db } from "@/db/initial";
+import { inventarioAreaventa } from "@/db/schema";
+import { eq } from "drizzle-orm";
+import { revalidatePath } from "next/cache";
+import { InferInput } from "valibot";
+import { AreaVentaSchema } from "./schema";
 
-interface CreateArea {
-  nombre: string;
-  color: string;
-}
-
-export async function addArea(data: CreateArea) {
-  const token = cookies().get('session')?.value || null;
-  const res = await fetch(process.env.BACKEND_URL_V2 + '/areas-ventas/', {
-    method: 'POST',
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-    body: JSON.stringify({ ...data }),
-  });
-  if (!res.ok) {
-    if (res.status === 401)
-      return {
-        data: null,
-        error: 'No autorizado',
-      };
-
-    if (res.status === 400) {
-      const json = await res.json();
-      return {
-        data: null,
-        error: json.detail,
-      };
-    }
-
+export async function addArea(data: InferInput<typeof AreaVentaSchema>) {
+  try {
+    await db.insert(inventarioAreaventa).values(data);
+  } catch (e) {
+    console.error(e);
     return {
+      error: "Error al agregar la área de venta.",
       data: null,
-      error: 'Algo salió mal.',
     };
   }
-  revalidateTag('areas-ventas');
+
+  revalidatePath("/areas-de-venta");
   return {
     error: null,
-    data: 'Área de ventas creada correctamente.',
+    data: "Área de ventas creada con éxito",
   };
 }
 
-export async function updateArea(id: number, data: CreateArea) {
-  const token = cookies().get('session')?.value || null;
-  const res = await fetch(
-    process.env.BACKEND_URL_V2 + '/areas-ventas/' + id + '/',
-    {
-      method: 'PUT',
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify({ ...data }),
-    }
-  );
-  if (!res.ok) {
-    if (res.status === 401)
-      return {
-        data: null,
-        error: 'No autorizado',
-      };
-
-    if (res.status === 400) {
-      const json = await res.json();
-      return {
-        data: null,
-        error: json.detail,
-      };
-    }
-
+export async function updateArea(
+  id: number,
+  data: InferInput<typeof AreaVentaSchema>
+) {
+  try {
+    await db
+      .update(inventarioAreaventa)
+      .set(data)
+      .where(eq(inventarioAreaventa.id, id));
+  } catch (e) {
+    console.error(e);
     return {
       data: null,
-      error: 'Algo salió mal.',
+      error: "Error al editar la área de venta.",
     };
   }
-  revalidateTag('areas-ventas');
+
+  revalidatePath("/areas-de-venta");
   return {
     error: null,
-    data: 'Área de ventas editada correctamente.',
+    data: "Área de ventas editada con éxito.",
   };
 }
 
 export async function deleteAreaVenta({ id }: { id: number }) {
-  const token = cookies().get('session')?.value || null;
-  const res = await fetch(
-    process.env.BACKEND_URL_V2 + '/areas-ventas/' + id + '/',
-    {
-      method: 'DELETE',
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    }
-  );
-  if (!res.ok) {
-    if (res.status === 401)
-      return {
-        data: null,
-        error: 'No autorizado',
-      };
-
-    if (res.status === 404)
-      return {
-        data: null,
-        error: 'Area venta no encontrada',
-      };
+  try {
+    await db.delete(inventarioAreaventa).where(eq(inventarioAreaventa.id, id));
+  } catch (e) {
+    console.error(e);
     return {
       data: null,
-      error: 'Algo salió mal.',
+      error: "Error al eliminar la área de venta.",
     };
   }
-  revalidateTag('areas-ventas');
+  revalidatePath("/areas-de-venta");
   return {
-    data: 'Área de venta eliminada con éxito.',
+    data: "Área de venta eliminada con éxito.",
     error: null,
   };
 }
