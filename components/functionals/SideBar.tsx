@@ -1,6 +1,6 @@
-'use client';
-import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+"use client";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 import {
   ClipboardCheck,
@@ -25,12 +25,13 @@ import {
   Heart,
   Handshake,
   Truck,
-} from 'lucide-react';
+} from "lucide-react";
 
-import { cn } from '@/lib/utils';
-import { ALMACENES } from '@/app/(with-layout)/users/types';
-import { AreaVenta } from '@/app/(with-layout)/areas-de-venta/types';
-import { Session } from '@/lib/getSession';
+import { cn } from "@/lib/utils";
+import { ALMACENES } from "@/app/(with-layout)/users/types";
+import { AreaVenta } from "@/app/(with-layout)/areas-de-venta/types";
+import { Session } from "@/lib/getSession";
+import { Table } from "../ui/icons";
 
 interface Props {
   areasVenta: AreaVenta[];
@@ -39,7 +40,7 @@ interface Props {
 
 export default function SideBar({ areasVenta, session }: Props) {
   const path = usePathname();
-  if (path === '/login') return;
+  if (path === "/login") return;
 
   return (
     <div className="hidden w-[20%] border-r bg-muted/40 md:block">
@@ -57,8 +58,8 @@ export default function SideBar({ areasVenta, session }: Props) {
                 <Link
                   href="/"
                   className={cn(
-                    'flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary',
-                    path === '/' && 'bg-muted text-primary'
+                    "flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary",
+                    path === "/" && "bg-muted text-primary"
                   )}
                 >
                   <Home className="h-4 w-4" />
@@ -68,8 +69,8 @@ export default function SideBar({ areasVenta, session }: Props) {
                 <Link
                   href="/products"
                   className={cn(
-                    'flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary',
-                    path === '/products' && 'bg-muted text-primary'
+                    "flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary",
+                    path === "/products" && "bg-muted text-primary"
                   )}
                 >
                   <Package className="h-4 w-4" />
@@ -85,8 +86,8 @@ export default function SideBar({ areasVenta, session }: Props) {
                 <Link
                   href="/productos-cafeteria"
                   className={cn(
-                    'flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary',
-                    path === '/productos-cafeteria' && 'bg-muted text-primary'
+                    "flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary",
+                    path === "/productos-cafeteria" && "bg-muted text-primary"
                   )}
                 >
                   <Package2 className="h-4 w-4" />
@@ -95,8 +96,8 @@ export default function SideBar({ areasVenta, session }: Props) {
                 <Link
                   href="/elaboraciones"
                   className={cn(
-                    'flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary',
-                    path === '/elaboraciones' && 'bg-muted text-primary'
+                    "flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary",
+                    path === "/elaboraciones" && "bg-muted text-primary"
                   )}
                 >
                   <Pizza className="h-4 w-4" />
@@ -105,8 +106,8 @@ export default function SideBar({ areasVenta, session }: Props) {
                 <Link
                   href="/merma"
                   className={cn(
-                    'flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary',
-                    path === '/merma' && 'bg-muted text-primary'
+                    "flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary",
+                    path === "/merma" && "bg-muted text-primary"
                   )}
                 >
                   <TicketX className="h-4 w-4" />
@@ -115,8 +116,8 @@ export default function SideBar({ areasVenta, session }: Props) {
                 <Link
                   href="/cuenta-casa"
                   className={cn(
-                    'flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary',
-                    path === '/cuenta-casa' && 'bg-muted text-primary'
+                    "flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary",
+                    path === "/cuenta-casa" && "bg-muted text-primary"
                   )}
                 >
                   <Heart className="h-4 w-4" />
@@ -131,8 +132,8 @@ export default function SideBar({ areasVenta, session }: Props) {
               <Link
                 href="/reportes"
                 className={cn(
-                  'flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary',
-                  path === '/reportes' && 'bg-muted text-primary'
+                  "flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary",
+                  path === "/reportes" && "bg-muted text-primary"
                 )}
               >
                 <FileText className="h-4 w-4" />
@@ -145,8 +146,8 @@ export default function SideBar({ areasVenta, session }: Props) {
                 <Link
                   href="/proveedores"
                   className={cn(
-                    'flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary',
-                    path === '/proveedores' && 'bg-muted text-primary'
+                    "flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary",
+                    path === "/proveedores" && "bg-muted text-primary"
                   )}
                 >
                   <Truck className="h-4 w-4" />
@@ -155,8 +156,8 @@ export default function SideBar({ areasVenta, session }: Props) {
                 <Link
                   href="/categorias"
                   className={cn(
-                    'flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary',
-                    path === '/categorias' && 'bg-muted text-primary'
+                    "flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary",
+                    path === "/categorias" && "bg-muted text-primary"
                   )}
                 >
                   <Tags className="h-4 w-4" />
@@ -165,8 +166,8 @@ export default function SideBar({ areasVenta, session }: Props) {
                 <Link
                   href="/users"
                   className={cn(
-                    'flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary',
-                    path === '/users' && 'bg-muted text-primary'
+                    "flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary",
+                    path === "/users" && "bg-muted text-primary"
                   )}
                 >
                   <Users className="h-4 w-4" />
@@ -175,8 +176,8 @@ export default function SideBar({ areasVenta, session }: Props) {
                 <Link
                   href="/referidos"
                   className={cn(
-                    'flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary',
-                    path === '/referidos' && 'bg-muted text-primary'
+                    "flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary",
+                    path === "/referidos" && "bg-muted text-primary"
                   )}
                 >
                   <Handshake className="h-4 w-4" />
@@ -185,8 +186,8 @@ export default function SideBar({ areasVenta, session }: Props) {
                 <Link
                   href="/gastos"
                   className={cn(
-                    'flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary',
-                    path === '/gastos' && 'bg-muted text-primary'
+                    "flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary",
+                    path === "/gastos" && "bg-muted text-primary"
                   )}
                 >
                   <CircleDollarSign className="h-4 w-4" />
@@ -198,8 +199,8 @@ export default function SideBar({ areasVenta, session }: Props) {
               <Link
                 href="/tarjetas"
                 className={cn(
-                  'flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary',
-                  path === '/tarjetas' && 'bg-muted text-primary'
+                  "flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary",
+                  path === "/tarjetas" && "bg-muted text-primary"
                 )}
               >
                 <CreditCard className="h-4 w-4" />
@@ -211,8 +212,8 @@ export default function SideBar({ areasVenta, session }: Props) {
                 <Link
                   href="/transferencias"
                   className={cn(
-                    'flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary',
-                    path === '/transferencias' && 'bg-muted text-primary'
+                    "flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary",
+                    path === "/transferencias" && "bg-muted text-primary"
                   )}
                 >
                   <ArrowRightLeft className="h-4 w-4" />
@@ -221,8 +222,8 @@ export default function SideBar({ areasVenta, session }: Props) {
                 <Link
                   href="/ajuste-inventario"
                   className={cn(
-                    'flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary',
-                    path === '/ajuste-inventario' && 'bg-muted text-primary'
+                    "flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary",
+                    path === "/ajuste-inventario" && "bg-muted text-primary"
                   )}
                 >
                   <Wrench className="h-4 w-4" />
@@ -239,8 +240,8 @@ export default function SideBar({ areasVenta, session }: Props) {
                 <Link
                   href="/inventario"
                   className={cn(
-                    'flex flex-1 items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary',
-                    path === '/inventario' && 'bg-muted text-primary'
+                    "flex flex-1 items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary",
+                    path === "/inventario" && "bg-muted text-primary"
                   )}
                 >
                   <PackageOpen className="h-4 w-4" />
@@ -253,8 +254,8 @@ export default function SideBar({ areasVenta, session }: Props) {
                     <Link
                       href="/entradas"
                       className={cn(
-                        'flex flex-1 items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary',
-                        path === '/entradas' && 'bg-muted text-primary'
+                        "flex flex-1 items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary",
+                        path === "/entradas" && "bg-muted text-primary"
                       )}
                     >
                       <ArrowDownLeft className="h-4 w-4" />
@@ -263,8 +264,8 @@ export default function SideBar({ areasVenta, session }: Props) {
                     <Link
                       href="/salidas"
                       className={cn(
-                        'flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary',
-                        path === '/salidas' && 'bg-muted text-primary'
+                        "flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary",
+                        path === "/salidas" && "bg-muted text-primary"
                       )}
                     >
                       <ArrowUpRight className="h-4 w-4" />
@@ -283,8 +284,8 @@ export default function SideBar({ areasVenta, session }: Props) {
                 <Link
                   href="/inventario-revoltosa"
                   className={cn(
-                    'flex flex-1 items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary',
-                    path === '/inventario-revoltosa' && 'bg-muted text-primary'
+                    "flex flex-1 items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary",
+                    path === "/inventario-revoltosa" && "bg-muted text-primary"
                   )}
                 >
                   <PackageOpen className="h-4 w-4" />
@@ -296,8 +297,8 @@ export default function SideBar({ areasVenta, session }: Props) {
                   <Link
                     href="/salidas-revoltosa"
                     className={cn(
-                      'flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary',
-                      path === '/salidas-revoltosa' && 'bg-muted text-primary'
+                      "flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary",
+                      path === "/salidas-revoltosa" && "bg-muted text-primary"
                     )}
                   >
                     <ArrowUpRight className="h-4 w-4" />
@@ -316,8 +317,8 @@ export default function SideBar({ areasVenta, session }: Props) {
                 <Link
                   href="/inventario-cafeteria"
                   className={cn(
-                    'flex flex-1 items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary',
-                    path === '/inventario-cafeteria' && 'bg-muted text-primary'
+                    "flex flex-1 items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary",
+                    path === "/inventario-cafeteria" && "bg-muted text-primary"
                   )}
                 >
                   <PackageOpen className="h-4 w-4" />
@@ -326,8 +327,8 @@ export default function SideBar({ areasVenta, session }: Props) {
                 <Link
                   href="/entradas-cafeteria"
                   className={cn(
-                    'flex flex-1 items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary',
-                    path === '/entradas-cafeteria' && 'bg-muted text-primary'
+                    "flex flex-1 items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary",
+                    path === "/entradas-cafeteria" && "bg-muted text-primary"
                   )}
                 >
                   <ArrowDownLeft className="h-4 w-4" />
@@ -337,8 +338,8 @@ export default function SideBar({ areasVenta, session }: Props) {
                 <Link
                   href="/salidas-cafeteria"
                   className={cn(
-                    'flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary',
-                    path === '/salidas-cafeteria' && 'bg-muted text-primary'
+                    "flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary",
+                    path === "/salidas-cafeteria" && "bg-muted text-primary"
                   )}
                 >
                   <ArrowUpRight className="h-4 w-4" />
@@ -356,8 +357,8 @@ export default function SideBar({ areasVenta, session }: Props) {
                   <Link
                     href="/areas-de-venta"
                     className={cn(
-                      'flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary',
-                      path === '/areas-de-venta' && 'bg-muted text-primary'
+                      "flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary",
+                      path === "/areas-de-venta" && "bg-muted text-primary"
                     )}
                   >
                     <Settings2 className="h-4 w-4" />
@@ -368,8 +369,8 @@ export default function SideBar({ areasVenta, session }: Props) {
                   <Link
                     href="/cafeteria"
                     className={cn(
-                      'flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary',
-                      path === '/cafeteria' && 'bg-muted text-primary'
+                      "flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary",
+                      path === "/cafeteria" && "bg-muted text-primary"
                     )}
                   >
                     <CoffeeIcon className="h-4 w-4" />
@@ -378,20 +379,41 @@ export default function SideBar({ areasVenta, session }: Props) {
                 )}
                 {!session.isVendedorCafeteria && (
                   <>
-                    {areasVenta?.map((area) => (
-                      <Link
-                        key={area.id}
-                        href={`/areas-de-venta/${area.id}`}
-                        className={cn(
-                          'flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary',
-                          path === `/areas-de-venta/${area.id}` &&
-                            'bg-muted text-primary'
-                        )}
-                      >
-                        <Store className="h-4 w-4" />
-                        <span className="line-clamp-1">{area.nombre}</span>
-                      </Link>
-                    ))}
+                    {areasVenta?.map(
+                      (area) =>
+                        !area.isMesa && (
+                          <Link
+                            key={area.id}
+                            href={`/areas-de-venta/${area.id}`}
+                            className={cn(
+                              "flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary",
+                              path === `/areas-de-venta/${area.id}` &&
+                                "bg-muted text-primary"
+                            )}
+                          >
+                            <Store className="h-4 w-4" />
+                            <span className="line-clamp-1">{area.nombre}</span>
+                          </Link>
+                        )
+                    )}
+                    <span className="p-2">Mesas</span>
+                    {areasVenta?.map(
+                      (area) =>
+                        area.isMesa && (
+                          <Link
+                            key={area.id}
+                            href={`/areas-de-venta/${area.id}`}
+                            className={cn(
+                              "flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary",
+                              path === `/areas-de-venta/${area.id}` &&
+                                "bg-muted text-primary"
+                            )}
+                          >
+                            <Table className="h-4 w-4" />
+                            <span className="line-clamp-1">{area.nombre}</span>
+                          </Link>
+                        )
+                    )}
                   </>
                 )}
               </>

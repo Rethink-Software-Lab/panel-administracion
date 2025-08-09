@@ -218,18 +218,6 @@ export const onlyNombreSchema = object({
   nombre: pipe(string("Campo requerido."), nonEmpty("Campo requerido.")),
 });
 
-export const AreaVentaSchema = object({
-  nombre: pipe(
-    string("Campo requerido."),
-    nonEmpty("Campo requerido."),
-    custom(
-      (value) => value !== "Revoltosa",
-      'El nombre no puede ser "Revoltosa"'
-    )
-  ),
-  color: pipe(string("Campo requerido."), nonEmpty("Campo requerido.")),
-});
-
 export const EspecialWarningSchema = object({
   test: literal("BORRAR", "El campo debe ser igual a BORRAR"),
 });
