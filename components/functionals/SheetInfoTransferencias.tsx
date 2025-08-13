@@ -1,7 +1,7 @@
-'use client';
+"use client";
 
-import { ArrowRight, Eye } from 'lucide-react';
-import { Button } from '../ui/button';
+import { ArrowRight, Eye } from "lucide-react";
+import { Button } from "../ui/button";
 import {
   Sheet,
   SheetContent,
@@ -9,9 +9,9 @@ import {
   SheetHeader,
   SheetTitle,
   SheetTrigger,
-} from '../ui/sheet';
-import { useState } from 'react';
-import { Transferencia } from '@/app/(with-layout)/transferencias/types';
+} from "../ui/sheet";
+import { useState } from "react";
+import { Transferencia } from "@/app/(with-layout)/transferencias/types";
 import {
   Table,
   TableBody,
@@ -19,8 +19,8 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from '../ui/table';
-import { DateTime } from 'luxon';
+} from "../ui/table";
+import { DateTime } from "luxon";
 
 export default function SheetInfoTransferencias({
   data,
@@ -38,15 +38,16 @@ export default function SheetInfoTransferencias({
       <SheetContent className="w-full sm:max-w-[600px] overflow-y-scroll">
         <SheetHeader>
           <SheetTitle className="flex items-center gap-2">
-            {data?.de?.nombre} <ArrowRight size={18} /> {data?.para?.nombre}
+            {data?.de || "Área eliminada"} <ArrowRight size={18} />{" "}
+            {data?.para || "Área eliminada"}
           </SheetTitle>
           <SheetDescription className="pb-6 flex items-center gap-2 justify-between">
             <span>
-              {DateTime.fromISO(data.created_at).toLocaleString(
+              {DateTime.fromSQL(data.created_at).toLocaleString(
                 DateTime.DATE_FULL
               )}
             </span>
-            <span>creada por : {data?.usuario?.username}</span>
+            <span>creada por : {data?.usuario}</span>
           </SheetDescription>
         </SheetHeader>
         <Table>
@@ -57,8 +58,8 @@ export default function SheetInfoTransferencias({
             </TableRow>
           </TableHeader>
           <TableBody>
-            {data.productos.map((producto, index) => (
-              <TableRow key={`${producto.descripcion}-${index}`}>
+            {data.productos.map((producto) => (
+              <TableRow key={producto.id}>
                 <TableCell className="font-semibold align-top w-1/2">
                   {producto.descripcion}
                 </TableCell>

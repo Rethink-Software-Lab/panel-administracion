@@ -1,11 +1,11 @@
-'use client';
+"use client";
 
-import { UseFormReturn } from 'react-hook-form';
-import { FormControl, FormField, FormItem, FormMessage } from '../ui/form';
-import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover';
-import { Button } from '../ui/button';
-import { cn } from '@/lib/utils';
-import { CheckIcon, ChevronDown } from 'lucide-react';
+import { UseFormReturn } from "react-hook-form";
+import { FormControl, FormField, FormItem, FormMessage } from "../ui/form";
+import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
+import { Button } from "../ui/button";
+import { cn } from "@/lib/utils";
+import { CheckIcon, ChevronDown } from "lucide-react";
 import {
   Command,
   CommandEmpty,
@@ -13,11 +13,11 @@ import {
   CommandInput,
   CommandItem,
   CommandList,
-} from '../ui/command';
-import { InferInput } from 'valibot';
-import { TransferenciaSchema } from '@/lib/schemas';
-import { ProductInfo } from '@/app/(with-layout)/products/types';
-import { RefObject, useState } from 'react';
+} from "../ui/command";
+import { InferInput } from "valibot";
+import { TransferenciaSchema } from "@/lib/schemas";
+import { RefObject, useState } from "react";
+import { ProductoInfoInTransferencia } from "@/app/(with-layout)/transferencias/types";
 
 export default function SelectProductoTransferencias({
   form,
@@ -27,7 +27,7 @@ export default function SelectProductoTransferencias({
 }: {
   form: UseFormReturn<InferInput<typeof TransferenciaSchema>>;
   index: number;
-  productosInfo: ProductInfo[];
+  productosInfo: ProductoInfoInTransferencia[];
   formRef: RefObject<HTMLElement>;
 }) {
   const [openPopover, setOpenPopover] = useState(false);
@@ -45,15 +45,15 @@ export default function SelectProductoTransferencias({
                   variant="outline"
                   role="combobox"
                   className={cn(
-                    'justify-between',
-                    !field.value && 'text-muted-foreground'
+                    "justify-between",
+                    !field.value && "text-muted-foreground"
                   )}
                 >
                   {field.value
                     ? productosInfo?.find(
                         (producto) => producto?.id.toString() === field.value
                       )?.descripcion
-                    : 'Seleccione un producto'}
+                    : "Seleccione un producto"}
                   <ChevronDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                 </Button>
               </FormControl>
@@ -64,32 +64,31 @@ export default function SelectProductoTransferencias({
                 <CommandList>
                   <CommandEmpty>Ningún resultado encontrado.</CommandEmpty>
                   <CommandGroup heading="Sugerencias">
-                    {productosInfo?.map((producto: ProductInfo) => (
+                    {productosInfo?.map((producto) => (
                       <CommandItem
                         key={producto.id}
                         value={producto.id.toString()}
                         keywords={[producto.descripcion]}
                         onSelect={(currentValue) => {
-                          const esZapato =
-                            productosInfo?.find(
-                              (e) => e.id.toString() === currentValue
-                            )?.categoria.nombre === 'Zapatos';
+                          const esZapato = productosInfo?.find(
+                            (e) => e.id.toString() === currentValue
+                          )?.isZapato;
 
                           if (esZapato) {
                             form.setValue(
                               `productos.${index}.cantidad`,
                               undefined
                             );
-                            form.setValue(`productos.${index}.zapatos_id`, '');
+                            form.setValue(`productos.${index}.zapatos_id`, "");
                           } else {
                             form.setValue(
                               `productos.${index}.zapatos_id`,
                               undefined
                             );
-                            form.setValue(`productos.${index}.cantidad`, '0');
+                            form.setValue(`productos.${index}.cantidad`, "0");
                           }
                           field.onChange(
-                            currentValue === field.value ? '' : currentValue
+                            currentValue === field.value ? "" : currentValue
                           );
                           setOpenPopover(false);
                         }}
@@ -97,10 +96,10 @@ export default function SelectProductoTransferencias({
                         {producto.descripcion}
                         <CheckIcon
                           className={cn(
-                            'ml-auto h-4 w-4',
+                            "ml-auto h-4 w-4",
                             producto.id.toString() === field.value
-                              ? 'opacity-100'
-                              : 'opacity-0'
+                              ? "opacity-100"
+                              : "opacity-0"
                           )}
                         />
                       </CommandItem>

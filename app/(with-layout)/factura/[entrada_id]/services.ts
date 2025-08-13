@@ -64,7 +64,7 @@ export async function getFactura(
       },
     };
   } catch (e) {
-    console.log(e);
+    console.error(e);
     if (e instanceof ValidationError) {
       return {
         data: null,

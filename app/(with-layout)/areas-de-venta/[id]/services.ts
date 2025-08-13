@@ -1,4 +1,3 @@
-import { cookies } from "next/headers";
 import { EndpointOneAreaVenta } from "./types";
 import { db } from "@/db/initial";
 import {
@@ -19,7 +18,6 @@ import { ValidationError } from "@/lib/errors";
 export async function getAreaVenta(
   id: number
 ): Promise<{ data: EndpointOneAreaVenta | null; error: string | null }> {
-  const token = cookies().get("session")?.value;
   try {
     const areaVenta = await db
       .select()
@@ -220,7 +218,7 @@ export async function getAreaVenta(
       },
     };
   } catch (e) {
-    console.log(e);
+    console.error(e);
     if (e instanceof ValidationError) {
       return {
         data: null,

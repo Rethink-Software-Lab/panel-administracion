@@ -10,7 +10,7 @@ export function Table({
       width={size}
       height={size}
       viewBox="0 0 24 24"
-      stroke-width="1.5"
+      strokeWidth="1.5"
       fill="none"
       className={className}
     >
