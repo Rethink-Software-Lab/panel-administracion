@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import {
   Sheet,
@@ -7,34 +7,34 @@ import {
   SheetHeader,
   SheetTitle,
   SheetTrigger,
-} from '@/components/ui/sheet';
-import { Button } from '../ui/button';
+} from "@/components/ui/sheet";
+import { Button } from "../ui/button";
 import {
   ArrowRight,
   CirclePlus,
   CircleX,
   MinusCircle,
   PlusCircle,
-} from 'lucide-react';
+} from "lucide-react";
 import {
   Form,
   FormControl,
   FormField,
   FormItem,
   FormMessage,
-} from '../ui/form';
-import { Label } from '../ui/label';
+} from "../ui/form";
+import { Label } from "../ui/label";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '../ui/select';
-import { useFieldArray, useForm } from 'react-hook-form';
-import { valibotResolver } from '@hookform/resolvers/valibot';
-import { AreaVenta } from '@/app/(with-layout)/areas-de-venta/types';
-import { TransferenciaSchema } from '@/lib/schemas';
+} from "../ui/select";
+import { useFieldArray, useForm } from "react-hook-form";
+import { valibotResolver } from "@hookform/resolvers/valibot";
+import { AreaVenta } from "@/app/(with-layout)/areas-de-venta/types";
+import { TransferenciaSchema } from "@/lib/schemas";
 import {
   Table,
   TableBody,
@@ -43,40 +43,40 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from '../ui/table';
-import { ProductInfo } from '@/app/(with-layout)/products/types';
-import { Input } from '../ui/input';
-import { InferInput } from 'valibot';
-import { addTransferencia } from '@/app/(with-layout)/transferencias/actions';
-import { toast } from 'sonner';
-import { useRef, useState } from 'react';
+} from "../ui/table";
+import { Input } from "../ui/input";
+import { InferInput } from "valibot";
+import { addTransferencia } from "@/app/(with-layout)/transferencias/actions";
+import { toast } from "sonner";
+import { useRef, useState } from "react";
 
-import SelectProductoTransferencias from './SelectProductoTransferencias';
-import { Alert, AlertDescription, AlertTitle } from '../ui/alert';
+import SelectProductoTransferencias from "./SelectProductoTransferencias";
+import { Alert, AlertDescription, AlertTitle } from "../ui/alert";
+import { ProductoInfoInTransferencia } from "@/app/(with-layout)/transferencias/types";
 
 export default function SheetTransferencias({
   areas,
   productosInfo,
 }: {
   areas: AreaVenta[];
-  productosInfo: ProductInfo[];
+  productosInfo: ProductoInfoInTransferencia[];
 }) {
   const [open, setOpen] = useState(false);
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
   const formRef = useRef<HTMLFormElement>(null);
 
   const form = useForm<InferInput<typeof TransferenciaSchema>>({
     resolver: valibotResolver(TransferenciaSchema),
     defaultValues: {
-      de: '',
-      para: '',
-      productos: [{ producto: '', cantidad: '0', zapatos_id: undefined }],
+      de: "",
+      para: "",
+      productos: [{ producto: "", cantidad: "0", zapatos_id: undefined }],
     },
   });
 
   const { fields, append, remove } = useFieldArray({
     control: form.control,
-    name: 'productos',
+    name: "productos",
   });
 
   const onSubmit = async (
@@ -223,7 +223,7 @@ export default function SheetTransferencias({
                         (p) =>
                           p.id.toString() ===
                           form.getValues(`productos.${index}.producto`)
-                      )?.categoria.nombre === 'Zapatos' ? (
+                      )?.isZapato ? (
                         <TableCell>
                           <FormField
                             control={form.control}
@@ -280,8 +280,8 @@ export default function SheetTransferencias({
                     className="gap-1"
                     onClick={() =>
                       append({
-                        producto: '',
-                        cantidad: '0',
+                        producto: "",
+                        cantidad: "0",
                         zapatos_id: undefined,
                       })
                     }

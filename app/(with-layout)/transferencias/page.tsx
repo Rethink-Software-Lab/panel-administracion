@@ -1,11 +1,10 @@
-import { CloudOff } from 'lucide-react';
+import { CloudOff } from "lucide-react";
 
-import { getTransferencias } from '@/lib/services';
-
-import DataTable from '@/components/functionals/data-tables/data-table-general';
-import { columns } from './columns';
-import SheetTransferencias from '@/components/functionals/SheetTransferencias';
-import { Transferencia } from './types';
+import DataTable from "@/components/functionals/data-tables/data-table-general";
+import { columns } from "./columns";
+import SheetTransferencias from "@/components/functionals/SheetTransferencias";
+import { Transferencia } from "./types";
+import { getTransferencias } from "./services";
 
 export default async function Transferencias() {
   const { data } = await getTransferencias();
@@ -16,12 +15,12 @@ export default async function Transferencias() {
         <h1 className="text-lg font-semibold md:text-2xl">Transferencias</h1>
 
         <SheetTransferencias
-          areas={data.areas_ventas}
-          productosInfo={data.productos_info}
+          areas={data?.areas_ventas || []}
+          productosInfo={data?.productos_info || []}
         />
       </div>
 
-      {data.transferencias ? (
+      {data?.transferencias ? (
         <DataTable<Transferencia>
           columns={columns}
           data={data.transferencias}
